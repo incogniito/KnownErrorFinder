@@ -211,9 +211,9 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         int row = unknownTable.getSelectedRow();
-        if(row== 1)
+        if(row == 1)
         {
-            
+           //hello
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
