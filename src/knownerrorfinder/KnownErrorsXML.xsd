@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://knownErrors"
+    xmlns:tns="http://knownErrors"
+    elementFormDefault="qualified">
+    
+    <xsd:complexType name="knownError"> 
+        <xsd:sequence>
+            <xsd:element name = "name" type = "xsd:string"/> 
+            <xsd:element name = "exception" type = "xsd:string"/>              
+            <xsd:element name = "solution" type = "xsd:string"/>
+            <xsd:element name = "dateAdded" type = "xsd:date"/>
+
+
+        </xsd:sequence>
+    </xsd:complexType>
+    
+     <xsd:element name="knownErrors">
+       <xsd:complexType > 
+        <xsd:sequence>
+            <xsd:element name = "Errors" type = "tns:knownError" minOccurs = "0" maxOccurs = "unbounded"/> 
+        </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
+    
+   
+    
+</xsd:schema>
