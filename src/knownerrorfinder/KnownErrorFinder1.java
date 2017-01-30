@@ -5,6 +5,15 @@
  */
 package knownerrorfinder;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JFileChooser;
+import knownerrors.*;
+
 /**
  *
  * @author samsonaiyegbusi
@@ -17,6 +26,8 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     public KnownErrorFinder1() {
         initComponents();
     }
+    
+    String filePath;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -27,6 +38,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        fileChooser = new javax.swing.JFileChooser();
         searchBox = new javax.swing.JTextField();
         openButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
@@ -39,7 +51,9 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        logsTable = new javax.swing.JTable();
+
+        fileChooser.setDialogTitle("Open Log File");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("KNOWN ERROR FINDER");
@@ -146,7 +160,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
         jTabbedPane3.addTab("Unknown", jPanel2);
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        logsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null},
                 {null},
@@ -162,7 +176,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                 "Title 1"
             }
         ));
-        jScrollPane4.setViewportView(jTable3);
+        jScrollPane4.setViewportView(logsTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -177,7 +191,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                     .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,7 +224,14 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void openButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openButtonActionPerformed
-        // TODO add your handling code here:
+        int returnVal = fileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION){
+            File file = fileChooser.getSelectedFile();
+          
+            List<String> logs = linesFromFile(file);
+            
+            
+        }
     }//GEN-LAST:event_openButtonActionPerformed
 
     /**
@@ -247,8 +268,40 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             }
         });
     }
+    
+    private List<String> linesFromFile(File file){
+        String line;
+        List<String> logs = new ArrayList();
+        try{
+            
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            while((line = reader.readLine()) != null)
+            {
+                logs.add(line);
+            }
+            reader.close();
+            return logs;
+        } catch(IOException e)
+        {
+            System.err.print(e);
+        }
+        return null;
+    }
+    
+    private void populateLogsTable(List<String> logs){
+        //Object[] column
+                
+             KnownError s = new KnownError(); 
+             KnownErrors r = new KnownErrors();
+             
+            
+                
+                
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JFileChooser fileChooser;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -259,7 +312,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
+    private javax.swing.JTable logsTable;
     private javax.swing.JButton openButton;
     private javax.swing.JTextField searchBox;
     // End of variables declaration//GEN-END:variables
