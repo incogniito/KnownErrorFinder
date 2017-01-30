@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFileChooser;
+import javax.swing.table.DefaultTableModel;
 import knownerrors.*;
 
 /**
@@ -38,11 +39,10 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
         fileChooser = new javax.swing.JFileChooser();
+        jTextField1 = new javax.swing.JTextField();
         searchBox = new javax.swing.JTextField();
         openButton = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
         jTabbedPane3 = new javax.swing.JTabbedPane();
         knownTab = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -52,10 +52,9 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         unknownTable = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
-        logsTable = new javax.swing.JTable();
+        logTable = new javax.swing.JTable();
 
         fileChooser.setDialogTitle("Open Log File");
-        logTable = new javax.swing.JTable();
 
         jTextField1.setText("jTextField1");
 
@@ -75,8 +74,6 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                 openButtonActionPerformed(evt);
             }
         });
-
-        jLabel2.setText("                                          LOGS");
 
         knownTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -164,7 +161,6 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
         jTabbedPane3.addTab("Unknown", unknownTab);
 
-        logsTable.setModel(new javax.swing.table.DefaultTableModel(
         logTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null},
@@ -191,11 +187,10 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jTabbedPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(openButton)
                     .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -206,8 +201,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(openButton)
@@ -227,9 +221,9 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         int row = unknownTable.getSelectedRow();
-        if(row== 1)
+        if(row == 1)
         {
-            
+           //hello
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -239,6 +233,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             File file = fileChooser.getSelectedFile();
           
             List<String> logs = linesFromFile(file);
+            populateLogsTable(logs);
             
             
         }
@@ -301,11 +296,18 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private void populateLogsTable(List<String> logs){
         //Object[] column
                 
-             KnownError s = new KnownError(); 
-             KnownErrors r = new KnownErrors();
-             
+       Object[] columnNames = {"Line No","Message"};
+       int counter = 0;
+       DefaultTableModel model = new DefaultTableModel(new Object[0][0], columnNames);
+        for (String log: logs) {
+            Object[] o = new Object[2];
+            counter++;
             
-                
+            o[0] = counter;
+            o[1] = log;
+            model.addRow(o);
+        }
+        logTable.setModel(model);
                 
     }
     
@@ -313,14 +315,14 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane3;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable logsTable;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JPanel knownTab;
+    private javax.swing.JTable knownTable;
+    private javax.swing.JTable logTable;
     private javax.swing.JButton openButton;
     private javax.swing.JTextField searchBox;
     private javax.swing.JPanel unknownTab;
