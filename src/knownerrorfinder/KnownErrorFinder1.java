@@ -38,22 +38,26 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTextField1 = new javax.swing.JTextField();
         fileChooser = new javax.swing.JFileChooser();
         searchBox = new javax.swing.JTextField();
         openButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jTabbedPane3 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
+        knownTab = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jPanel2 = new javax.swing.JPanel();
+        knownTable = new javax.swing.JTable();
+        unknownTab = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        unknownTable = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         logsTable = new javax.swing.JTable();
 
         fileChooser.setDialogTitle("Open Log File");
+        logTable = new javax.swing.JTable();
+
+        jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("KNOWN ERROR FINDER");
@@ -74,7 +78,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
         jLabel2.setText("                                          LOGS");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        knownTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null},
                 {null},
@@ -90,26 +94,26 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                 "Title 1"
             }
         ));
-        jScrollPane3.setViewportView(jTable2);
+        jScrollPane3.setViewportView(knownTable);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout knownTabLayout = new javax.swing.GroupLayout(knownTab);
+        knownTab.setLayout(knownTabLayout);
+        knownTabLayout.setHorizontalGroup(
+            knownTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(knownTabLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addGap(14, 14, 14))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        knownTabLayout.setVerticalGroup(
+            knownTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(knownTabLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
-        jTabbedPane3.addTab("Known", jPanel1);
+        jTabbedPane3.addTab("Known", knownTab);
 
         jButton1.setText("+");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -118,7 +122,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        unknownTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null},
                 {null},
@@ -134,23 +138,23 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                 "Title 1"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(unknownTable);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout unknownTabLayout = new javax.swing.GroupLayout(unknownTab);
+        unknownTab.setLayout(unknownTabLayout);
+        unknownTabLayout.setHorizontalGroup(
+            unknownTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(unknownTabLayout.createSequentialGroup()
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 202, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(unknownTabLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+        unknownTabLayout.setVerticalGroup(
+            unknownTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, unknownTabLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -158,9 +162,10 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane3.addTab("Unknown", jPanel2);
+        jTabbedPane3.addTab("Unknown", unknownTab);
 
         logsTable.setModel(new javax.swing.table.DefaultTableModel(
+        logTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null},
                 {null},
@@ -176,7 +181,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                 "Title 1"
             }
         ));
-        jScrollPane4.setViewportView(logsTable);
+        jScrollPane4.setViewportView(logTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -221,6 +226,11 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        int row = unknownTable.getSelectedRow();
+        if(row== 1)
+        {
+            
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void openButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openButtonActionPerformed
@@ -304,8 +314,6 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -315,5 +323,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private javax.swing.JTable logsTable;
     private javax.swing.JButton openButton;
     private javax.swing.JTextField searchBox;
+    private javax.swing.JPanel unknownTab;
+    private javax.swing.JTable unknownTable;
     // End of variables declaration//GEN-END:variables
 }
