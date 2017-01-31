@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFileChooser;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
 import knownerrors.*;
 
@@ -346,7 +347,6 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     }
     
     private void populateLogsTable(List<String> logs){
-        //Object[] column
                 
        Object[] columnNames = {"No","Message"};
        int counter = 0;
@@ -360,6 +360,12 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             model.addRow(o);
         }
         logTable.setModel(model);
+        
+        PopUpMenu popup = new PopUpMenu();
+         
+        
+        CustomMouseListener popUpListener = new CustomMouseListener(popup, logTable);
+        logTable.addMouseListener(popUpListener);
                 
     }
     
