@@ -286,9 +286,28 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         try{
             
             BufferedReader reader = new BufferedReader(new FileReader(file));
+            StringBuilder sb = new StringBuilder();
+            
             while((line = reader.readLine()) != null)
             {
+                if(line.startsWith("\t"))
+                {
+                    sb.append(line).append("\n\t");
+                continue;
+                } else if (line.startsWith("    ")){
+                    sb.append(line).append("\n");
+                    continue;
+                }
+                if (sb.toString().equalsIgnoreCase(""))
+                {
                 logs.add(line);
+                }
+                else{
+                    String concat = logs.get(logs.size()-1).concat("\n" + sb.toString());
+                    logs.set(logs.size()-1, concat);
+                    sb.delete(0, sb.length());
+                    logs.add(line);
+                        }
             }
             reader.close();
             return logs;
@@ -302,7 +321,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private void populateLogsTable(List<String> logs){
         //Object[] column
                 
-       Object[] columnNames = {"Line No","Message"};
+       Object[] columnNames = {"No","Message"};
        int counter = 0;
        DefaultTableModel model = new DefaultTableModel(new Object[0][0], columnNames);
         for (String log: logs) {
