@@ -5,8 +5,15 @@
  */
 package knownerrorfinder;
 
-import knownerrors.KnownError;
-import knownerrors.KnownErrors;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JFileChooser;
+import javax.swing.table.DefaultTableModel;
+import knownerrors.*;
 
 /**
  *
@@ -19,7 +26,10 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
      */
     public KnownErrorFinder1() {
         initComponents();
+        knownErrorFileCheck();
     }
+    
+    String filePath;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,6 +40,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        fileChooser = new javax.swing.JFileChooser();
         jTextField1 = new javax.swing.JTextField();
         searchBox = new javax.swing.JTextField();
         openButton = new javax.swing.JButton();
@@ -45,6 +56,8 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         logTable = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+
+        fileChooser.setDialogTitle("Open Log File");
 
         jTextField1.setText("jTextField1");
 
@@ -239,7 +252,18 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void openButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openButtonActionPerformed
-        // TODO add your handling code here:
+        int returnVal = fileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION){
+            File file = fileChooser.getSelectedFile();
+          
+            List<String> logs = linesFromFile(file);
+            populateLogsTable(logs);
+            
+            
+        }
+
+
+               
     }//GEN-LAST:event_openButtonActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -275,13 +299,63 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new KnownErrorFinder1().setVisible(true);
+                
             }
         });
     }
+    
+    private List<String> linesFromFile(File file){
+        String line;
+        List<String> logs = new ArrayList();
+        try{
+            
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            while((line = reader.readLine()) != null)
+            {
+                logs.add(line);
+            }
+            reader.close();
+            return logs;
+        } catch(IOException e)
+        {
+            System.err.print(e);
+        }
+        return null;
+    }
+    
+    private void populateLogsTable(List<String> logs){
+        //Object[] column
+                
+       Object[] columnNames = {"Line No","Message"};
+       int counter = 0;
+       DefaultTableModel model = new DefaultTableModel(new Object[0][0], columnNames);
+        for (String log: logs) {
+            Object[] o = new Object[2];
+            counter++;
+            
+            o[0] = counter;
+            o[1] = log;
+            model.addRow(o);
+        }
+        logTable.setModel(model);
+                
+    }
+    
+    private void knownErrorFileCheck(){
+        KnownErrorFileChecker checks = new KnownErrorFileChecker();
+        if(checks.checkIfFileExists())
+        {
+            System.out.println("it exists");
+        } else{
+            checks.createNewKnownErrorFile();
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JFileChooser fileChooser;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
