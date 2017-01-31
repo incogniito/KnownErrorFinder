@@ -26,6 +26,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
      */
     public KnownErrorFinder1() {
         initComponents();
+        knownErrorFileCheck();
     }
     
     String filePath;
@@ -237,6 +238,9 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             
             
         }
+
+
+               
     }//GEN-LAST:event_openButtonActionPerformed
 
     /**
@@ -268,8 +272,10 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new KnownErrorFinder1().setVisible(true);
+                
             }
         });
     }
@@ -311,6 +317,15 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                 
     }
     
+    private void knownErrorFileCheck(){
+        KnownErrorFileChecker checks = new KnownErrorFileChecker();
+        if(checks.checkIfFileExists())
+        {
+            System.out.println("it exists");
+        } else{
+            checks.createNewKnownErrorFile();
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser fileChooser;
