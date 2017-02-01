@@ -46,6 +46,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     }
     
     String filePath;
+    int row = 0;
     List<String> unknownErrorHolder = new ArrayList();
     Object[] columnNames = {"No","Message"};
     DefaultTableModel model = new DefaultTableModel(new Object[0][0], columnNames){
@@ -297,22 +298,14 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        iterateThroughTable();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void searchBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchBoxKeyReleased
     //filterData(query);
     //read contents of textfield
-    String query=searchBox.getText();
-    for(int row = 0; row < logTable.getRowCount(); row++){
-        for(int col = 0; col < logTable.getColumnCount(); col++) {
-            String next = logTable.getValueAt(row, col).toString();
-            if(next.contains(query))
-            {
-            System.out.println("found");
-            logTable.convertRowIndexToView(row);
-            }
-        }
-    }
+    row = 0;
+    iterateThroughTable();
     //int selectedRowIndex = logTable.getSelectedRow();
    // int selectedColumnIndex = logTable.getSelectedColumn();
    // String selectedString = (String)logTable.getModel().getValueAt(selectedRowIndex, selectedColumnIndex);
@@ -478,7 +471,35 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         unknownTable.setModel(unknownModel);
     }
     
+    private void iterateThroughTable(){
     
+    int counter = 0;
+    String query=searchBox.getText();
+    if (row>logTable.getRowCount())
+    {
+        row= 0;
+    } else{
+    for( ; row < logTable.getRowCount(); row++){
+            String next = logTable.getValueAt(row, 1).toString();
+            if(next.contains(query))
+            {
+                counter++;
+                if(counter == 1)
+                {
+                    logTable.setRowSelectionInterval(row, row);
+                    logTable.convertRowIndexToView(row);
+                    logTable.scrollRectToVisible(logTable.getCellRect(row,1, true));
+                    row++;
+                    break;
+                }
+                
+            //System.out.println("found");
+            
+            }
+        
+    }
+    }
+   }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser fileChooser;
