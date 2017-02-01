@@ -13,10 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import static javax.management.Query.value;
 import javax.swing.JFileChooser;
 import javax.swing.JPopupMenu;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import knownerrors.*;
 
@@ -298,10 +300,28 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void searchBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchBoxKeyReleased
-    
-       String query=searchBox.getText().toLowerCase();
+    //filterData(query);
+    //read contents of textfield
+    String query=searchBox.getText();
+    for(int row = 0; row < logTable.getRowCount(); row++){
+        for(int col = 0; col < logTable.getColumnCount(); col++) {
+            String next = logTable.getValueAt(row, col).toString();
+            if(next.contains(query))
+            {
+            System.out.println("found");
+            logTable.convertRowIndexToView(row);
+            }
+        }
+    }
+    //int selectedRowIndex = logTable.getSelectedRow();
+   // int selectedColumnIndex = logTable.getSelectedColumn();
+   // String selectedString = (String)logTable.getModel().getValueAt(selectedRowIndex, selectedColumnIndex);
+     //search index of matching element in TableModel
+       //convert index to corresponding row index in Jtable using covertRowIndexToview
+   
       
-       filterData(query);
+ 
+       //setRowSelectionInterval method of Jtable to select that row
     }//GEN-LAST:event_searchBoxKeyReleased
 
     private void logTableKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_logTableKeyPressed
