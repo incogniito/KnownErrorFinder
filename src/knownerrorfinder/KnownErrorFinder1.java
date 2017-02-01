@@ -11,6 +11,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.JPopupMenu;
 import javax.swing.RowFilter;
@@ -30,12 +32,39 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     public KnownErrorFinder1() {
         initComponents();
         knownErrorFileCheck();
+        int returnVal = fileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION){
+            File file = fileChooser.getSelectedFile();
+          
+            List<String> logs = linesFromFile(file);
+            populateLogsTable(logs);
+            
+            
+        }
     }
     
     String filePath;
+    List<String> unknownErrorHolder = new ArrayList();
     Object[] columnNames = {"No","Message"};
-     int counter = 0;
-      DefaultTableModel model = new DefaultTableModel(new Object[0][0], columnNames);
+    DefaultTableModel model = new DefaultTableModel(new Object[0][0], columnNames){
+      
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false; //To change body of generated methods, choose Tools | Templates.
+        }
+      }
+;
+    
+    Object[] unknownErrorColumnNames = {"Exception"};
+    DefaultTableModel unknownModel = new DefaultTableModel(new Object[0][0], unknownErrorColumnNames){
+      
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false; //To change body of generated methods, choose Tools | Templates.
+        }
+      }
+;
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -173,22 +202,6 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
         jTabbedPane3.addTab("Unknown", unknownTab);
 
-        logTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null}
-            },
-            new String [] {
-                "Title 1"
-            }
-        ));
         logTable.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 logTableKeyPressed(evt);
@@ -287,6 +300,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private void searchBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchBoxKeyReleased
     
        String query=searchBox.getText().toLowerCase();
+      
        filterData(query);
     }//GEN-LAST:event_searchBoxKeyReleased
 
@@ -370,8 +384,13 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     }
     
     private void populateLogsTable(List<String> logs){
-                
-      
+           
+        int counter = 0;
+        
+        if (model.getRowCount() > 0)
+        {
+      model.setRowCount(0);
+        }
         for (String log: logs) {
             Object[] o = new Object[2];
             counter++;
@@ -379,14 +398,17 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             o[0] = counter;
             o[1] = log;
             model.addRow(o);
+            populateUnknownErrorsTable(log);
         }
         logTable.setModel(model);
+        //logTable.setEditingRow(ERROR);
         
         PopUpMenu popup = new PopUpMenu();
          
         
         CustomMouseListener popUpListener = new CustomMouseListener(popup, logTable);
         logTable.addMouseListener(popUpListener);
+        //unknown
                 
     }
     
@@ -397,15 +419,46 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             System.out.println("it exists");
         } else{
             checks.createNewKnownErrorFile();
+            
         }
     }
     private void filterData(String query){
         
-        TableRowSorter<DefaultTableModel> tr=new TableRowSorter<DefaultTableModel>(model);
+        TableRowSorter<DefaultTableModel> tr=new TableRowSorter<>(model);
+        
         logTable.setRowSorter(tr);
-        tr.setRowFilter(RowFilter.regexFilter(query));
+        tr.setRowFilter(RowFilter.regexFilter("(?i)"+query));
         
     }
+    
+    private void populateUnknownErrorsTable(String log){
+        
+        Pattern p = Pattern.compile("[\\w]+Exception", Pattern.CASE_INSENSITIVE);
+        
+        if(log.length() > 250)
+        {
+        log = log.substring(0, 250);
+        } 
+        
+        
+        Matcher m = p.matcher(log);
+        while(m.find()){
+            String word = log.substring(m.start(), m.end());
+            if (word.matches("[\\w]+Exception$")){
+                if(!unknownErrorHolder.contains(word))
+                {
+            Object[] o = new Object[1];
+            
+            o[0] = word;
+            unknownModel.addRow(o);
+            unknownErrorHolder.add(word);
+            }
+           }
+        }
+        unknownTable.setModel(unknownModel);
+    }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser fileChooser;
@@ -425,4 +478,4 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private javax.swing.JPanel unknownTab;
     private javax.swing.JTable unknownTable;
     // End of variables declaration//GEN-END:variables
-}
+    }

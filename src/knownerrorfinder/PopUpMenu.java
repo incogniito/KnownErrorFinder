@@ -40,7 +40,7 @@ public class PopUpMenu {
                         StringBuilder sb = new StringBuilder();
                         for(int i : selectedRows)
                         {
-                             int selectedColumn = logTable.getSelectedColumn();
+                             int selectedColumn = 1;
                             String info = logTable.getValueAt(i, selectedColumn).toString();
                             sb.append(info).append("\n");
                         }
