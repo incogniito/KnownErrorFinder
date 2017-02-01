@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static javax.management.Query.value;
 import javax.swing.JFileChooser;
+import javax.swing.JPopupMenu;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -390,7 +391,6 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     }
     
     private void populateLogsTable(List<String> logs){
-        //Object[] column
                 
       
         for (String log: logs) {
@@ -402,6 +402,12 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             model.addRow(o);
         }
         logTable.setModel(model);
+        
+        PopUpMenu popup = new PopUpMenu();
+         
+        
+        CustomMouseListener popUpListener = new CustomMouseListener(popup, logTable);
+        logTable.addMouseListener(popUpListener);
                 
     }
     
