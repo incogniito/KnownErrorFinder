@@ -517,7 +517,38 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             }
         }
     }
-    
+     private void iterateUp(){
+       int counter = 0;
+    String query=searchBox.getText();
+    if (row==logTable.getRowCount())
+    {
+        row--;
+    } else{
+    for( ; row < logTable.getRowCount(); row--){
+            String previous = logTable.getValueAt(row, 1).toString().toLowerCase();
+             String lowerCaseQuery = query.toLowerCase();
+            if(previous.contains(lowerCaseQuery))
+            {
+     
+               counter++;
+                if(counter == 1)
+                { 
+                     logTable.setRowSelectionInterval(row, row);
+                    logTable.convertRowIndexToView(row);
+                    logTable.scrollRectToVisible(logTable.getCellRect(row,1, true));
+                    row--;
+                    currentEntry--;
+                    updateCurrentEntry();
+                    break;
+                }
+               
+                 //System.out.println("found");      
+            }
+        
+        
+   }
+    }
+   }
     public void countFoundEntries(){
         int counter = 0;
         String query = searchBox.getText();
@@ -550,36 +581,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             
 
  
-   private void iterateUp(){
-       int counter = 0;
-    String query=searchBox.getText();
-    if (row==logTable.getRowCount())
-    {
-        row--;
-    } else{
-    for( ; row < logTable.getRowCount(); row--){
-            String previous = logTable.getValueAt(row, 1).toString();
-            if(previous.contains(query))
-            {
-     
-               counter++;
-                if(counter == 1)
-                { 
-                  
-                    logTable.setRowSelectionInterval(row, row);
-                    logTable.convertRowIndexToView(row);
-                    logTable.scrollRectToVisible(logTable.getCellRect(row,1, true));
-                    row--;
-                    break;
-                }
-               
-                 //System.out.println("found");      
-            }
-        
-        
-   }
-    }
-   }
+  
   
     private void updateCurrentEntry(){
 
