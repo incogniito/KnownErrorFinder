@@ -34,40 +34,44 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     public KnownErrorFinder1() {
         initComponents();
         knownErrorFileCheck();
+        
+        totalEntriesLabel.setVisible(false);
+        specificEntryLabel.setVisible(false);
+        
         int returnVal = fileChooser.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION){
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-          
+
             List<String> logs = linesFromFile(file);
             populateLogsTable(logs);
-            
-            
+
         }
     }
-    
+
     String filePath;
+    int foundEntriescounter = 0;
+    int totalEntriesFound = -1;
+    int currentEntry = 0;
     int row = 0;
     List<String> unknownErrorHolder = new ArrayList();
-    Object[] columnNames = {"No","Message"};
-    DefaultTableModel model = new DefaultTableModel(new Object[0][0], columnNames){
-      
+    Object[] columnNames = {"No", "Message"};
+    DefaultTableModel model = new DefaultTableModel(new Object[0][0], columnNames) {
+
         @Override
         public boolean isCellEditable(int row, int column) {
             return false; //To change body of generated methods, choose Tools | Templates.
         }
-      }
-;
-    
+    };
+
     Object[] unknownErrorColumnNames = {"Exception"};
-    DefaultTableModel unknownModel = new DefaultTableModel(new Object[0][0], unknownErrorColumnNames){
-      
+    DefaultTableModel unknownModel = new DefaultTableModel(new Object[0][0], unknownErrorColumnNames) {
+
         @Override
         public boolean isCellEditable(int row, int column) {
             return false; //To change body of generated methods, choose Tools | Templates.
         }
-      }
-;
-    
+    };
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -93,6 +97,8 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         logTable = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        specificEntryLabel = new javax.swing.JLabel();
+        totalEntriesLabel = new javax.swing.JLabel();
 
         fileChooser.setDialogTitle("Open Log File");
 
@@ -226,28 +232,37 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             }
         });
 
+        specificEntryLabel.setText("jLabel1");
+
+        totalEntriesLabel.setText("jLabel2");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jTabbedPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(openButton)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(openButton, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(specificEntryLabel)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(totalEntriesLabel)))))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -260,7 +275,11 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
+                        .addGap(3, 3, 3)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(specificEntryLabel)
+                            .addComponent(totalEntriesLabel))
+                        .addGap(18, 18, 18)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(openButton))
@@ -274,31 +293,29 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
     private void searchBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBoxActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_searchBoxActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-          
+
         int row = unknownTable.getSelectedRow();
-         KnownErrors hey = new KnownErrors();
-         
-        
+        KnownErrors hey = new KnownErrors();
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void openButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openButtonActionPerformed
         int returnVal = fileChooser.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION){
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-          
+
             List<String> logs = linesFromFile(file);
             populateLogsTable(logs);
-            
-            
+
         }
 
 
-               
     }//GEN-LAST:event_openButtonActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -307,19 +324,19 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void searchBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchBoxKeyReleased
-    //filterData(query);
-    //read contents of textfield
-    row = 0;
-    iterateThroughTable();
-    //int selectedRowIndex = logTable.getSelectedRow();
-   // int selectedColumnIndex = logTable.getSelectedColumn();
-   // String selectedString = (String)logTable.getModel().getValueAt(selectedRowIndex, selectedColumnIndex);
-     //search index of matching element in TableModel
-       //convert index to corresponding row index in Jtable using covertRowIndexToview
-   
-      
- 
-       //setRowSelectionInterval method of Jtable to select that row
+        //filterData(query);
+        //read contents of textfield
+        row = 0;
+        currentEntry = 0;
+        countFoundEntries();
+        iterateThroughTable();
+        //int selectedRowIndex = logTable.getSelectedRow();
+        // int selectedColumnIndex = logTable.getSelectedColumn();
+        // String selectedString = (String)logTable.getModel().getValueAt(selectedRowIndex, selectedColumnIndex);
+        //search index of matching element in TableModel
+        //convert index to corresponding row index in Jtable using covertRowIndexToview
+
+        //setRowSelectionInterval method of Jtable to select that row
     }//GEN-LAST:event_searchBoxKeyReleased
 
     private void logTableKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_logTableKeyPressed
@@ -363,61 +380,55 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             @Override
             public void run() {
                 new KnownErrorFinder1().setVisible(true);
-                
+
             }
         });
     }
-    
-    private List<String> linesFromFile(File file){
+
+    private List<String> linesFromFile(File file) {
         String line;
         List<String> logs = new ArrayList();
-        try{
-            
+        try {
+
             BufferedReader reader = new BufferedReader(new FileReader(file));
             StringBuilder sb = new StringBuilder();
-            
-            while((line = reader.readLine()) != null)
-            {
-                if(line.startsWith("\t"))
-                {
+
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("\t")) {
                     sb.append(line).append("\n\t");
-                continue;
-                } else if (line.startsWith("    ")){
+                    continue;
+                } else if (line.startsWith("    ")) {
                     sb.append(line).append("\n");
                     continue;
                 }
-                if (sb.toString().equalsIgnoreCase(""))
-                {
-                logs.add(line);
-                }
-                else{
-                    String concat = logs.get(logs.size()-1).concat("\n" + sb.toString());
-                    logs.set(logs.size()-1, concat);
+                if (sb.toString().equalsIgnoreCase("")) {
+                    logs.add(line);
+                } else {
+                    String concat = logs.get(logs.size() - 1).concat("\n" + sb.toString());
+                    logs.set(logs.size() - 1, concat);
                     sb.delete(0, sb.length());
                     logs.add(line);
-                        }
+                }
             }
             reader.close();
             return logs;
-        } catch(IOException e)
-        {
+        } catch (IOException e) {
             System.err.print(e);
         }
         return null;
     }
-    
-    private void populateLogsTable(List<String> logs){
-           
+
+    private void populateLogsTable(List<String> logs) {
+
         int counter = 0;
-        
-        if (model.getRowCount() > 0)
-        {
-      model.setRowCount(0);
+
+        if (model.getRowCount() > 0) {
+            model.setRowCount(0);
         }
-        for (String log: logs) {
+        for (String log : logs) {
             Object[] o = new Object[2];
             counter++;
-            
+
             o[0] = counter;
             o[1] = log;
             model.addRow(o);
@@ -425,62 +436,100 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         }
         logTable.setModel(model);
         //logTable.setEditingRow(ERROR);
-        
+
         PopUpMenu popup = new PopUpMenu();
-         
-        
+
         CustomMouseListener popUpListener = new CustomMouseListener(popup, logTable);
         logTable.addMouseListener(popUpListener);
         //unknown
-                
+
     }
-    
-    private void knownErrorFileCheck(){
+
+    private void knownErrorFileCheck() {
         KnownErrorFileChecker checks = new KnownErrorFileChecker();
-        if(checks.checkIfFileExists())
-        {
+        if (checks.checkIfFileExists()) {
             System.out.println("it exists");
-        } else{
+        } else {
             checks.createNewKnownErrorFile();
-            
+
         }
     }
-    private void filterData(String query){
-        
-        TableRowSorter<DefaultTableModel> tr=new TableRowSorter<>(model);
-        
+
+    private void filterData(String query) {
+
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(model);
+
         logTable.setRowSorter(tr);
-        tr.setRowFilter(RowFilter.regexFilter("(?i)"+query));
-        
+        tr.setRowFilter(RowFilter.regexFilter("(?i)" + query));
+
     }
-    
-    private void populateUnknownErrorsTable(String log){
-        
+
+    private void populateUnknownErrorsTable(String log) {
+
         Pattern p = Pattern.compile("[\\w]+Exception", Pattern.CASE_INSENSITIVE);
-        
-        if(log.length() > 250)
-        {
-        log = log.substring(0, 250);
-        } 
-        
-        
+
+        if (log.length() > 250) {
+            log = log.substring(0, 250);
+        }
+
         Matcher m = p.matcher(log);
-        while(m.find()){
+        while (m.find()) {
             String word = log.substring(m.start(), m.end());
-            if (word.matches("[\\w]+Exception$")){
-                if(!unknownErrorHolder.contains(word))
-                {
-            Object[] o = new Object[1];
-            
-            o[0] = word;
-            unknownModel.addRow(o);
-            unknownErrorHolder.add(word);
+            if (word.matches("[\\w]+Exception$")) {
+                if (!unknownErrorHolder.contains(word)) {
+                    Object[] o = new Object[1];
+
+                    o[0] = word;
+                    unknownModel.addRow(o);
+                    unknownErrorHolder.add(word);
+                }
             }
-           }
         }
         unknownTable.setModel(unknownModel);
     }
+
+    private void iterateThroughTable() {
+
+        int counter = 0;
+        String query = searchBox.getText();
+        if (currentEntry == totalEntriesFound) {
+            row = 0;
+            currentEntry = 0;
+        } 
+            for (; row < logTable.getRowCount(); row++) {
+                String next = logTable.getValueAt(row, 1).toString().toLowerCase();
+                String lowerCaseQuery = query.toLowerCase();
+                        
+                if (next.contains(lowerCaseQuery)) {
+                    counter++;
+                    if (counter == 1) {
+                        logTable.setRowSelectionInterval(row, row);
+                        logTable.convertRowIndexToView(row);
+                        logTable.scrollRectToVisible(logTable.getCellRect(row, 1, true));
+                        row++;
+                        currentEntry++;
+                        updateCurrentEntry();
+                        break;
+                    }
+                    //System.out.println("found");
+                
+
+            }
+        }
+    }
     
+    public void countFoundEntries(){
+        int counter = 0;
+        String query = searchBox.getText();
+        
+            for (int i = 0; i < logTable.getRowCount(); i++) {
+                String next = logTable.getValueAt(i, 1).toString().toLowerCase();
+                String lowerCaseQuery = query.toLowerCase();   
+                if (next.contains(lowerCaseQuery)) {
+                    counter++;
+                }
+            
+   
     private void iterateThroughTable(){
     
     int counter = 0;
@@ -534,9 +583,46 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                  //System.out.println("found");      
             }
         
+        if (query.equalsIgnoreCase("")){
+                                totalEntriesLabel.setVisible(false);
+
+        
+    } else {
+            if (counter == 0){
+                totalEntriesLabel.setText("Not Found");
+                totalEntriesFound = -1;
+                updateCurrentEntry();
+                
+
+            }else{
+totalEntriesLabel.setText(Integer.toString(counter)+" entries");
+totalEntriesFound = counter;
+        totalEntriesLabel.setVisible(true);
+        }
+        }
     }
+    
+    private void updateCurrentEntry(){
+
+                        String query = searchBox.getText();
+
+                
+        if (query.equalsIgnoreCase("")  ){
+                                specificEntryLabel.setVisible(false);
+
+        
+    } else if(totalEntriesFound == -1) {
+                                        specificEntryLabel.setVisible(false);
+
     }
-   }
+        else {
+           
+        specificEntryLabel.setText(Integer.toString(currentEntry)+" of");
+        specificEntryLabel.setVisible(true);
+        }
+        
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser fileChooser;
@@ -553,7 +639,9 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private javax.swing.JTable logTable;
     private javax.swing.JButton openButton;
     private javax.swing.JTextField searchBox;
+    private javax.swing.JLabel specificEntryLabel;
+    private javax.swing.JLabel totalEntriesLabel;
     private javax.swing.JPanel unknownTab;
     private javax.swing.JTable unknownTable;
     // End of variables declaration//GEN-END:variables
-    }
+}
