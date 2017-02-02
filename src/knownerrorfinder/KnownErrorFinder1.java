@@ -528,35 +528,28 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                 if (next.contains(lowerCaseQuery)) {
                     counter++;
                 }
-            
-   
-    private void iterateThroughTable(){
-    
-    int counter = 0;
-    String query=searchBox.getText();
-    if (row>logTable.getRowCount())
-    {
-        row= 0;
-    } else{
-    for( ; row < logTable.getRowCount(); row++){
-            String next = logTable.getValueAt(row, 1).toString();
-            if(next.contains(query))
-            {
-                counter++;
-                if(counter == 1)
-                {
-                    logTable.setRowSelectionInterval(row, row);
-                    logTable.convertRowIndexToView(row);
-                    logTable.scrollRectToVisible(logTable.getCellRect(row,1, true));
-                   row++;
-                    break;
-                }
-                 //System.out.println("found");      
-            }
+                if (query.equalsIgnoreCase("")){
+                                totalEntriesLabel.setVisible(false);
+
         
+    } else {
+            if (counter == 0){
+                totalEntriesLabel.setText("Not Found");
+                totalEntriesFound = -1;
+                updateCurrentEntry();
+                
+
+            }else{
+                    totalEntriesLabel.setText(Integer.toString(counter)+" entries");
+                    totalEntriesFound = counter;
+                    totalEntriesLabel.setVisible(true);
+        }
+        }
     }
     }
-   }
+            
+
+ 
    private void iterateUp(){
        int counter = 0;
     String query=searchBox.getText();
@@ -583,25 +576,11 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                  //System.out.println("found");      
             }
         
-        if (query.equalsIgnoreCase("")){
-                                totalEntriesLabel.setVisible(false);
-
         
-    } else {
-            if (counter == 0){
-                totalEntriesLabel.setText("Not Found");
-                totalEntriesFound = -1;
-                updateCurrentEntry();
-                
-
-            }else{
-totalEntriesLabel.setText(Integer.toString(counter)+" entries");
-totalEntriesFound = counter;
-        totalEntriesLabel.setVisible(true);
-        }
-        }
+   }
     }
-    
+   }
+  
     private void updateCurrentEntry(){
 
                         String query = searchBox.getText();
