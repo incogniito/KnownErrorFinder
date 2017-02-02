@@ -6,9 +6,13 @@
 package knownerrorfinder;
 
 import java.awt.PopupMenu;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 /**
@@ -20,6 +24,7 @@ public class CustomMouseListener extends MouseAdapter{
     private PopUpMenu menu;
     private JTable table;
     private JTable logsTable;
+    private JTextField searchField;
     
     
     public CustomMouseListener(PopUpMenu menu, JTable logTable){
@@ -28,10 +33,10 @@ public class CustomMouseListener extends MouseAdapter{
     }
     
     
-    public CustomMouseListener(PopUpMenu menu, JTable exceptionsTable, JTable logTable){
+    public CustomMouseListener(PopUpMenu menu, JTable exceptionsTable, JTextField searchField ){
         this.menu = menu;
         this.table = exceptionsTable;
-        this.logsTable = logTable;
+        this.searchField = searchField;
     }
     
     
@@ -50,18 +55,10 @@ public class CustomMouseListener extends MouseAdapter{
             if (table.getSelectedColumnCount()>1)
             {
                 showDetails();
-            } 
-        } else if (e.getClickCount() == 1)
-        {
-            if (table.getSelectedColumnCount()>1)
-            {
             } else {
-                findUnknownOccurences();
+              findUnknownOccurences();
             }
-        }
-        
-        
-        
+        }    
     }
     
     
@@ -71,7 +68,6 @@ public class CustomMouseListener extends MouseAdapter{
             if(table.getColumnCount() > 1){
                  menu.logTablePopupMenu(table).show(e.getComponent(), e.getX(), e.getY());
             } else {
-                
                 
             }
         }
@@ -111,6 +107,7 @@ public class CustomMouseListener extends MouseAdapter{
        int rowIndex = table.getSelectedRow();
        String valueAtRow = table.getValueAt(rowIndex, 0).toString();
        
-       
+       searchField.setText(valueAtRow);
+
     }
 }
