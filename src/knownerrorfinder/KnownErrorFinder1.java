@@ -525,12 +525,11 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         row--;
     } else{
     for( ; row < logTable.getRowCount(); row--){
-            String previous = logTable.getValueAt(row, 1).toString().toLowerCase();
+            String current = logTable.getValueAt(row, 1).toString().toLowerCase();
              String lowerCaseQuery = query.toLowerCase();
-            if(previous.contains(lowerCaseQuery))
+            if(current.contains(lowerCaseQuery))
             {
-     
-               counter++;
+                 counter++;
                 if(counter == 1)
                 { 
                      logTable.setRowSelectionInterval(row, row);
@@ -540,8 +539,9 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                     currentEntry--;
                     updateCurrentEntry();
                     break;
+                   
                 }
-               
+             
                  //System.out.println("found");      
             }
         
