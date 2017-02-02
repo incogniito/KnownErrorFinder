@@ -220,6 +220,11 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         });
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/knownerrorfinder/icon-arrow-up-b-128.png"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -320,6 +325,11 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private void logTableKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_logTableKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_logTableKeyPressed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        iterateUp();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -489,12 +499,39 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                     logTable.setRowSelectionInterval(row, row);
                     logTable.convertRowIndexToView(row);
                     logTable.scrollRectToVisible(logTable.getCellRect(row,1, true));
-                    row++;
+                   row++;
                     break;
                 }
-                
-            //System.out.println("found");
-            
+                 //System.out.println("found");      
+            }
+        
+    }
+    }
+   }
+   private void iterateUp(){
+       int counter = 0;
+    String query=searchBox.getText();
+    if (row==logTable.getRowCount())
+    {
+        row--;
+    } else{
+    for( ; row < logTable.getRowCount(); row--){
+            String previous = logTable.getValueAt(row, 1).toString();
+            if(previous.contains(query))
+            {
+     
+               counter++;
+                if(counter == 1)
+                { 
+                  
+                    logTable.setRowSelectionInterval(row, row);
+                    logTable.convertRowIndexToView(row);
+                    logTable.scrollRectToVisible(logTable.getCellRect(row,1, true));
+                    row--;
+                    break;
+                }
+               
+                 //System.out.println("found");      
             }
         
     }
