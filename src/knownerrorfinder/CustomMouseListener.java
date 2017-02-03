@@ -50,8 +50,13 @@ public class CustomMouseListener extends MouseAdapter{
             if (table.getSelectedColumnCount()>1)
             {
                 showDetails();
+            } 
+        } else if (e.getClickCount() == 1)
+        {
+            if (table.getSelectedColumnCount()>1)
+            {
             } else {
-                
+                findUnknownOccurences();
             }
         }
         
