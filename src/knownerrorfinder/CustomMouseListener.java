@@ -29,7 +29,7 @@ public class CustomMouseListener extends MouseAdapter{
     
     public CustomMouseListener(PopUpMenu menu, JTable logTable){
         this.menu = menu;
-        this.table = logTable;
+        this.logsTable = logTable;
     }
     
     
@@ -47,20 +47,22 @@ public class CustomMouseListener extends MouseAdapter{
         //Determine if right button is clicked
         if(SwingUtilities.isRightMouseButton(e))
         {
+            
             doPop(e);
+            
         }
         
         if (e.getClickCount() == 2)
         {
-            if (table.getSelectedColumnCount()>1)
+            if (logsTable != null)
             {
                 showDetails();
             } 
         } else if (e.getClickCount() == 1)
         {
-            if (table.getSelectedColumnCount()>1)
-            {
-            } else {
+
+            
+             if (table != null){
               findUnknownOccurences();
             }
         }    
@@ -69,13 +71,21 @@ public class CustomMouseListener extends MouseAdapter{
     
     private void doPop(MouseEvent e){
         
-        if (table.getSelectedRow() != -1){
-            if(table.getColumnCount() > 1){
-                 menu.logTablePopupMenu(table).show(e.getComponent(), e.getX(), e.getY());
+
+            if(logsTable != null){
+                int selectedRow = logsTable.getSelectedRow();
+                    if (selectedRow != -1 )
+                    {
+                 menu.logTablePopupMenu(logsTable).show(e.getComponent(), e.getX(), e.getY());
+                    }
             } else {
-                
+                int selectedRow = table.getSelectedRow();
+                    if (selectedRow != -1 ){
+
+                menu.unknownTablePopupMenu(table, searchField).show(e.getComponent(), e.getX(), e.getY());
+                    }
             }
-        }
+        
         
         
     }
@@ -83,7 +93,7 @@ public class CustomMouseListener extends MouseAdapter{
     private void showDetails(){
         
         ShowFullDetails details = new ShowFullDetails();
-                    int[] selectedRows = table.getSelectedRows();
+                    int[] selectedRows = logsTable.getSelectedRows();
                     
                     if(selectedRows.length != 0)
                     {
@@ -91,17 +101,20 @@ public class CustomMouseListener extends MouseAdapter{
                         for(int i : selectedRows)
                         {
                              int selectedColumn = 1;
-                            String info = table.getValueAt(i, selectedColumn).toString();
+                            String info = logsTable.getValueAt(i, selectedColumn).toString();
                             sb.append(info).append("\n");
                         }
                         details.fillDetails(sb.toString());
                     } else {
                     
-                    int selectedRow = table.getSelectedRow();
-                    int selectedColumn = table.getSelectedColumn();
-                    String info = table.getValueAt(selectedRow, selectedColumn).toString();
+                    int selectedRow = logsTable.getSelectedRow();
+                    int selectedColumn = logsTable.getSelectedColumn();
+                    if (selectedRow != -1 || selectedColumn != -1)
+                    {
+                    String info = logsTable.getValueAt(selectedRow, selectedColumn).toString();
                     
                     details.fillDetails(info);
+                    }
                     }
                     details.setVisible(true);
     }
@@ -110,9 +123,13 @@ public class CustomMouseListener extends MouseAdapter{
     
     private void findUnknownOccurences(){
        int rowIndex = table.getSelectedRow();
+       if (rowIndex != -1)
+       {
        String valueAtRow = table.getValueAt(rowIndex, 0).toString();
+              searchField.setText(valueAtRow);
+       }
        
-       searchField.setText(valueAtRow);
+       
 
     }
 }

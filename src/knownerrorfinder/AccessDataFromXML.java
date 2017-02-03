@@ -55,7 +55,7 @@ public List<KnownError> retrieveKnownErrors() {
         
         List<KnownError> existingErrors = retrieveKnownErrors();
         KnownError newKnownError = new KnownError();
-
+      if (existingErrors != null){
         for (KnownError currentError : existingErrors) {
             if (currentError.getName().equalsIgnoreCase(name)) {
                 currentKnownErrors.clear();
@@ -77,6 +77,24 @@ public List<KnownError> retrieveKnownErrors() {
                 currentKnownErrors.add(currentError);
             }
         }
+      }else{
+          
+          newKnownError.setName(name);
+                newKnownError.setSolution(solution);
+                
+                GregorianCalendar dateAdded = new GregorianCalendar();
+        dateAdded.setTime(date);
+       XMLGregorianCalendar xmlDateAdded = null;
+                try {
+                    xmlDateAdded = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(dateAdded.get(Calendar.YEAR), dateAdded.get(Calendar.MONTH)+1, dateAdded.get(Calendar.DAY_OF_MONTH), DatatypeConstants.FIELD_UNDEFINED);
+                } catch (DatatypeConfigurationException ex) {
+                    Logger.getLogger(AccessDataFromXML.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                newKnownError.setDateAdded(xmlDateAdded);
+                currentKnownErrors.add(newKnownError);
+          
+      }
 
         if (currentKnownErrors.size() > 0) {
             currentKnownErrors.add(newKnownError);

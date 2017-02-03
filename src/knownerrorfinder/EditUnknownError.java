@@ -8,7 +8,9 @@ package knownerrorfinder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import javax.swing.JFileChooser;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 /**
@@ -20,6 +22,8 @@ public class EditUnknownError extends javax.swing.JFrame {
     /**
      * Creates new form EditUnknownError
      */
+    
+    Date date = null;
     public EditUnknownError() {
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -30,26 +34,39 @@ public class EditUnknownError extends javax.swing.JFrame {
             }
              
          });
-         dateEdited();
+         jButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               AccessDataFromXML data = new AccessDataFromXML();
+               String name = nameLabel.getText().toString();
+               String solution = jTextArea1.getText();
+               data.newError(name, date, solution);
+               
+            }
+        });
+        date = dateEdited();
+         
+         
     }
     public void closeFrame(){
         super.dispose();
     }
-    public void dateEdited()
+    public final Date dateEdited()
     {
         Calendar cal = Calendar.getInstance();
         int day = cal.get(Calendar.DAY_OF_MONTH);
         int month = cal.get(Calendar.MONTH);
         int year= cal.get(Calendar.YEAR);
         
-        int hour = cal.get(Calendar.HOUR);
+       /* int hour = cal.get(Calendar.HOUR);
         int min = cal.get(Calendar.MINUTE);
-        int sec = cal.get(Calendar.SECOND);
+        int sec = cal.get(Calendar.SECOND);*/
         
         
         
-        dateLabel.setText("Date: "+day+"/"+month+"/"+year+" Time: "+hour+":"+min+":"+sec);
+        dateLabel.setText("Date:  "+day+"/"+month+"/"+year);
         
+        return cal.getTime();
      }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -138,7 +155,11 @@ public class EditUnknownError extends javax.swing.JFrame {
         // TODO add your handling code here:
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_jButton2ActionPerformed
-
+    
+    public void setName(String rowName){
+        
+       nameLabel.setText(rowName);
+    }
     /**
      * @param args the command line arguments
      */
@@ -175,11 +196,7 @@ public class EditUnknownError extends javax.swing.JFrame {
         });
     }
    
-    @Override
-   public void setName(String exception){
-       nameLabel.setText("Name: "+exception);
-       
-   }
+   
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel dateLabel;
