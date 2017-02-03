@@ -48,7 +48,7 @@ public class EditUnknownError extends javax.swing.JFrame {
         
         
         
-        dateLabel.setText("Time:"+hour+":"+min+":"+sec+"  Date: "+day+"/"+month+"/"+year);
+        dateLabel.setText("Date: "+day+"/"+month+"/"+year+" Time: "+hour+":"+min+":"+sec);
         
      }
     /**
@@ -69,7 +69,7 @@ public class EditUnknownError extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Edit Unknown Error");
+        setTitle("Add To Known Errors");
 
         jButton1.setText("Save");
 
@@ -175,6 +175,12 @@ public class EditUnknownError extends javax.swing.JFrame {
         });
     }
    
+    @Override
+   public void setName(String exception){
+       nameLabel.setText("Name: "+exception);
+       
+   }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel dateLabel;
     private javax.swing.JButton jButton1;

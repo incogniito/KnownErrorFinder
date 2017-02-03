@@ -39,66 +39,80 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     public KnownErrorFinder1() {
         initComponents();
         knownErrorFileCheck();
-
+        
         totalEntriesLabel.setVisible(false);
         specificEntryLabel.setVisible(false);
-
+        
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-
+            
             List<String> logs = linesFromFile(file);
             populateLogsTable(logs);
-
+            
         }
-        jButton1.addActionListener(new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                     EditUnknownError a = new EditUnknownError();
-                     a.setVisible(true);
-                    }
+        jButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EditUnknownError a = new EditUnknownError();
+                a.setVisible(true);
+            }
             
         });
         
-                        
-   searchBox.getDocument().addDocumentListener(new DocumentListener() {
-  @Override
-  public void changedUpdate(DocumentEvent e) {
-      
-  }
-  @Override
-  public void removeUpdate(DocumentEvent e) {
-  }
-  @Override
-  public void insertUpdate(DocumentEvent e) {
-      row = 0;
-        currentEntry = 0;
-        countFoundEntries();
-        iterateThroughTable();
-  }
+        searchBox.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                
+            }
 
-});
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                row = 0;
+                currentEntry = 0;
+                countFoundEntries();
+                iterateThroughTable();
+            }
+            
+        });
     }
-
+    
     String filePath;
     int foundEntriescounter = 0;
     int totalEntriesFound = -1;
     int currentEntry = 0;
     int buttonCounter = 0;
     int row = 0;
+    
+    AccessDataFromXML knownErrorsFile = new AccessDataFromXML();
+    List<KnownError> knownErrors = knownErrorsFile.retrieveKnownErrors();
+    
     List<String> unknownErrorHolder = new ArrayList();
     Object[] columnNames = {"No", "Message"};
     DefaultTableModel model = new DefaultTableModel(new Object[0][0], columnNames) {
-
+        
         @Override
         public boolean isCellEditable(int row, int column) {
             return false; //To change body of generated methods, choose Tools | Templates.
         }
     };
-
+    
     Object[] unknownErrorColumnNames = {"Exception"};
     DefaultTableModel unknownModel = new DefaultTableModel(new Object[0][0], unknownErrorColumnNames) {
-
+        
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false; //To change body of generated methods, choose Tools | Templates.
+        }
+    };
+    
+    Object[] knownErrorColumnNames = {"Exception"};
+    DefaultTableModel knownModel = new DefaultTableModel(new Object[0][0], knownErrorColumnNames) {
+        
         @Override
         public boolean isCellEditable(int row, int column) {
             return false; //To change body of generated methods, choose Tools | Templates.
@@ -335,9 +349,6 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 
-        
-       
-
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -345,12 +356,12 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-
+            
             List<String> logs = linesFromFile(file);
             populateLogsTable(logs);
-
+            
         }
-
+        
 
     }//GEN-LAST:event_openButtonActionPerformed
 
@@ -419,19 +430,19 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             @Override
             public void run() {
                 new KnownErrorFinder1().setVisible(true);
-
+                
             }
         });
     }
-
+    
     private List<String> linesFromFile(File file) {
         String line;
         List<String> logs = new ArrayList();
         try {
-
+            
             BufferedReader reader = new BufferedReader(new FileReader(file));
             StringBuilder sb = new StringBuilder();
-
+            
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("\t")) {
                     sb.append(line).append("\n\t");
@@ -456,71 +467,73 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         }
         return null;
     }
-
+    
     private void populateLogsTable(List<String> logs) {
-
+        
         int counter = 0;
-
+        
         if (model.getRowCount() > 0) {
             model.setRowCount(0);
         }
         for (String log : logs) {
             Object[] o = new Object[2];
             counter++;
-
+            
             o[0] = counter;
             o[1] = log;
             model.addRow(o);
-            populateUnknownErrorsTable(log);
+            populateErrorsTable(log);
+            
+            
         }
         logTable.setModel(model);
         //logTable.setEditingRow(ERROR);
 
         PopUpMenu popup = new PopUpMenu();
-
+        
         CustomMouseListener popUpListener = new CustomMouseListener(popup, logTable);
         logTable.addMouseListener(popUpListener);
-
+        
         CustomMouseListener unknownPopUpListener = new CustomMouseListener(popup, unknownTable, searchBox);
         unknownTable.addMouseListener(unknownPopUpListener);
         //unknown
 
     }
-
+    
     private void knownErrorFileCheck() {
         KnownErrorFileChecker checks = new KnownErrorFileChecker();
         if (checks.checkIfFileExists()) {
             System.out.println("it exists");
         } else {
             checks.createNewKnownErrorFile();
-
+            
         }
     }
-
+    
     private void filterData(String query) {
-
+        
         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(model);
-
+        
         logTable.setRowSorter(tr);
         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query));
-
+        
     }
-
+    
     private void populateUnknownErrorsTable(String log) {
-
+        
         Pattern p = Pattern.compile("[\\w]+Exception", Pattern.CASE_INSENSITIVE);
-
+        
         if (log.length() > 250) {
             log = log.substring(0, 250);
         }
-
+        
         Matcher m = p.matcher(log);
         while (m.find()) {
             String word = log.substring(m.start(), m.end());
             if (word.matches("[\\w]+Exception$")) {
                 if (!unknownErrorHolder.contains(word)) {
                     Object[] o = new Object[1];
-
+                    
                     o[0] = word;
                     unknownModel.addRow(o);
                     unknownErrorHolder.add(word);
@@ -528,23 +541,72 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             }
         }
         unknownTable.setModel(unknownModel);
-
+        
     }
+    
+    private void populateErrorsTable(String log) {
+        
+        
+        
+        if (!knownErrors.isEmpty()) {
+            
+            Pattern p = Pattern.compile("[\\w]+Exception", Pattern.CASE_INSENSITIVE);
+            
+            if (log.length() > 250) {
+                log = log.substring(0, 250);
+            }
+            
+            Matcher m = p.matcher(log);
+            EXCEPTION_FINDER:
+            while (m.find()) {
+                String word = log.substring(m.start(), m.end());
+                if (word.matches("[\\w]+Exception$")) {
+                for (KnownError ke : knownErrors) {
+                    if (word.equalsIgnoreCase(ke.getName())) {
+                       Object[] o = new Object[1];
 
+                        o[0] = ke.getName();
+                         knownModel.addRow(o);
+                    continue EXCEPTION_FINDER;
+                    } else {
+                        if (!unknownErrorHolder.contains(word)) {
+                    Object[] o = new Object[1];
+                    
+                    o[0] = word;
+                    unknownModel.addRow(o);
+                    unknownErrorHolder.add(word);
+                }
+                        
+                    }
+                   
+                }
+                }
+                
+            } 
+            
+            knownTable.setModel(knownModel);
+            unknownTable.setModel(unknownModel);
+
+        }else {
+                    populateUnknownErrorsTable(log);
+                    }
+        
+    }
+    
     private void iterateThroughTable() {
-
+        
         int counter = 0;
         String query = searchBox.getText();
         if (currentEntry == totalEntriesFound) {
             row = 0;
             currentEntry = 0;
         } else if (totalEntriesLabel.getText().equalsIgnoreCase("not found")) {
-
+            
         }
         for (; row < logTable.getRowCount(); row++) {
             String next = logTable.getValueAt(row, 1).toString().toLowerCase();
             String lowerCaseQuery = query.toLowerCase();
-
+            
             if (next.contains(lowerCaseQuery)) {
                 counter++;
                 if (counter == 1) {
@@ -561,14 +623,14 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             }
         }
     }
-
+    
     private void iterateUp() {
         int counter = 0;
         String query = searchBox.getText();
         if (currentEntry == 1) {
             row = 0;
         } else if (totalEntriesLabel.getText().equalsIgnoreCase("not found")) {
-
+            
         } else {
             for (; row < logTable.getRowCount(); row--) {
                 if (buttonCounter == 1) {
@@ -579,12 +641,12 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                     buttonCounter = 0;
                     continue;
                 }
-
+                
                 String previous = logTable.getValueAt(row, 1).toString().toLowerCase();
                 String lowerCaseQuery = query.toLowerCase();
-
+                
                 if (previous.contains(lowerCaseQuery)) {
-
+                    
                     counter++;
                     if (counter == 1) {
                         logTable.setRowSelectionInterval(row, row);
@@ -598,15 +660,15 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
                     //System.out.println("found");      
                 }
-
+                
             }
         }
     }
-
+    
     public void countFoundEntries() {
         int counter = 0;
         String query = searchBox.getText();
-
+        
         for (int i = 0; i < logTable.getRowCount(); i++) {
             String next = logTable.getValueAt(i, 1).toString().toLowerCase();
             String lowerCaseQuery = query.toLowerCase();
@@ -615,13 +677,13 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             }
             if (query.equalsIgnoreCase("")) {
                 totalEntriesLabel.setVisible(false);
-
+                
             } else {
                 if (counter == 0) {
                     totalEntriesLabel.setText("Not Found");
                     totalEntriesFound = -1;
                     updateCurrentEntry();
-
+                    
                 } else {
                     totalEntriesLabel.setText(Integer.toString(counter) + " entries");
                     totalEntriesFound = counter;
@@ -630,23 +692,23 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             }
         }
     }
-
+    
     private void updateCurrentEntry() {
-
+        
         String query = searchBox.getText();
-
+        
         if (query.equalsIgnoreCase("")) {
             specificEntryLabel.setVisible(false);
-
+            
         } else if (totalEntriesFound == -1) {
             specificEntryLabel.setVisible(false);
-
+            
         } else {
-
+            
             specificEntryLabel.setText(Integer.toString(currentEntry) + " of");
             specificEntryLabel.setVisible(true);
         }
-
+        
     }
 
 
