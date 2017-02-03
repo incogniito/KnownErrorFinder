@@ -20,6 +20,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPopupMenu;
 import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -37,10 +39,10 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     public KnownErrorFinder1() {
         initComponents();
         knownErrorFileCheck();
-        
+
         totalEntriesLabel.setVisible(false);
         specificEntryLabel.setVisible(false);
-        
+
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
@@ -58,6 +60,24 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             
         });
         
+                        
+   searchBox.getDocument().addDocumentListener(new DocumentListener() {
+  @Override
+  public void changedUpdate(DocumentEvent e) {
+      
+  }
+  @Override
+  public void removeUpdate(DocumentEvent e) {
+  }
+  @Override
+  public void insertUpdate(DocumentEvent e) {
+      row = 0;
+        currentEntry = 0;
+        countFoundEntries();
+        iterateThroughTable();
+  }
+
+});
     }
 
     String filePath;
@@ -306,7 +326,10 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
     private void searchBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBoxActionPerformed
         // TODO add your handling code here:
-
+        row = 0;
+        currentEntry = 0;
+        countFoundEntries();
+        iterateThroughTable();
     }//GEN-LAST:event_searchBoxActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -335,7 +358,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         // TODO add your handling code here:
         buttonCounter = 1;
         iterateThroughTable();
-        
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void searchBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchBoxKeyReleased
@@ -361,7 +384,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         iterateUp();
-       
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
@@ -457,6 +480,9 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
         CustomMouseListener popUpListener = new CustomMouseListener(popup, logTable);
         logTable.addMouseListener(popUpListener);
+
+        CustomMouseListener unknownPopUpListener = new CustomMouseListener(popup, unknownTable, searchBox);
+        unknownTable.addMouseListener(unknownPopUpListener);
         //unknown
 
     }
@@ -502,6 +528,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             }
         }
         unknownTable.setModel(unknownModel);
+
     }
 
     private void iterateThroughTable() {
@@ -511,128 +538,115 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         if (currentEntry == totalEntriesFound) {
             row = 0;
             currentEntry = 0;
-        } else if (totalEntriesLabel.getText().equalsIgnoreCase("not found")){
-            
-        } 
-            for (; row < logTable.getRowCount(); row++) {
-                String next = logTable.getValueAt(row, 1).toString().toLowerCase();
+        } else if (totalEntriesLabel.getText().equalsIgnoreCase("not found")) {
+
+        }
+        for (; row < logTable.getRowCount(); row++) {
+            String next = logTable.getValueAt(row, 1).toString().toLowerCase();
+            String lowerCaseQuery = query.toLowerCase();
+
+            if (next.contains(lowerCaseQuery)) {
+                counter++;
+                if (counter == 1) {
+                    logTable.setRowSelectionInterval(row, row);
+                    logTable.convertRowIndexToView(row);
+                    logTable.scrollRectToVisible(logTable.getCellRect(row, 1, true));
+                    currentEntry++;
+                    updateCurrentEntry();
+                    row++;
+                    break;
+                }
+                //System.out.println("found");
+
+            }
+        }
+    }
+
+    private void iterateUp() {
+        int counter = 0;
+        String query = searchBox.getText();
+        if (currentEntry == 1) {
+            row = 0;
+        } else if (totalEntriesLabel.getText().equalsIgnoreCase("not found")) {
+
+        } else {
+            for (; row < logTable.getRowCount(); row--) {
+                if (buttonCounter == 1) {
+                    buttonCounter++;
+                    continue;
+                }
+                if (buttonCounter == 2) {
+                    buttonCounter = 0;
+                    continue;
+                }
+
+                String previous = logTable.getValueAt(row, 1).toString().toLowerCase();
                 String lowerCaseQuery = query.toLowerCase();
-                        
-                if (next.contains(lowerCaseQuery)) {
+
+                if (previous.contains(lowerCaseQuery)) {
+
                     counter++;
                     if (counter == 1) {
                         logTable.setRowSelectionInterval(row, row);
                         logTable.convertRowIndexToView(row);
                         logTable.scrollRectToVisible(logTable.getCellRect(row, 1, true));
-                        currentEntry++;
+                        currentEntry--;
                         updateCurrentEntry();
-                        row++;
+                        row--;
                         break;
                     }
-                    //System.out.println("found");
-                
+
+                    //System.out.println("found");      
+                }
 
             }
         }
     }
-     private void iterateUp(){
-       int counter = 0;
-    String query=searchBox.getText();
-    if (currentEntry == 1) {
-            row = 0;
-        }else if (totalEntriesLabel.getText().equalsIgnoreCase("not found")){
-            
-        } else{
-    for( ; row < logTable.getRowCount(); row--){
-        if (buttonCounter == 1)
-        {
-            buttonCounter++;
-            continue;
-        } if (buttonCounter == 2)
-        {
-            buttonCounter = 0;
-            continue;
-        }
-        
-             String previous = logTable.getValueAt(row, 1).toString().toLowerCase();
-             String lowerCaseQuery = query.toLowerCase();
-            
-             
-             
-            if(previous.contains(lowerCaseQuery))
-            {
-                 counter++;
-                if(counter == 1)
-                { 
-                     logTable.setRowSelectionInterval(row, row);
-                    logTable.convertRowIndexToView(row);
-                    logTable.scrollRectToVisible(logTable.getCellRect(row,1, true));
-                    currentEntry--;
-                    updateCurrentEntry();
-                    row--;
-                    break;
-                   
-                }
-             
-                 //System.out.println("found");      
-            }
-        
-   }
-    }
-   }
-    public void countFoundEntries(){
+
+    public void countFoundEntries() {
         int counter = 0;
         String query = searchBox.getText();
-        
-            for (int i = 0; i < logTable.getRowCount(); i++) {
-                String next = logTable.getValueAt(i, 1).toString().toLowerCase();
-                String lowerCaseQuery = query.toLowerCase();   
-                if (next.contains(lowerCaseQuery)) {
-                    counter++;
-                }
-                if (query.equalsIgnoreCase("")){
-                                totalEntriesLabel.setVisible(false);
 
-        
-    } else {
-            if (counter == 0){
-                totalEntriesLabel.setText("Not Found");
-                totalEntriesFound = -1;
-                updateCurrentEntry();
-                
+        for (int i = 0; i < logTable.getRowCount(); i++) {
+            String next = logTable.getValueAt(i, 1).toString().toLowerCase();
+            String lowerCaseQuery = query.toLowerCase();
+            if (next.contains(lowerCaseQuery)) {
+                counter++;
+            }
+            if (query.equalsIgnoreCase("")) {
+                totalEntriesLabel.setVisible(false);
 
-            }else{
-                    totalEntriesLabel.setText(Integer.toString(counter)+" entries");
+            } else {
+                if (counter == 0) {
+                    totalEntriesLabel.setText("Not Found");
+                    totalEntriesFound = -1;
+                    updateCurrentEntry();
+
+                } else {
+                    totalEntriesLabel.setText(Integer.toString(counter) + " entries");
                     totalEntriesFound = counter;
                     totalEntriesLabel.setVisible(true);
-        }
+                }
+            }
         }
     }
-    }
-            
 
- 
-  
-  
-    private void updateCurrentEntry(){
+    private void updateCurrentEntry() {
 
-                        String query = searchBox.getText();
+        String query = searchBox.getText();
 
-                
-        if (query.equalsIgnoreCase("")  ){
-                                specificEntryLabel.setVisible(false);
+        if (query.equalsIgnoreCase("")) {
+            specificEntryLabel.setVisible(false);
 
-        
-    } else if(totalEntriesFound == -1) {
-                                        specificEntryLabel.setVisible(false);
+        } else if (totalEntriesFound == -1) {
+            specificEntryLabel.setVisible(false);
 
-    }
-        else {
-           
-        specificEntryLabel.setText(Integer.toString(currentEntry)+" of");
-        specificEntryLabel.setVisible(true);
+        } else {
+
+            specificEntryLabel.setText(Integer.toString(currentEntry) + " of");
+            specificEntryLabel.setVisible(true);
         }
-        
+
     }
 
 

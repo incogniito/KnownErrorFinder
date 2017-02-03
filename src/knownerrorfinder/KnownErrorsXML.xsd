@@ -8,7 +8,6 @@
     <xsd:complexType name="knownError"> 
         <xsd:sequence>
             <xsd:element name = "name" type = "xsd:string"/> 
-            <xsd:element name = "exception" type = "xsd:string"/>              
             <xsd:element name = "solution" type = "xsd:string"/>
             <xsd:element name = "dateAdded" type = "xsd:date"/>
 
