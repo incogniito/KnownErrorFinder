@@ -5,6 +5,8 @@
  */
 package knownerrorfinder;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -15,6 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static javax.management.Query.value;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JPopupMenu;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
@@ -46,12 +49,22 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             populateLogsTable(logs);
 
         }
+        jButton1.addActionListener(new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                     EditUnknownError a = new EditUnknownError();
+                     a.setVisible(true);
+                    }
+            
+        });
+        
     }
 
     String filePath;
     int foundEntriescounter = 0;
     int totalEntriesFound = -1;
     int currentEntry = 0;
+    int buttonCounter = 0;
     int row = 0;
     List<String> unknownErrorHolder = new ArrayList();
     Object[] columnNames = {"No", "Message"};
@@ -299,8 +312,8 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 
-        int row = unknownTable.getSelectedRow();
-        KnownErrors hey = new KnownErrors();
+        
+       
 
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -320,7 +333,9 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        buttonCounter = 1;
         iterateThroughTable();
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void searchBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchBoxKeyReleased
@@ -346,6 +361,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         iterateUp();
+       
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
@@ -495,6 +511,8 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         if (currentEntry == totalEntriesFound) {
             row = 0;
             currentEntry = 0;
+        } else if (totalEntriesLabel.getText().equalsIgnoreCase("not found")){
+            
         } 
             for (; row < logTable.getRowCount(); row++) {
                 String next = logTable.getValueAt(row, 1).toString().toLowerCase();
@@ -506,9 +524,9 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                         logTable.setRowSelectionInterval(row, row);
                         logTable.convertRowIndexToView(row);
                         logTable.scrollRectToVisible(logTable.getCellRect(row, 1, true));
-                        row++;
                         currentEntry++;
                         updateCurrentEntry();
+                        row++;
                         break;
                     }
                     //System.out.println("found");
@@ -520,14 +538,28 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
      private void iterateUp(){
        int counter = 0;
     String query=searchBox.getText();
-    if (row==logTable.getRowCount())
-    {
-        row--;
-    } else{
+    if (currentEntry == 1) {
+            row = 0;
+        }else if (totalEntriesLabel.getText().equalsIgnoreCase("not found")){
+            
+        } else{
     for( ; row < logTable.getRowCount(); row--){
-            String current = logTable.getValueAt(row, 1).toString().toLowerCase();
+        if (buttonCounter == 1)
+        {
+            buttonCounter++;
+            continue;
+        } if (buttonCounter == 2)
+        {
+            buttonCounter = 0;
+            continue;
+        }
+        
+             String previous = logTable.getValueAt(row, 1).toString().toLowerCase();
              String lowerCaseQuery = query.toLowerCase();
-            if(current.contains(lowerCaseQuery))
+            
+             
+             
+            if(previous.contains(lowerCaseQuery))
             {
                  counter++;
                 if(counter == 1)
@@ -535,16 +567,15 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                      logTable.setRowSelectionInterval(row, row);
                     logTable.convertRowIndexToView(row);
                     logTable.scrollRectToVisible(logTable.getCellRect(row,1, true));
-                    row--;
                     currentEntry--;
                     updateCurrentEntry();
+                    row--;
                     break;
                    
                 }
              
                  //System.out.println("found");      
             }
-        
         
    }
     }
