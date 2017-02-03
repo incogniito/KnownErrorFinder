@@ -54,8 +54,14 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         jButton1.addActionListener(new ActionListener(){
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                     EditUnknownError a = new EditUnknownError();
-                     a.setVisible(true);
+                     EditUnknownError newFrame = new EditUnknownError();
+                     
+                     int index = unknownTable.getSelectedRow();
+                     TableModel model = unknownTable.getModel();
+                    String id= unknownTable.getValueAt(index, 0).toString();
+                    newFrame.setName(id);
+                    newFrame.pack();
+                    newFrame.setVisible(true);
                     }
             
         });
