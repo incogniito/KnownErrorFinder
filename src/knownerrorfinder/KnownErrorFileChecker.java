@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  * @author samsonaiyegbusi
  */
 public class KnownErrorFileChecker {
-
+//checks if file exists
     public boolean checkIfFileExists() {
         File f = new File(System.getProperty("user.dir")+"/src/Files/knownErrors.xml");
         if (f.exists() && !f.isDirectory()) {
@@ -31,12 +31,7 @@ public class KnownErrorFileChecker {
             return false;
         }
     }
-    
-    public void loadKnownErrorsToTable(){
-        
-        
-    }
-    
+    //creates an xml file in the Files package
     public void createNewKnownErrorFile(){
       List<String> lines = Arrays.asList("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
 

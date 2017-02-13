@@ -22,28 +22,12 @@ public class EditUnknownError extends javax.swing.JFrame {
     /**
      * Creates new form EditUnknownError
      */
-    
+    boolean saved = false;
     Date date = null;
     public EditUnknownError() {
         initComponents();
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-         jButton2.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                closeFrame();
-            }
-             
-         });
-         jButton1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               AccessDataFromXML data = new AccessDataFromXML();
-               String name = nameLabel.getText().toString();
-               String solution = jTextArea1.getText();
-               data.newError(name, date, solution);
-               
-            }
-        });
+        
+         
         date = dateEdited();
          
          
@@ -51,18 +35,14 @@ public class EditUnknownError extends javax.swing.JFrame {
     public void closeFrame(){
         super.dispose();
     }
+    
+    //displays date and returns it
     public final Date dateEdited()
     {
         Calendar cal = Calendar.getInstance();
         int day = cal.get(Calendar.DAY_OF_MONTH);
         int month = cal.get(Calendar.MONTH);
-        int year= cal.get(Calendar.YEAR);
-        
-       /* int hour = cal.get(Calendar.HOUR);
-        int min = cal.get(Calendar.MINUTE);
-        int sec = cal.get(Calendar.SECOND);*/
-        
-        
+        int year= cal.get(Calendar.YEAR);  
         
         dateLabel.setText("Date:  "+day+"/"+month+"/"+year);
         
@@ -89,6 +69,11 @@ public class EditUnknownError extends javax.swing.JFrame {
         setTitle("Add To Known Errors");
 
         jButton1.setText("Save");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Cancel");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -153,9 +138,21 @@ public class EditUnknownError extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        closeFrame();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+         AccessDataFromXML data = new AccessDataFromXML();
+               String name = nameLabel.getText();
+               String solution = jTextArea1.getText();
+               data.newError(name, date, solution);
+               saved = true;
+               closeFrame();
+               
+    }//GEN-LAST:event_jButton1ActionPerformed
     
+    @Override
     public void setName(String rowName){
         
        nameLabel.setText(rowName);

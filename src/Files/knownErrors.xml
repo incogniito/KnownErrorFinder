@@ -1,1 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<allKnownErrors xmlns="http://exceptions">
+    <Errors>
+        <name>SQLException</name>
+        <solution>,n,mn,mn</solution>
+        <dateAdded>2017-02-06</dateAdded>
+    </Errors>
+    <Errors>
+        <name>ResourceException</name>
+        <solution>huihuhiu</solution>
+        <dateAdded>2017-02-06</dateAdded>
+    </Errors>
+    <Errors>
+        <name>PropertyAccessException</name>
+        <solution>gzhdfgfxh</solution>
+        <dateAdded>2017-02-06</dateAdded>
+    </Errors>
+    <Errors>
+        <name>ResourceDeadException</name>
+        <solution>bjhbb</solution>
+        <dateAdded>2017-02-06</dateAdded>
+    </Errors>
+</allKnownErrors>

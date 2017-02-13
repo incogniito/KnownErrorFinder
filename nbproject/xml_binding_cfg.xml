@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <schemas xmlns='http://xml.netbeans.org/schema/JAXBWizConfig' destdir='build/generated-sources/jaxb' projectName='KnownErrorFinder' version='1.0'>
-	<schema type='-xmlschema' package='' name='KnownErrorSchemaBinding'>
+	<schema type='-xmlschema' package='org.example.knownerror' name='KnownErrorBinding'>
 		<xjc-options>
 		</xjc-options>
 		<schema-sources>
-			<schema-source location='xml-resources/jaxb/KnownErrorSchemaBinding/KnownErrorsXML.xsd' origLocation='src/knownerrorfinder/KnownErrorsXML.xsd'/>
+			<schema-source location='xml-resources/jaxb/KnownErrorBinding/KnownErrorsXML.xsd' origLocation='src/knownerrorfinder/KnownErrorsXML.xsd'/>
 		</schema-sources>
 		<bindings>
 		</bindings>

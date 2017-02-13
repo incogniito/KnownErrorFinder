@@ -26,13 +26,13 @@ public class CustomMouseListener extends MouseAdapter{
     private JTable logsTable;
     private JTextField searchField;
     
-    
+    //constructor for Log table
     public CustomMouseListener(PopUpMenu menu, JTable logTable){
         this.menu = menu;
         this.logsTable = logTable;
     }
     
-    
+    //constructor for error tables
     public CustomMouseListener(PopUpMenu menu, JTable exceptionsTable, JTextField searchField ){
         this.menu = menu;
         this.table = exceptionsTable;
@@ -51,19 +51,17 @@ public class CustomMouseListener extends MouseAdapter{
             doPop(e);
             
         }
-        
+        //checks for double click
         if (e.getClickCount() == 2)
         {
             if (logsTable != null)
             {
                 showDetails();
-            } 
+            } //checks for single click
         } else if (e.getClickCount() == 1)
         {
-
-            
              if (table != null){
-              findUnknownOccurences();
+              findOccurences();
             }
         }    
     }
@@ -89,7 +87,7 @@ public class CustomMouseListener extends MouseAdapter{
         
         
     }
-    
+    //opens another jframe to give a larger view of the selected field(s)
     private void showDetails(){
         
         ShowFullDetails details = new ShowFullDetails();
@@ -121,15 +119,12 @@ public class CustomMouseListener extends MouseAdapter{
     
     
     
-    private void findUnknownOccurences(){
+    private void findOccurences(){
        int rowIndex = table.getSelectedRow();
        if (rowIndex != -1)
        {
        String valueAtRow = table.getValueAt(rowIndex, 0).toString();
               searchField.setText(valueAtRow);
        }
-       
-       
-
     }
 }

@@ -11,19 +11,19 @@
     <target name="jaxb-code-generation" depends="xjc-typedef-target,-do-init,-init-macrodef-javac">
         <mkdir dir="${build.generated.sources.dir}/jaxb" xmlns:s="http://xml.netbeans.org/schema/JAXBWizConfig"/>
         <mkdir dir="build/generated/jaxbCache" xmlns:s="http://xml.netbeans.org/schema/JAXBWizConfig"/>
-        <mkdir dir="build/generated/jaxbCache/KnownErrorSchemaBinding"/>
-        <xjc destdir="build/generated/jaxbCache/KnownErrorSchemaBinding" catalog="catalog.xml">
+        <mkdir dir="build/generated/jaxbCache/KnownErrorBinding"/>
+        <xjc package="org.example.knownerror" destdir="build/generated/jaxbCache/KnownErrorBinding" catalog="catalog.xml">
             <classpath>
                 <pathelement location="${src.dir}"/>
                 <pathelement path="${jaxbwiz.xjcrun.classpath}"/>
             </classpath>
             <arg value="-xmlschema"/>
-            <schema file="xml-resources/jaxb/KnownErrorSchemaBinding/KnownErrorsXML.xsd"/>
-            <depends file="xml-resources/jaxb/KnownErrorSchemaBinding/KnownErrorsXML.xsd"/>
-            <produces dir="build/generated/jaxbCache/KnownErrorSchemaBinding"/>
+            <schema file="xml-resources/jaxb/KnownErrorBinding/KnownErrorsXML.xsd"/>
+            <depends file="xml-resources/jaxb/KnownErrorBinding/KnownErrorsXML.xsd"/>
+            <produces dir="build/generated/jaxbCache/KnownErrorBinding"/>
         </xjc>
         <copy todir="${build.generated.sources.dir}/jaxb">
-            <fileset dir="build/generated/jaxbCache/KnownErrorSchemaBinding"/>
+            <fileset dir="build/generated/jaxbCache/KnownErrorBinding"/>
         </copy>
     </target>
 </project>

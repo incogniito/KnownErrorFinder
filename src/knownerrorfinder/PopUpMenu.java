@@ -7,10 +7,15 @@ package knownerrorfinder;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.List;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import org.example.knownerror.KnownError;
 
 /**
  *
@@ -21,7 +26,7 @@ public class PopUpMenu {
     public PopUpMenu() {
 
     }
-
+//pop up menu for only the logs table
     public JPopupMenu logTablePopupMenu(JTable logTable) {
 
         //Create Pop up Items
@@ -60,7 +65,7 @@ public class PopUpMenu {
 
         return logTablePopup;
     }
-
+//pop up menu for only the unknown table
     public JPopupMenu unknownTablePopupMenu(JTable unknownErrorTable, JTextField search) {
 
         //Create Pop up Items
@@ -79,6 +84,8 @@ public class PopUpMenu {
                 EditUnknownError addKnownError = new EditUnknownError();
                 addKnownError.setName(exception);
                 addKnownError.setVisible(true);
+                
+                
 
             }
 

@@ -98,8 +98,6 @@ public class ShowFullDetails extends javax.swing.JFrame {
         detailsArea.append(details);
         detailsArea.setEditable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea detailsArea;
