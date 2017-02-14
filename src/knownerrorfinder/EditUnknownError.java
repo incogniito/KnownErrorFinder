@@ -5,13 +5,9 @@
  */
 package knownerrorfinder;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import javax.swing.JFileChooser;
-import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import javax.swing.JFrame;
 
 /**
  *
@@ -22,12 +18,13 @@ public class EditUnknownError extends javax.swing.JFrame {
     /**
      * Creates new form EditUnknownError
      */
-    boolean saved = false;
-    Date date = null;
+    public boolean saved = false;
+    private Date date = null;
     public EditUnknownError() {
         initComponents();
         
-         
+                 setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
         date = dateEdited();
          
          

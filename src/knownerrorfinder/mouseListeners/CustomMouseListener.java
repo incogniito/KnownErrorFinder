@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package knownerrorfinder;
+package knownerrorfinder.mouseListeners;
 
 import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
@@ -14,6 +14,8 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import knownerrorfinder.PopUpMenu;
+import knownerrorfinder.ShowFullDetails;
 
 /**
  *

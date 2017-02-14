@@ -13,7 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import knownerrorfinder.AccessDataFromXML;
-import knownerrorfinder.CustomMouseListener;
+import knownerrorfinder.mouseListeners.CustomMouseListener;
 import knownerrorfinder.PopUpMenu;
 import org.example.knownerror.KnownError;
 

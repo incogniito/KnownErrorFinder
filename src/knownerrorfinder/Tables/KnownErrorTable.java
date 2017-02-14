@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import knownerrorfinder.CustomMouseListener;
+import knownerrorfinder.mouseListeners.CustomMouseListener;
 import knownerrorfinder.PopUpMenu;
 import org.example.knownerror.KnownError;
 
