@@ -37,8 +37,6 @@ public class DaySelector extends javax.swing.JFrame {
         jCheckBox7 = new javax.swing.JCheckBox();
         chooseButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        ta = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Select day(s)");
@@ -76,10 +74,6 @@ public class DaySelector extends javax.swing.JFrame {
             }
         });
 
-        ta.setColumns(20);
-        ta.setRows(5);
-        jScrollPane1.setViewportView(ta);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -99,9 +93,7 @@ public class DaySelector extends javax.swing.JFrame {
                             .addComponent(jCheckBox3)
                             .addComponent(jCheckBox4)
                             .addComponent(jCheckBox5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(9, Short.MAX_VALUE))))
+                        .addContainerGap(262, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(chooseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -115,16 +107,13 @@ public class DaySelector extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBox2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jCheckBox3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox5)
-                        .addGap(9, 9, 9)
-                        .addComponent(jCheckBox6))
-                    .addComponent(jScrollPane1))
+                .addComponent(jCheckBox3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox5)
+                .addGap(9, 9, 9)
+                .addComponent(jCheckBox6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBox7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -146,13 +135,38 @@ public class DaySelector extends javax.swing.JFrame {
 
     private void chooseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseButtonActionPerformed
         // TODO add your handling code here:
-        if(jCheckBox1.isSelected()||(jCheckBox2.isSelected())||(jCheckBox3.isSelected())||(jCheckBox4.isSelected())){
-            String text = jCheckBox1.getText();
-            ta.append(text);
-            //Scheduler textBox = new Scheduler();
-            //textBox.setDays(text);
-            
+        String text = "";
+        if(jCheckBox1.isSelected()){
+            text = text + "" + jCheckBox1.getText() + '\n';
         }
+        if(jCheckBox2.isSelected()){
+            text = text + "" + jCheckBox2.getText() + '\n';
+        }
+        if(jCheckBox3.isSelected()){
+            text = text + "" + jCheckBox3.getText() + '\n';
+        }
+          
+        if(jCheckBox4.isSelected()){
+            text = text + "" + jCheckBox4.getText() + '\n';
+        }
+          
+        if(jCheckBox5.isSelected()){
+            text = text + "" + jCheckBox5.getText() + '\n';
+        }
+          
+        if(jCheckBox6.isSelected()){
+            text = text + "" + jCheckBox6.getText() + '\n';
+        }
+         if(jCheckBox7.isSelected()){
+            text = text + "" + jCheckBox7.getText() + '\n';
+        }
+            
+            Scheduler textBox = new Scheduler();
+            textBox.setDays(text);
+            textBox.setVisible(true);
+            
+            
+        
     }//GEN-LAST:event_chooseButtonActionPerformed
 
     /**
@@ -201,7 +215,5 @@ public class DaySelector extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox5;
     private javax.swing.JCheckBox jCheckBox6;
     private javax.swing.JCheckBox jCheckBox7;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea ta;
     // End of variables declaration//GEN-END:variables
 }
