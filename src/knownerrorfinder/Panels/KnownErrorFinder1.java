@@ -694,8 +694,12 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.LINE_AXIS));
             searchBox.setText("");
 
+            
             //adds scrollable table to panel
             newPanel.add(scrollPane);
+            
+            totalEntriesLabel.setVisible(false);
+        specificEntryLabel.setVisible(false);
         }
 
     }
@@ -708,6 +712,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         logs = linesFromFile(file);
 
         logTable = new LogTable();
+        
         String name = file.getName();
         filePath = recentFile;
         TabbedLogFiles newPanel = new TabbedLogFiles(keTable, ukeTable, logTable, logs);
@@ -724,14 +729,17 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
         //populates table
         newPanel.updateTable();
+        logTable.getColumnModel().getColumn(0).setPreferredWidth(10);
         addLogTable(logTable);
 
         //adds a box layout
         newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.LINE_AXIS));
         searchBox.setText("");
-
         //adds scrollable table to panel
         newPanel.add(scrollPane);
+        
+        totalEntriesLabel.setVisible(false);
+        specificEntryLabel.setVisible(false);
     }
 
     private void retrieveKnownErrors() {

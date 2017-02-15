@@ -38,6 +38,8 @@ public class LogTable extends JTable {
             return false; //To change body of generated methods, choose Tools | Templates.
         }
     };
+        
+        
     }
     
     public void populateLogsTable(List<String> logs, KnownErrorTable keTable) {

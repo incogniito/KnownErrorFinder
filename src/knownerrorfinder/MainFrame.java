@@ -5,18 +5,17 @@
  */
 package knownerrorfinder;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.List;
-import javax.swing.BoxLayout;
-import javax.swing.GroupLayout;
-import javax.swing.JFileChooser;
+
 import javax.swing.JMenuItem;
-import javax.swing.JScrollPane;
+
+import knownerrorfinder.Panels.CloseTab;
 import knownerrorfinder.Panels.KnownErrorFinder1;
-import knownerrorfinder.Panels.TabbedLogFiles;
-import knownerrorfinder.Tables.LogTable;
+
 
 /**
  *
@@ -30,12 +29,13 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {
         initComponents();
         checks = new KnownErrorFileChecker();
+        
+        featuresTabbedPane.setUI(new CloseTab());
 
         fileCheck();
         addRecentHistoryItems();
     }
 
-    private int finderTabCounter = 0;
     private KnownErrorFinder1 finder;
     private List<String> recentHistory;
     private KnownErrorFileChecker checks;
@@ -136,14 +136,14 @@ public class MainFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(featuresTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1063, Short.MAX_VALUE)
+                .addComponent(featuresTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1052, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addComponent(featuresTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(featuresTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -197,11 +197,13 @@ public class MainFrame extends javax.swing.JFrame {
     //opens file
     private void openFile() {
 
-        if (finderTabCounter == 0) {
+        if (featuresTabbedPane.getTabCount() == 0) {
             finder = new KnownErrorFinder1();
             String filePath = finder.getFilePath();
-            featuresTabbedPane.add("Finder", finder.getContentPane());
             
+           
+           featuresTabbedPane.add("Finder    ", finder.getContentPane());
+
             if (recentHistory.contains(filePath))
             {
                 recentHistory.remove(filePath);
@@ -217,8 +219,6 @@ public class MainFrame extends javax.swing.JFrame {
             }
             addFilePathToRecentHistory(finder.getFilePath());
         }
-        //check to see if it would be wise to add this if a file is opened
-        finderTabCounter++;
 
     }
 
@@ -253,19 +253,18 @@ public class MainFrame extends javax.swing.JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
 
-                        if (finderTabCounter == 0) {
+                        if (featuresTabbedPane.getTabCount() == 0) {
                             finder = new KnownErrorFinder1(fileName);
-                            featuresTabbedPane.add("Finder", finder.getContentPane());
-                            recentHistory.remove(fileName);
-                            addFilePathToRecentHistory(finder.getFilePath());
+                            featuresTabbedPane.add("Finder  ", finder.getContentPane());
+                            
+                recentHistory.remove(fileName);
+                addFilePathToRecentHistory(finder.getFilePath());
 
                         } else {
                             finder.openFile(fileName);
                             recentHistory.remove(fileName);
                             addFilePathToRecentHistory(finder.getFilePath());
                         }
-                        //check to see if it would be wise to add this if a file is opened
-                        finderTabCounter++;
 
                     }
                 });
