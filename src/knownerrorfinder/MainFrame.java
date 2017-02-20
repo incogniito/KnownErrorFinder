@@ -12,9 +12,10 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JMenuItem;
+import knownerrorfinder.Panels.CloseFeatureTabButton;
 
-import knownerrorfinder.Panels.CloseTab;
 import knownerrorfinder.Panels.KnownErrorFinder1;
+//import knownerrorfinder.Panels
 
 
 /**
@@ -30,7 +31,6 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
         checks = new KnownErrorFileChecker();
         
-        featuresTabbedPane.setUI(new CloseTab());
 
         fileCheck();
         addRecentHistoryItems();
@@ -202,7 +202,9 @@ public class MainFrame extends javax.swing.JFrame {
             String filePath = finder.getFilePath();
             
            
-           featuresTabbedPane.add("Finder    ", finder.getContentPane());
+           featuresTabbedPane.add("Finder", finder.getContentPane());
+                                       initTabComponent(featuresTabbedPane.getTabCount()-1);
+
 
             if (recentHistory.contains(filePath))
             {
@@ -255,7 +257,8 @@ public class MainFrame extends javax.swing.JFrame {
 
                         if (featuresTabbedPane.getTabCount() == 0) {
                             finder = new KnownErrorFinder1(fileName);
-                            featuresTabbedPane.add("Finder  ", finder.getContentPane());
+                            featuresTabbedPane.add("Finder", finder.getContentPane());
+                            initTabComponent(featuresTabbedPane.getTabCount()-1);
                             
                 recentHistory.remove(fileName);
                 addFilePathToRecentHistory(finder.getFilePath());
@@ -289,6 +292,12 @@ public class MainFrame extends javax.swing.JFrame {
             addRecentHistoryItems();
         }
     }
+    
+      private void initTabComponent(int i) {
+        
+                featuresTabbedPane.setTabComponentAt(i, new CloseFeatureTabButton(featuresTabbedPane));
+
+    } 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem OpenRecentReportItem;
     private javax.swing.JMenuItem exportKnownErrorsItem;

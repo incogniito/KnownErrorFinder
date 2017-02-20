@@ -67,7 +67,8 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         initComponents();
 
         //obtains known errors from xml
-        retrieveKnownErrors();
+        retrieveKnownErrors(); 
+        
 
         //Initialise error tables
         ukeTable = new UnknownErrorTable(searchBox);
@@ -117,24 +118,28 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         unknownTab.add(ukeScrollPane);
 
         ChangeListener changeListener = new ChangeListener() {
+            
+           
+            
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
                 JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
                 int index = sourceTabbedPane.getSelectedIndex();
 
+                if(logFileTabbedPane.getTabCount()!=0){
                 //clear tables
-                keTable.clearKnownErrorTable();
-                ukeTable.clearUnknownErrorTable();
-                logTable.clearLogTable();
+                clearTables();
 
                 //update tables
                 logTable = logTables.get(index);
                 logs = logTable.getOpenedLog();
                 logTable.populateLogsTable(logs, keTable);
-
+                } else{
+                                    clearTables();
+                }
                 //clear search field
-                searchBox.setText("");
-            }
+                searchBox.setText("");                
+              }   
         };
 
         logFileTabbedPane.addChangeListener(changeListener);
@@ -151,6 +156,9 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
         //obtains known errors from xml
         retrieveKnownErrors();
+
+        //gives the tabbed pan a close button
+                //logFileTabbedPane.setUI(new CloseLogTab(this));
 
         //Initialise error tables
         ukeTable = new UnknownErrorTable(searchBox);
@@ -194,21 +202,25 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         layout.putConstraint(SpringLayout.SOUTH, unknownTab, 0, SpringLayout.SOUTH, jButton1);
 
         ChangeListener changeListener = new ChangeListener() {
+            
+
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
                 JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
                 int index = sourceTabbedPane.getSelectedIndex();
-
+                
+                
+                if(logFileTabbedPane.getTabCount()!=0){
                 //clear tables
-                keTable.clearKnownErrorTable();
-                ukeTable.clearUnknownErrorTable();
-                logTable.clearLogTable();
+                clearTables();
 
                 //update tables
                 logTable = logTables.get(index);
                 logs = logTable.getOpenedLog();
                 logTable.populateLogsTable(logs, keTable);
-
+                } else{
+                                    clearTables();
+                }
                 //clear search field
                 searchBox.setText("");
             }
@@ -665,7 +677,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     //opens file
     public void openFile() {
 
-        int returnVal = fileChooser.showOpenDialog(this);
+        int returnVal = fileChooser.showOpenDialog(this.getContentPane());
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             //populates the logtable with the lines from the file
@@ -681,14 +693,16 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
             //adds panel to tab
             logFileTabbedPane.add(newPanel);
+            initTabComponent(logFileTabbedPane.getTabCount()-1);
 
             //adds table to scroll pane
             JScrollPane scrollPane = new JScrollPane(logTable);
             scrollPane.setSize(newPanel.getWidth(), newPanel.getHeight());
 
-            //populates table
+            //populates table on first occassion
             newPanel.updateTable();
             addLogTable(logTable);
+            logFileTabbedPane.setSelectedIndex(logFileTabbedPane.getTabCount()-1);
 
             //adds a box layout
             newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.LINE_AXIS));
@@ -712,25 +726,30 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         logs = linesFromFile(file);
 
         logTable = new LogTable();
-        
         String name = file.getName();
         filePath = recentFile;
         TabbedLogFiles newPanel = new TabbedLogFiles(keTable, ukeTable, logTable, logs);
 
         //sets name of tab
         newPanel.setName(name);
+        
+        //populates table
+            newPanel.updateTable();
+        addLogTable(logTable);
 
         //adds panel to tab
         logFileTabbedPane.add(newPanel);
+        initTabComponent(logFileTabbedPane.getTabCount()-1);
 
+        
         //adds table to scroll pane
         JScrollPane scrollPane = new JScrollPane(logTable);
         scrollPane.setSize(newPanel.getWidth(), newPanel.getHeight());
 
-        //populates table
-        newPanel.updateTable();
-        logTable.getColumnModel().getColumn(0).setPreferredWidth(10);
-        addLogTable(logTable);
+       
+            
+                    logFileTabbedPane.setSelectedIndex(logFileTabbedPane.getTabCount()-1);
+    
 
         //adds a box layout
         newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.LINE_AXIS));
@@ -773,18 +792,33 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         logTables.add(logTable);
     }
 
-    private void removeLogTable(int position) {
-        logTables.remove(position);
+    public void removeLogTable(int position) {
+                logTables.remove(position);
 
     }
+    
+     private void initTabComponent(int i) {
+        logFileTabbedPane.setTabComponentAt(i, new CloseTabButton(logFileTabbedPane, this));
+    } 
 
     public String getFilePath() {
         return filePath;
+    }
+    
+    private void clearTables(){
+        
+        //clear tables
+                keTable.clearKnownErrorTable();
+                ukeTable.clearUnknownErrorTable();
+                logTable.clearLogTable();
     }
 
     private LogTable logTable;
     private KnownErrorTable keTable;
     private UnknownErrorTable ukeTable;
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JButton jButton1;
