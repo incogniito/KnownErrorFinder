@@ -59,7 +59,10 @@ public class UnknownErrorTable extends JTable {
     }
     
     public void checkWordExistsInHolder(String word){
-        
+        //checks if the first character to ensure that the word is an actual exception
+                if(Character.isUpperCase(word.charAt(0)))
+                {
+
         if (!unknownErrorHolder.contains(word)) {
                             Object[] o = new Object[1];
 
@@ -68,7 +71,7 @@ public class UnknownErrorTable extends JTable {
                             unknownErrorHolder.add(word);
                         }
 
-        
+                }
     }
     
     public void setModel(){
@@ -87,12 +90,16 @@ public class UnknownErrorTable extends JTable {
             String word = log.substring(m.start(), m.end());
             //checks if word matches the regex (words ending with 'exception')
             if (word.matches("[\\w]+Exception$")) {
+                //checks if the first character to ensure that the word is an actual exception
+                if(Character.isUpperCase(word.charAt(0)))
+                {
                 if (!unknownErrorHolder.contains(word)) {
                     Object[] o = new Object[1];
 
                     o[0] = word;
                     unknownModel.addRow(o);
                     unknownErrorHolder.add(word);
+                }
                 }
             }
         }

@@ -86,9 +86,19 @@ public class MainFrame extends javax.swing.JFrame {
         fileMenu.add(jSeparator1);
 
         importKnownErrorsItem.setText("Import Known Errors");
+        importKnownErrorsItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                importKnownErrorsItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(importKnownErrorsItem);
 
         exportKnownErrorsItem.setText("Export Known Errors");
+        exportKnownErrorsItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportKnownErrorsItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(exportKnownErrorsItem);
 
         jMenuBar1.add(fileMenu);
@@ -158,6 +168,19 @@ public class MainFrame extends javax.swing.JFrame {
     private void newScheduleItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newScheduleItemActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_newScheduleItemActionPerformed
+
+    private void importKnownErrorsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importKnownErrorsItemActionPerformed
+        // TODO add your handling code here:
+        
+        ManageKnownErrors mke = new ManageKnownErrors(this);
+        mke.openImportDialog();
+    }//GEN-LAST:event_importKnownErrorsItemActionPerformed
+
+    private void exportKnownErrorsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportKnownErrorsItemActionPerformed
+        // TODO add your handling code here:
+        ManageKnownErrors mke = new ManageKnownErrors(this);
+        mke.openExportDialog();
+    }//GEN-LAST:event_exportKnownErrorsItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -280,8 +303,8 @@ public class MainFrame extends javax.swing.JFrame {
     private void addFilePathToRecentHistory(String filePath) {
 
         if (recentHistory.size() == 5) {
-            recentHistory.add(0, filePath);
-            recentHistory.remove(5);
+            recentHistory.add(filePath);
+            recentHistory.remove(0);
             checks.updateRecentHistoryFile(recentHistory);
 
             addRecentHistoryItems();

@@ -29,7 +29,7 @@ public class EditUnknownError extends javax.swing.JFrame {
          
          
     }
-    public void closeFrame(){
+    private void closeFrame(){
         super.dispose();
     }
     
@@ -41,7 +41,7 @@ public class EditUnknownError extends javax.swing.JFrame {
         int month = cal.get(Calendar.MONTH);
         int year= cal.get(Calendar.YEAR);  
         
-        dateLabel.setText("Date:  "+day+"/"+month+"/"+year);
+        dateLabel.setText("Date:  "+day+"/"+month+1+"/"+year);
         
         return cal.getTime();
      }

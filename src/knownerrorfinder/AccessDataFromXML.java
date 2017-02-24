@@ -54,7 +54,7 @@ public class AccessDataFromXML {
         
 
         List<KnownError> existingErrors = retrieveKnownErrors();
-        KnownError newKnownError = new KnownError();
+        KnownError newKnownError = null;
         if (existingErrors != null) {
             currentKnownErrors.addAll(existingErrors);
                 
@@ -92,9 +92,6 @@ public class AccessDataFromXML {
             currentKnownErrors.add(newKnownError);
 
         }
-
-        
-            
             try {
                 OutputStream os = new FileOutputStream(System.getProperty("user.dir") + "/src/Files/knownErrors.xml");
                 javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(newKnownError.getClass().getPackage().getName());
@@ -110,6 +107,84 @@ public class AccessDataFromXML {
             }
 
         }
-    
+        
+    public void newErrors(List<String> errors){
+        
+        AllKnownErrors errorsInFile = new AllKnownErrors();
+        List<KnownError> currentKnownErrors = errorsInFile.getErrors() ;
+        
 
+        List<KnownError> existingErrors = retrieveKnownErrors();
+        KnownError newKnownError = null;
+        
+        if (existingErrors != null) {
+            
+            currentKnownErrors.addAll(existingErrors);
+            
+            
+            IMPORTED_ERRORS_ITER: for(String importedErrors : errors){
+                
+                for (KnownError ke : currentKnownErrors){
+                    
+                    if (ke.getName().equalsIgnoreCase(importedErrors))
+                    {
+                        continue IMPORTED_ERRORS_ITER;
+                    }
+                    
+                }
+                
+                newKnownError = new KnownError();
+                
+                    newKnownError.setName(importedErrors);
+                    newKnownError.setSolution("");
+
+                    GregorianCalendar dateAdded = new GregorianCalendar();
+                    dateAdded.setTime(new Date());
+                    XMLGregorianCalendar xmlDateAdded = null;
+                    try {
+                        xmlDateAdded = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(dateAdded.get(Calendar.YEAR), dateAdded.get(Calendar.MONTH) + 1, dateAdded.get(Calendar.DAY_OF_MONTH), DatatypeConstants.FIELD_UNDEFINED);
+                    } catch (DatatypeConfigurationException ex) {
+                        Logger.getLogger(AccessDataFromXML.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    newKnownError.setDateAdded(xmlDateAdded);
+                    currentKnownErrors.add(newKnownError);
+            }
+            
+        } else {
+
+             for(String str : errors){
+                newKnownError = new KnownError();
+                    newKnownError.setName(str);
+                    newKnownError.setSolution("");
+
+                    GregorianCalendar dateAdded = new GregorianCalendar();
+                    dateAdded.setTime(new Date());
+                    XMLGregorianCalendar xmlDateAdded = null;
+                    try {
+                        xmlDateAdded = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(dateAdded.get(Calendar.YEAR), dateAdded.get(Calendar.MONTH) + 1, dateAdded.get(Calendar.DAY_OF_MONTH), DatatypeConstants.FIELD_UNDEFINED);
+                    } catch (DatatypeConfigurationException ex) {
+                        Logger.getLogger(AccessDataFromXML.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    newKnownError.setDateAdded(xmlDateAdded);
+                    currentKnownErrors.add(newKnownError);
+            }
+
+        }
+        
+        try {
+                OutputStream os = new FileOutputStream(System.getProperty("user.dir") + "/src/Files/knownErrors.xml");
+                javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(newKnownError.getClass().getPackage().getName());
+                javax.xml.bind.Marshaller marshaller = jaxbCtx.createMarshaller();
+                marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8"); //NOI18N
+                marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+                marshaller.marshal(errorsInFile, os);
+            } catch (javax.xml.bind.JAXBException ex) {
+                // XXXTODO Handle exception
+                System.out.print(ex); //NOI18N
+            } catch (FileNotFoundException e) {
+                java.util.logging.Logger.getLogger("global").log(java.util.logging.Level.SEVERE, null, e); //NOI18N
+            }  
+    }
 }

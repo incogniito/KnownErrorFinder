@@ -1,4 +1,5 @@
-/Users/samsonaiyegbusi/Documents/synthetica_2.20.2_eval/README.txt
-/Users/samsonaiyegbusi/Documents/moonmemo/Readme_ESP.txt
-/Users/samsonaiyegbusi/Downloads/application.txt
-/Users/samsonaiyegbusi/weka.log
+/Users/samsonaiyegbusi/Downloads/glassfish server log
+/Users/samsonaiyegbusi/Downloads/~$se Study- edited.docx
+null
+null
+/Users/samsonaiyegbusi/Downloads/oracle wl log

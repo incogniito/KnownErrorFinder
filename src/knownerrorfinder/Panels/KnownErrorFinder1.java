@@ -5,49 +5,26 @@
  */
 package knownerrorfinder.Panels;
 
-import com.jtattoo.plaf.acryl.AcrylButtonUI;
-import com.jtattoo.plaf.mint.MintButtonUI;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.RowFilter;
 import javax.swing.SpringLayout;
-import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.plaf.synth.SynthLookAndFeel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 import knownerrorfinder.AccessDataFromXML;
 import knownerrorfinder.EditUnknownError;
-import knownerrorfinder.KnownErrorFileChecker;
-import knownerrorfinder.Panels.TabbedLogFiles;
 import knownerrorfinder.Tables.KnownErrorTable;
 import knownerrorfinder.Tables.LogTable;
 import knownerrorfinder.Tables.UnknownErrorTable;
@@ -523,7 +500,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                     sb.append(line).append("\n\t");
                     continue;
                     //checks for lines that start with a few spaces
-                } else if (line.startsWith("    ")) {
+                } else if (line.startsWith(" ")) {
                     sb.append(line).append("\n");
                     continue;
                 }//add lines to list when there isn't a concatanated string 

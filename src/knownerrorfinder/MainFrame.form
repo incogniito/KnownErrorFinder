@@ -30,11 +30,17 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Import Known Errors"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="importKnownErrorsItemActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="exportKnownErrorsItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Export Known Errors"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportKnownErrorsItemActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
