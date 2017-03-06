@@ -38,6 +38,7 @@ public class TabbedLogFiles extends JPanel{
     
     public void updateTable(){
                 logTable.populateLogsTable(logs, keTable);
+                logTable.setColumnSize(logTable);
     }
 
     @Override

@@ -14,6 +14,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import knownerrorfinder.Panels.KnownErrorFinder1;
 import knownerrorfinder.PopUpMenu;
 import knownerrorfinder.ShowFullDetails;
 
@@ -64,6 +65,8 @@ public class CustomMouseListener extends MouseAdapter{
         {
              if (table != null){
               findOccurences();
+            } else if (logsTable != null){
+                 KnownErrorFinder1.deselectErrorTableRows();
             }
         }    
     }

@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import knownerrorfinder.AccessDataFromXML;
 import knownerrorfinder.mouseListeners.CustomMouseListener;
 import knownerrorfinder.PopUpMenu;
@@ -38,7 +39,7 @@ public class LogTable extends JTable {
             return false; //To change body of generated methods, choose Tools | Templates.
         }
     };
-        
+      
         
     }
     
@@ -79,5 +80,10 @@ public class LogTable extends JTable {
          
      }
 
+     public void setColumnSize(JTable table){
+                 TableColumn column = table.getColumnModel().getColumn(0);
+                 column.setPreferredWidth(15);
+         
+     }
     
 }

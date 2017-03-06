@@ -1,5 +1,2 @@
-/Users/samsonaiyegbusi/Downloads/glassfish server log
-/Users/samsonaiyegbusi/Downloads/~$se Study- edited.docx
-null
-null
+/Users/samsonaiyegbusi/Downloads/application.txt
 /Users/samsonaiyegbusi/Downloads/oracle wl log
