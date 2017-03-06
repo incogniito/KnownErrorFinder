@@ -1,3 +1,9 @@
+package knownerrorfinder;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JCheckBox;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -81,19 +87,14 @@ public class DaySelector extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(93, 93, 93)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox7)
-                            .addComponent(jCheckBox2)
-                            .addComponent(jCheckBox1))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox6)
-                            .addComponent(jCheckBox3)
-                            .addComponent(jCheckBox4)
-                            .addComponent(jCheckBox5))
-                        .addContainerGap(262, Short.MAX_VALUE))))
+                    .addComponent(jCheckBox7)
+                    .addComponent(jCheckBox2)
+                    .addComponent(jCheckBox1)
+                    .addComponent(jCheckBox6)
+                    .addComponent(jCheckBox3)
+                    .addComponent(jCheckBox4)
+                    .addComponent(jCheckBox5))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(chooseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -136,33 +137,42 @@ public class DaySelector extends javax.swing.JFrame {
     private void chooseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseButtonActionPerformed
         // TODO add your handling code here:
         String text = "";
+        List<String> checkBoxs = new ArrayList<>();
         if(jCheckBox1.isSelected()){
-            text = text + "" + jCheckBox1.getText() + '\n';
+            text =  jCheckBox1.getText() + '\n';
+            checkBoxs.add(text);
+            //
         }
         if(jCheckBox2.isSelected()){
-            text = text + "" + jCheckBox2.getText() + '\n';
+            text =  jCheckBox2.getText() + '\n';
+            checkBoxs.add(text);
         }
         if(jCheckBox3.isSelected()){
-            text = text + "" + jCheckBox3.getText() + '\n';
+            text = jCheckBox3.getText() + '\n';
+            checkBoxs.add(text);
         }
           
         if(jCheckBox4.isSelected()){
-            text = text + "" + jCheckBox4.getText() + '\n';
+            text = jCheckBox4.getText() + '\n';
+            checkBoxs.add(text);
         }
           
         if(jCheckBox5.isSelected()){
-            text = text + "" + jCheckBox5.getText() + '\n';
+            text = jCheckBox5.getText() + '\n';
+            checkBoxs.add(text);
         }
           
         if(jCheckBox6.isSelected()){
-            text = text + "" + jCheckBox6.getText() + '\n';
+            text = jCheckBox6.getText() + '\n';
+            checkBoxs.add(text);
         }
          if(jCheckBox7.isSelected()){
-            text = text + "" + jCheckBox7.getText() + '\n';
+            text = jCheckBox7.getText() + '\n';
+            checkBoxs.add(text);
         }
             
             Scheduler textBox = new Scheduler();
-            textBox.setDays(text);
+            textBox.setDays(checkBoxs);
             textBox.setVisible(true);
             
             

@@ -1,9 +1,18 @@
+package knownerrorfinder;
 
+
+import knownerrorfinder.DaySelector;
 import java.awt.Color;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
@@ -26,6 +35,7 @@ public class Scheduler extends javax.swing.JFrame {
      * Creates new form Scheduler
      */
     DefaultTableModel dtm;
+    DefaultTableModel tableMod;
     public Scheduler() {
         initComponents();
         
@@ -46,13 +56,11 @@ public class Scheduler extends javax.swing.JFrame {
         dayChooser = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        display = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         pathTable = new javax.swing.JTable();
         saveButton = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
         addButton = new javax.swing.JButton();
         removeButton = new javax.swing.JButton();
         Date date = new Date ();
@@ -62,6 +70,8 @@ public class Scheduler extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        daysTable = new javax.swing.JTable();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -86,11 +96,6 @@ public class Scheduler extends javax.swing.JFrame {
 
         jLabel3.setText("Choose folder location(s) which contain logs");
 
-        display.setEditable(false);
-        display.setColumns(20);
-        display.setRows(5);
-        jScrollPane1.setViewportView(display);
-
         jLabel4.setText("Schedule Time");
 
         pathTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -110,7 +115,12 @@ public class Scheduler extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Cancel");
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         addButton.setText("+");
         addButton.addActionListener(new java.awt.event.ActionListener() {
@@ -129,6 +139,16 @@ public class Scheduler extends javax.swing.JFrame {
         JSpinner.DateEditor dEdit = new JSpinner.DateEditor(jSpinner1, "HH:mm:ss");
         jSpinner1.setEditor(dEdit);
 
+        daysTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Days"
+            }
+        ));
+        jScrollPane1.setViewportView(daysTable);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -139,105 +159,140 @@ public class Scheduler extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(210, 210, 210)
+                                .addComponent(jLabel5)
+                                .addGap(0, 10, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                    .addComponent(dayChooser, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jSpinner1, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
-                                        .addGap(125, 125, 125)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(dayChooser, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                        .addGap(28, 28, 28)
                                         .addComponent(jLabel7))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(161, 161, 161)
-                                                .addComponent(saveButton)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButton2))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addGap(7, 7, 7)
-                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(9, 9, 9)
+                                        .addComponent(jLabel6))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(saveButton)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                        .addComponent(cancelButton)
+                                        .addGap(50, 50, 50)))))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel5))
-                            .addComponent(jLabel6))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3)
+                        .addGap(92, 92, 92))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jLabel1))
+                        .addComponent(jLabel5))
+                    .addComponent(nameField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addGap(3, 3, 3)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel7)
+                        .addGap(33, 33, 33)
+                        .addComponent(jLabel6))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(addButton)
+                        .addGap(5, 5, 5)
+                        .addComponent(removeButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(dayChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(addButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(removeButton)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
-                    .addComponent(saveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(saveButton)
+                            .addComponent(cancelButton)))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    public void closeFrame(){
+        super.dispose();
+    }
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        if (nameField.getText().equals("")){  
-            JOptionPane.showMessageDialog(null,"Fill missing fields");
-            jLabel5.setText("Enter schedule name");
-            jLabel5.setForeground(Color.red);
-        }
-        if (display.getText().equals("")){  
-            JOptionPane.showMessageDialog(null,"Fill missing fields");
-            jLabel6.setText("Select schedule day");
-            jLabel6.setForeground(Color.red);
-        }
-        /*if (display.getText().equals("")){  
-            JOptionPane.showMessageDialog(null,"Fill missing fields");
-            jLabel7.setText("Chose folder path");
-            jLabel7.setForeground(Color.red);
-        }*/
+      int row = pathTable.getRowCount();
+      int row1 = daysTable.getRowCount();
+      String name = nameField.getText();
+        DateFormat s = new SimpleDateFormat("ss:mm:ss");
+      Date scheduleTime = (Date) jSpinner1.getValue();
+      List <String> folderPaths = new ArrayList();
+      List <String> scheduleDay  = new ArrayList();  
+      
+      if ((nameField.getText().equals(""))||((row1 == 0))||(row == 0)) {
+            
+            JOptionPane.showMessageDialog(null, "Missing fields","Error",JOptionPane.ERROR_MESSAGE);
+            if (nameField.getText().equals("")){  
+                jLabel5.setText("Enter schedule name");
+                jLabel5.setForeground(Color.red);
+            }
+            
+            if (row1 == 0){  
+                jLabel6.setText("Select schedule day");
+                jLabel6.setForeground(Color.red);
+            }
+            if (row == 0){  
+                jLabel7.setText("No path selected");
+                jLabel7.setForeground(Color.red);
+            }
+        } 
+      else{
+         for(int i = 0; i < row; i++ ){
+             String folders =  pathTable.getValueAt(i,0).toString();
+             
+             folderPaths.add(folders);
+             String day = daysTable.getValueAt(i,0).toString();
+             scheduleDay.add(day);
+               
+          }
+         AccessDataFromXML saveSchedule = new AccessDataFromXML();
+         saveSchedule.newSchedule(name, scheduleTime, scheduleDay, folderPaths);
+         JOptionPane.showMessageDialog(null, "Schedule Saved");
+         closeFrame();
+         
+      }
+  
+     
+   
+      
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
@@ -246,17 +301,33 @@ public class Scheduler extends javax.swing.JFrame {
     }//GEN-LAST:event_nameFieldActionPerformed
 
     private void dayChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dayChooserActionPerformed
-    // display.setText(dayChooser.getSelectedItem().toString());
-      if(dayChooser.getSelectedItem().equals("Weekdays")){
-        display.setText("Monday"+"\n"+"Tuesday"+"\n"+"Wednesday"+"\n"+"Thursday"+"\n"+"Friday");
-        
+        tableMod = (DefaultTableModel) daysTable.getModel();
+     if(dayChooser.getSelectedItem().equals("Weekdays")){
+         
+            tableMod.setRowCount(0);
+            tableMod.addRow(new Object[]{"Monday",});
+            tableMod.addRow(new Object[]{"Tuesday"});
+            tableMod.addRow(new Object[]{"Wednesday" });
+            tableMod.addRow(new Object[]{"Thursday"});
+            tableMod.addRow(new Object[]{"Friday"});
        }
-      if(dayChooser.getSelectedItem().equals("Weekends")){
-         display.setText("Saturday"+"\n"+"Sunday");
+     if(dayChooser.getSelectedItem().equals("Weekends")){
+         
+            tableMod.setRowCount(0);
+            tableMod.addRow(new Object[]{"Saturday"});
+            tableMod.addRow(new Object[]{"Sunday"});
       }
  
       if(dayChooser.getSelectedItem().equals("Everyday")){
-         display.setText("Monday"+"\n"+"Tuesday"+"\n"+"Wednesday"+"\n"+"Thursday"+"\n"+"Friday"+"\n"+"Saturday"+"\n"+"Sunday");
+          
+            tableMod.setRowCount(0);
+            tableMod.addRow(new Object[]{"Monday",});
+            tableMod.addRow(new Object[]{"Tuesday"});
+            tableMod.addRow(new Object[]{"Wednesday" });
+            tableMod.addRow(new Object[]{"Thursday"});
+            tableMod.addRow(new Object[]{"Friday"});
+            tableMod.addRow(new Object[]{"Saturday"});
+            tableMod.addRow(new Object[]{"Sunday"});
        }
       if(dayChooser.getSelectedItem().equals("Select day(s)")){
          DaySelector selectFrame = new DaySelector();
@@ -264,6 +335,9 @@ public class Scheduler extends javax.swing.JFrame {
          selectFrame.setVisible(true);
        
        }
+      if(dayChooser.getSelectedItem().equals("Choose")){
+          tableMod.setRowCount(0);
+      }
             
     }//GEN-LAST:event_dayChooserActionPerformed
 
@@ -273,13 +347,14 @@ public class Scheduler extends javax.swing.JFrame {
         JFileChooser j = new JFileChooser();
         j.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int returnVal = j.showSaveDialog(this);
+        
         if(returnVal == JFileChooser.APPROVE_OPTION) {  
+            
             File folder = j.getSelectedFile();
             Vector v = new Vector();
             String path;
             dtm = (DefaultTableModel) pathTable.getModel();
             path = folder.getPath();
-            System.out.println("path = "+path);
             v.add(path);
             dtm.addRow(v);
             JOptionPane.showMessageDialog(null, "Path Saved");
@@ -295,16 +370,30 @@ public class Scheduler extends javax.swing.JFrame {
          int val = JOptionPane.showConfirmDialog(null, "confirm Delete?", "Delete", JOptionPane.YES_OPTION);
         if ((pathTable.getSelectedRow() != -1) &&(val == 0)) {
             // remove selected row from the model
-           
-            dtm.removeRow(pathTable.getSelectedRow());
+           dtm.removeRow(pathTable.getSelectedRow());
         }
-        /*elseif ()
-        else {
-            JOptionPane.showMessageDialog(null, "No path selected");
-        }*/
+        
     }//GEN-LAST:event_removeButtonActionPerformed
-    public void setDays(String days){
-        display.setText(days);
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cancelButtonActionPerformed
+    public void setDays(List<String> days){
+        
+        
+      tableMod = (DefaultTableModel) daysTable.getModel();
+
+        for (String day : days){
+            
+            tableMod.addRow(new Object[]{day});
+        }
+        
+        
+         
+         
+         
+        //display.setText(days);
+        
        
     }
     /**
@@ -344,9 +433,9 @@ public class Scheduler extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
+    private javax.swing.JButton cancelButton;
     private javax.swing.JComboBox<String> dayChooser;
-    private javax.swing.JTextArea display;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JTable daysTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
