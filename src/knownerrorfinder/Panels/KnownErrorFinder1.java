@@ -256,6 +256,10 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
         //stores the index of the selected row
         int index = ukeTable.getSelectedRow();
+        
+        if(index != -1){
+            
+        
         //stores value of selected cell
         String id = ukeTable.getValueAt(index, 0).toString();
         //Enables the name label to be predefined before jframe appears
@@ -266,6 +270,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         addToUnknownFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         //makes the jframe visible
         addToUnknownFrame.setVisible(true);
+        
 
         //Listens to when jframe closes
         WindowAdapter adapter = new WindowAdapter() {
@@ -291,6 +296,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         //adds listener
         addToUnknownFrame.addWindowListener(adapter);
         addToUnknownFrame.addWindowFocusListener(adapter);
+        }
 
     }//GEN-LAST:event_jButton1ActionPerformed
 

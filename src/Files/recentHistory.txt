@@ -1,2 +1,2 @@
-/Users/samsonaiyegbusi/Downloads/application.txt
 /Users/samsonaiyegbusi/Downloads/oracle wl log
+/Users/samsonaiyegbusi/Downloads/application.txt
