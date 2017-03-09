@@ -42,6 +42,7 @@ public class KnownErrorTable extends JTable {
         
         knownModel = new DefaultTableModel(new Object[0][0], knownErrorColumnNames) {
 
+           
         //disables fields from being editable
         @Override
         public boolean isCellEditable(int row, int column) {

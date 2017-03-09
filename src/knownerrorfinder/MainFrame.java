@@ -5,18 +5,18 @@
  */
 package knownerrorfinder;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.List;
-import javax.swing.BoxLayout;
-import javax.swing.GroupLayout;
-import javax.swing.JFileChooser;
+
 import javax.swing.JMenuItem;
-import javax.swing.JScrollPane;
+import knownerrorfinder.Panels.CloseFeatureTabButton;
+
 import knownerrorfinder.Panels.KnownErrorFinder1;
-import knownerrorfinder.Panels.TabbedLogFiles;
-import knownerrorfinder.Tables.LogTable;
+//import knownerrorfinder.Panels
 
 /**
  *
@@ -29,16 +29,20 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         initComponents();
+        
         checks = new KnownErrorFileChecker();
+        filler1.setEnabled(false);
+        filler2.setEnabled(false);
+        filler3.setEnabled(false);
 
+        editOptionMenuSetup();
         fileCheck();
         addRecentHistoryItems();
     }
 
-    private int finderTabCounter = 0;
     private KnownErrorFinder1 finder;
-    private List<String> recentHistory;
-    private KnownErrorFileChecker checks;
+    public static List<String> recentHistory;
+    private  KnownErrorFileChecker checks;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -58,10 +62,20 @@ public class MainFrame extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         importKnownErrorsItem = new javax.swing.JMenuItem();
         exportKnownErrorsItem = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        filler1 = new javax.swing.JMenu();
+        editMenu = new javax.swing.JMenu();
+        copyMenuItem = new javax.swing.JMenuItem();
+        pasteMenuItem = new javax.swing.JMenuItem();
+        selectAllMenuItem = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        searchMenuItem = new javax.swing.JMenuItem();
+        findNextMenuItem = new javax.swing.JMenuItem();
+        findPreviousMenuItem = new javax.swing.JMenuItem();
+        filler2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         newScheduleItem = new javax.swing.JMenuItem();
         updateScheduleItem = new javax.swing.JMenuItem();
+        filler3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         openReportsItem = new javax.swing.JMenuItem();
         OpenRecentReportItem = new javax.swing.JMenuItem();
@@ -70,6 +84,12 @@ public class MainFrame extends javax.swing.JFrame {
         exportReportItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jMenuBar1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jMenuBar1MouseEntered(evt);
+            }
+        });
 
         fileMenu.setText("File");
 
@@ -86,15 +106,77 @@ public class MainFrame extends javax.swing.JFrame {
         fileMenu.add(jSeparator1);
 
         importKnownErrorsItem.setText("Import Known Errors");
+        importKnownErrorsItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                importKnownErrorsItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(importKnownErrorsItem);
 
         exportKnownErrorsItem.setText("Export Known Errors");
+        exportKnownErrorsItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportKnownErrorsItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(exportKnownErrorsItem);
 
         jMenuBar1.add(fileMenu);
+        jMenuBar1.add(filler1);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        editMenu.setText("Edit");
+
+        copyMenuItem.setText("Copy");
+        copyMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(copyMenuItem);
+
+        pasteMenuItem.setText("Paste");
+        pasteMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pasteMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(pasteMenuItem);
+
+        selectAllMenuItem.setText("Select All");
+        selectAllMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectAllMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(selectAllMenuItem);
+        editMenu.add(jSeparator3);
+
+        searchMenuItem.setText("Search");
+        searchMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(searchMenuItem);
+
+        findNextMenuItem.setText("Find Next");
+        findNextMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                findNextMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(findNextMenuItem);
+
+        findPreviousMenuItem.setText("Find Previous");
+        findPreviousMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                findPreviousMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(findPreviousMenuItem);
+
+        jMenuBar1.add(editMenu);
+        jMenuBar1.add(filler2);
 
         jMenu3.setText("Schedule");
 
@@ -107,9 +189,15 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu3.add(newScheduleItem);
 
         updateScheduleItem.setText("Update Schedule");
+        updateScheduleItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateScheduleItemActionPerformed(evt);
+            }
+        });
         jMenu3.add(updateScheduleItem);
 
         jMenuBar1.add(jMenu3);
+        jMenuBar1.add(filler3);
 
         jMenu4.setText("Reports");
 
@@ -136,14 +224,14 @@ public class MainFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(featuresTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1063, Short.MAX_VALUE)
+                .addComponent(featuresTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1052, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addComponent(featuresTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(featuresTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -156,8 +244,68 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_openFileItemActionPerformed
 
     private void newScheduleItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newScheduleItemActionPerformed
-        // TODO add your handling code here:
+        Scheduler newSchedule = new Scheduler();
+        newSchedule.setDefaultCloseOperation(Scheduler.DISPOSE_ON_CLOSE);
+        newSchedule.setVisible(true);
     }//GEN-LAST:event_newScheduleItemActionPerformed
+
+    private void importKnownErrorsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importKnownErrorsItemActionPerformed
+        // TODO add your handling code here:
+
+        ManageKnownErrors mke = new ManageKnownErrors(this);
+        mke.openImportDialog();
+    }//GEN-LAST:event_importKnownErrorsItemActionPerformed
+
+    private void exportKnownErrorsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportKnownErrorsItemActionPerformed
+        // TODO add your handling code here:
+        ManageKnownErrors mke = new ManageKnownErrors(this);
+        mke.openExportDialog();
+    }//GEN-LAST:event_exportKnownErrorsItemActionPerformed
+
+    private void copyMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyMenuItemActionPerformed
+        // TODO add your handling code here:
+        finder.copy();
+    }//GEN-LAST:event_copyMenuItemActionPerformed
+
+    private void jMenuBar1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuBar1MouseEntered
+        // TODO add your handling code here:
+editOptionMenuSetup();
+
+
+    }//GEN-LAST:event_jMenuBar1MouseEntered
+
+    private void pasteMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pasteMenuItemActionPerformed
+        // TODO add your handling code here:
+
+        finder.paste();
+    }//GEN-LAST:event_pasteMenuItemActionPerformed
+
+    private void selectAllMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectAllMenuItemActionPerformed
+        // TODO add your handling code here:
+        finder.selectAll(); 
+    }//GEN-LAST:event_selectAllMenuItemActionPerformed
+
+    private void searchMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMenuItemActionPerformed
+        // TODO add your handling code here:
+        finder.search();
+    }//GEN-LAST:event_searchMenuItemActionPerformed
+
+    private void findNextMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findNextMenuItemActionPerformed
+        // TODO add your handling code here:
+        finder.iterateDown();
+    }//GEN-LAST:event_findNextMenuItemActionPerformed
+
+    private void findPreviousMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findPreviousMenuItemActionPerformed
+        // TODO add your handling code here:
+        finder.iterateUp();
+    }//GEN-LAST:event_findPreviousMenuItemActionPerformed
+
+    private void updateScheduleItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateScheduleItemActionPerformed
+      ViewAllSchedules allSchedules = new ViewAllSchedules();
+      allSchedules.setDefaultCloseOperation(Scheduler.DISPOSE_ON_CLOSE);
+      allSchedules.setVisible(true);
+     
+    }//GEN-LAST:event_updateScheduleItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -197,29 +345,27 @@ public class MainFrame extends javax.swing.JFrame {
     //opens file
     private void openFile() {
 
-        if (finderTabCounter == 0) {
+        if (featuresTabbedPane.getTabCount() == 0) {
             finder = new KnownErrorFinder1();
             String filePath = finder.getFilePath();
+
             featuresTabbedPane.add("Finder", finder.getContentPane());
-            
-            if (recentHistory.contains(filePath))
-            {
+            editOptionMenuSetup();
+            initTabComponent(featuresTabbedPane.getTabCount() - 1);
+
+            if (recentHistory.contains(filePath)) {
                 recentHistory.remove(filePath);
             }
             addFilePathToRecentHistory(filePath);
 
         } else {
-            finder.openFile();
+           finder.openFile();
             String filePath = finder.getFilePath();
-            if (recentHistory.contains(filePath))
-            {
+            if (recentHistory.contains(filePath)) {
                 recentHistory.remove(filePath);
             }
             addFilePathToRecentHistory(finder.getFilePath());
         }
-        //check to see if it would be wise to add this if a file is opened
-        finderTabCounter++;
-
     }
 
     private void fileCheck() {
@@ -239,6 +385,13 @@ public class MainFrame extends javax.swing.JFrame {
 
         }
 
+        if (checks.checkIfScheduleFileExists()) {
+        } else {
+            //if the file doesnt exist then one is created
+            checks.createNewScheduleFile();
+
+        }
+        
         recentHistory = checks.readRecentHistoryFile();
 
     }
@@ -253,19 +406,25 @@ public class MainFrame extends javax.swing.JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
 
-                        if (finderTabCounter == 0) {
+                        if (featuresTabbedPane.getTabCount() == 0) {
                             finder = new KnownErrorFinder1(fileName);
                             featuresTabbedPane.add("Finder", finder.getContentPane());
+                            editOptionMenuSetup();
+                            initTabComponent(featuresTabbedPane.getTabCount() - 1);
+
                             recentHistory.remove(fileName);
                             addFilePathToRecentHistory(finder.getFilePath());
 
                         } else {
-                            finder.openFile(fileName);
+                             boolean foundFile = finder.openFile(fileName);
+                             if (foundFile == true)
+                             {
                             recentHistory.remove(fileName);
                             addFilePathToRecentHistory(finder.getFilePath());
+                             } else {
+                                 addRecentHistoryItems();
+                             }
                         }
-                        //check to see if it would be wise to add this if a file is opened
-                        finderTabCounter++;
 
                     }
                 });
@@ -278,8 +437,8 @@ public class MainFrame extends javax.swing.JFrame {
     private void addFilePathToRecentHistory(String filePath) {
 
         if (recentHistory.size() == 5) {
-            recentHistory.add(0, filePath);
-            recentHistory.remove(5);
+            recentHistory.add(filePath);
+            recentHistory.remove(0);
             checks.updateRecentHistoryFile(recentHistory);
 
             addRecentHistoryItems();
@@ -287,28 +446,103 @@ public class MainFrame extends javax.swing.JFrame {
         } else {
             recentHistory.add(filePath);
             checks.updateRecentHistoryFile(recentHistory);
+            
             addRecentHistoryItems();
         }
     }
+    
+   
+
+    private void initTabComponent(int i) {
+
+        featuresTabbedPane.setTabComponentAt(i, new CloseFeatureTabButton(featuresTabbedPane));
+    }
+    
+    private void editOptionMenuSetup(){
+        
+        if (featuresTabbedPane.getTabCount() != 0) {
+            boolean itemSelected = finder.isItemSelected();
+            if (itemSelected == true) {
+                copyMenuItem.setEnabled(true);
+                copyMenuItem.setForeground(Color.BLACK);
+                
+                selectAllMenuItem.setEnabled(true);
+                selectAllMenuItem.setForeground(Color.BLACK);
+
+            } else {
+                copyMenuItem.setEnabled(false);
+                copyMenuItem.setForeground(Color.LIGHT_GRAY);
+
+            }
+            
+            searchMenuItem.setEnabled(true);
+                searchMenuItem.setForeground(Color.BLACK);
+                            
+                findNextMenuItem.setEnabled(true);
+                findNextMenuItem.setForeground(Color.BLACK);
+
+                findPreviousMenuItem.setEnabled(true);
+                findPreviousMenuItem.setForeground(Color.BLACK);
+
+            boolean clipboardHasContent = EditMenuOptions.clipboardHasContent();
+            if (clipboardHasContent == false) {
+                pasteMenuItem.setEnabled(false);
+                pasteMenuItem.setForeground(Color.LIGHT_GRAY);
+            } else {
+                pasteMenuItem.setEnabled(true);
+                pasteMenuItem.setForeground(Color.BLACK);
+            }
+        } else {
+            copyMenuItem.setEnabled(false);
+            copyMenuItem.setForeground(Color.LIGHT_GRAY);
+
+            pasteMenuItem.setEnabled(false);
+            pasteMenuItem.setForeground(Color.LIGHT_GRAY);
+
+            selectAllMenuItem.setEnabled(false);
+            selectAllMenuItem.setForeground(Color.LIGHT_GRAY);
+
+            findNextMenuItem.setEnabled(false);
+            findNextMenuItem.setForeground(Color.LIGHT_GRAY);
+
+            findPreviousMenuItem.setEnabled(false);
+            findPreviousMenuItem.setForeground(Color.LIGHT_GRAY);
+
+            searchMenuItem.setEnabled(false);
+            searchMenuItem.setForeground(Color.LIGHT_GRAY);
+        }
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem OpenRecentReportItem;
+    private javax.swing.JMenuItem copyMenuItem;
+    private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exportKnownErrorsItem;
     private javax.swing.JMenuItem exportReportItem;
     private javax.swing.JTabbedPane featuresTabbedPane;
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenu filler1;
+    private javax.swing.JMenu filler2;
+    private javax.swing.JMenu filler3;
+    private javax.swing.JMenuItem findNextMenuItem;
+    private javax.swing.JMenuItem findPreviousMenuItem;
     private javax.swing.JMenuItem importKnownErrorsItem;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JMenuItem manageReportsItem;
     private javax.swing.JMenuItem newScheduleItem;
     private javax.swing.JMenuItem openFileItem;
     private javax.swing.JMenu openRecentMenu;
     private javax.swing.JMenuItem openReportsItem;
+    private javax.swing.JMenuItem pasteMenuItem;
+    private javax.swing.JMenuItem searchMenuItem;
+    private javax.swing.JMenuItem selectAllMenuItem;
     private javax.swing.JMenuItem updateScheduleItem;
     // End of variables declaration//GEN-END:variables
 

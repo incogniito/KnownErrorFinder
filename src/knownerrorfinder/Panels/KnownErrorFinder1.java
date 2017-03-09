@@ -5,49 +5,32 @@
  */
 package knownerrorfinder.Panels;
 
-import com.jtattoo.plaf.acryl.AcrylButtonUI;
-import com.jtattoo.plaf.mint.MintButtonUI;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.RowFilter;
 import javax.swing.SpringLayout;
-import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.plaf.synth.SynthLookAndFeel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 import knownerrorfinder.AccessDataFromXML;
-import knownerrorfinder.EditUnknownError;
+import knownerrorfinder.EditMenuOptions;
+import knownerrorfinder.AddToKnownError;
 import knownerrorfinder.KnownErrorFileChecker;
-import knownerrorfinder.Panels.TabbedLogFiles;
+import knownerrorfinder.MainFrame;
 import knownerrorfinder.Tables.KnownErrorTable;
 import knownerrorfinder.Tables.LogTable;
 import knownerrorfinder.Tables.UnknownErrorTable;
@@ -67,78 +50,17 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         initComponents();
 
         //obtains known errors from xml
-        retrieveKnownErrors();
-
-        //Initialise error tables
-        ukeTable = new UnknownErrorTable(searchBox);
-        keTable = new KnownErrorTable(ukeTable, searchBox, knownErrors);
-
-        //Adds table to panel
-        //stops the labels that show the amount of entries found from being shown
-        totalEntriesLabel.setVisible(false);
-        specificEntryLabel.setVisible(false);
-
-//        totalEntriesLabel.setText("");
-//        specificEntryLabel.setText("");
-        //Opens dialog to find an log file when application is opened
+        retrieveKnownErrors(); 
+        
+        initialiseWidgets();
+         //Opens dialog to find an log file when application is opened
         openFile();
-        JScrollPane ukeScrollPane = new JScrollPane(ukeTable);
-        JScrollPane keScrollPane = new JScrollPane(keTable);
 
-        //IMPORTANT adds a swinglayout 
-        //tables will not show otherwise and button will not show underneath
-        SpringLayout ktlayout = new SpringLayout();
-
-        knownTab.setLayout(ktlayout);
-        knownTab.add(keScrollPane);
-
-        ktlayout.putConstraint(SpringLayout.WEST, keScrollPane, 0, SpringLayout.WEST, knownTab);
-        ktlayout.putConstraint(SpringLayout.NORTH, ukeScrollPane, 0, SpringLayout.NORTH, knownTab);
-        ktlayout.putConstraint(SpringLayout.EAST, knownTab, 0, SpringLayout.EAST, keScrollPane);
-        ktlayout.putConstraint(SpringLayout.SOUTH, knownTab, 0, SpringLayout.SOUTH, keScrollPane);
-
-        //IMPORTANT adds a swinglayout 
-        //tables will not show otherwise and button will not show underneath
-        SpringLayout uktlayout = new SpringLayout();
-
-        unknownTab.setLayout(uktlayout);
-        unknownTab.add(jButton1);
-        unknownTab.add(ukeScrollPane);
-
-        uktlayout.putConstraint(SpringLayout.WEST, ukeScrollPane, 0, SpringLayout.WEST, unknownTab);
-        uktlayout.putConstraint(SpringLayout.NORTH, ukeScrollPane, 0, SpringLayout.NORTH, unknownTab);
-        uktlayout.putConstraint(SpringLayout.WEST, jButton1, 0, SpringLayout.WEST, unknownTab);
-        uktlayout.putConstraint(SpringLayout.NORTH, jButton1, 5, SpringLayout.SOUTH, ukeScrollPane);
-        uktlayout.putConstraint(SpringLayout.EAST, unknownTab, 0, SpringLayout.EAST, ukeScrollPane);
-        uktlayout.putConstraint(SpringLayout.SOUTH, unknownTab, 0, SpringLayout.SOUTH, jButton1);
-
-        knownTab.add(keScrollPane);
-
-        unknownTab.add(ukeScrollPane);
-
-        ChangeListener changeListener = new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent changeEvent) {
-                JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
-                int index = sourceTabbedPane.getSelectedIndex();
-
-                //clear tables
-                keTable.clearKnownErrorTable();
-                ukeTable.clearUnknownErrorTable();
-                logTable.clearLogTable();
-
-                //update tables
-                logTable = logTables.get(index);
-                logs = logTable.getOpenedLog();
-                logTable.populateLogsTable(logs, keTable);
-
-                //clear search field
-                searchBox.setText("");
-            }
-        };
-
-        logFileTabbedPane.addChangeListener(changeListener);
-
+       
+      
+        logTabChangeListener();
+        errorTabChangeListener();
+        
         //add logTable to panel        
         //adds listener to search box
         searchBoxListener();
@@ -151,74 +73,19 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
         //obtains known errors from xml
         retrieveKnownErrors();
-
-        //Initialise error tables
-        ukeTable = new UnknownErrorTable(searchBox);
-        keTable = new KnownErrorTable(ukeTable, searchBox, knownErrors);
-
-        //Adds table to panel
-        //stops the labels that show the amount of entries found from being shown
-        totalEntriesLabel.setVisible(false);
-        specificEntryLabel.setVisible(false);
+        
+        
+        initialiseWidgets();
 
         //Opens dialog to find an log file when application is opened
         openFile(filename);
-        JScrollPane ukeScrollPane = new JScrollPane(ukeTable);
-        JScrollPane keScrollPane = new JScrollPane(keTable);
 
-        //IMPORTANT adds a swinglayout 
-        //tables will not show otherwise and button will not show underneath
-        SpringLayout ktlayout = new SpringLayout();
-
-        knownTab.setLayout(ktlayout);
-        knownTab.add(keScrollPane);
-
-        ktlayout.putConstraint(SpringLayout.WEST, keScrollPane, 0, SpringLayout.WEST, knownTab);
-        ktlayout.putConstraint(SpringLayout.NORTH, ukeScrollPane, 0, SpringLayout.NORTH, knownTab);
-        ktlayout.putConstraint(SpringLayout.EAST, knownTab, 0, SpringLayout.EAST, keScrollPane);
-        ktlayout.putConstraint(SpringLayout.SOUTH, knownTab, 0, SpringLayout.SOUTH, keScrollPane);
-
-        //IMPORTANT adds a swinglayout 
-        //tables will not show otherwise and button will not show underneath
-        SpringLayout layout = new SpringLayout();
-
-        unknownTab.setLayout(layout);
-        unknownTab.add(jButton1);
-        unknownTab.add(ukeScrollPane);
-
-        layout.putConstraint(SpringLayout.WEST, ukeScrollPane, 0, SpringLayout.WEST, unknownTab);
-        layout.putConstraint(SpringLayout.NORTH, ukeScrollPane, 0, SpringLayout.NORTH, unknownTab);
-        layout.putConstraint(SpringLayout.WEST, jButton1, 0, SpringLayout.WEST, knownTab);
-        layout.putConstraint(SpringLayout.NORTH, jButton1, 5, SpringLayout.SOUTH, ukeScrollPane);
-        layout.putConstraint(SpringLayout.EAST, unknownTab, 0, SpringLayout.EAST, ukeScrollPane);
-        layout.putConstraint(SpringLayout.SOUTH, unknownTab, 0, SpringLayout.SOUTH, jButton1);
-
-        ChangeListener changeListener = new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent changeEvent) {
-                JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
-                int index = sourceTabbedPane.getSelectedIndex();
-
-                //clear tables
-                keTable.clearKnownErrorTable();
-                ukeTable.clearUnknownErrorTable();
-                logTable.clearLogTable();
-
-                //update tables
-                logTable = logTables.get(index);
-                logs = logTable.getOpenedLog();
-                logTable.populateLogsTable(logs, keTable);
-
-                //clear search field
-                searchBox.setText("");
-            }
-        };
-
-        logFileTabbedPane.addChangeListener(changeListener);
-
-        //add logTable to panel        
+        logTabChangeListener();
+        errorTabChangeListener();
+        
         //adds listener to search box
         searchBoxListener();
+        
 
     }
 
@@ -231,10 +98,10 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private String filePath;
 
     //used as a marker when the next and previous buttons have been pressed
-    private int buttonCounter = 0;
+    private static int buttonCounter = 0;
 
-    AccessDataFromXML knownErrorsFile = new AccessDataFromXML();
-    List<KnownError> knownErrors;
+    private AccessDataFromXML knownErrorsFile = new AccessDataFromXML();
+   private List<KnownError> knownErrors;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -369,7 +236,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                     .addComponent(totalEntriesLabel))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                    .addComponent(jTabbedPane3)
                     .addComponent(logFileTabbedPane))
                 .addContainerGap())
         );
@@ -385,7 +252,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         //opens new jframe enabling the ability to add the chosen unknown error to known errors
-        EditUnknownError addToUnknownFrame = new EditUnknownError();
+        AddToKnownError addToUnknownFrame = new AddToKnownError();
 
         //stores the index of the selected row
         int index = ukeTable.getSelectedRow();
@@ -511,7 +378,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                     sb.append(line).append("\n\t");
                     continue;
                     //checks for lines that start with a few spaces
-                } else if (line.startsWith("    ")) {
+                } else if (line.startsWith(" ")) {
                     sb.append(line).append("\n");
                     continue;
                 }//add lines to list when there isn't a concatanated string 
@@ -537,7 +404,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         return null;
     }
 
-    private void iterateDown() {
+    public  void iterateDown() {
 
         int counter = 0;
         String query = searchBox.getText();
@@ -547,6 +414,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             currentEntry = 0;
         } else if (totalEntriesLabel.getText().equalsIgnoreCase("not found")) {
             //does nothing when nothing is found
+            
         }       //iterates down through table
         for (; row < logTable.getRowCount(); row++) {
             String next = logTable.getValueAt(row, 1).toString().toLowerCase();
@@ -571,7 +439,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         }
     }
 
-    private void iterateUp() {
+    public  void iterateUp() {
         int counter = 0;
         String query = searchBox.getText();
         // stops the user from going backwards from the first entry
@@ -629,7 +497,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             }
             if (query.equalsIgnoreCase("")) {
                 totalEntriesLabel.setVisible(false);
-                //totalEntriesLabel.setText("");
+                totalEntriesFound = counter;
 
             } else {
                 if (counter == 0) {
@@ -647,7 +515,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     }
 
     //updates the label that shows the current entry
-    private void updateCurrentEntry() {
+    private  void updateCurrentEntry() {
 
         String query = searchBox.getText();
         if (query.equalsIgnoreCase("")) {
@@ -665,7 +533,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     //opens file
     public void openFile() {
 
-        int returnVal = fileChooser.showOpenDialog(this);
+        int returnVal = fileChooser.showOpenDialog(this.getContentPane());
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             //populates the logtable with the lines from the file
@@ -681,31 +549,47 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
             //adds panel to tab
             logFileTabbedPane.add(newPanel);
+            initTabComponent(logFileTabbedPane.getTabCount()-1);
 
             //adds table to scroll pane
             JScrollPane scrollPane = new JScrollPane(logTable);
             scrollPane.setSize(newPanel.getWidth(), newPanel.getHeight());
 
-            //populates table
+            //populates table on first occassion
             newPanel.updateTable();
             addLogTable(logTable);
+            logFileTabbedPane.setSelectedIndex(logFileTabbedPane.getTabCount()-1);
 
             //adds a box layout
             newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.LINE_AXIS));
             searchBox.setText("");
 
+            
             //adds scrollable table to panel
             newPanel.add(scrollPane);
+            
+            totalEntriesLabel.setVisible(false);
+        specificEntryLabel.setVisible(false);
         }
 
     }
 
     //opens file
-    public void openFile(String recentFile) {
+    public boolean openFile(String recentFile) {
 
         File file = new File(recentFile);
+        
+       
         //populates the logtable with the lines from the file
         logs = linesFromFile(file);
+        
+        if (logs == null){
+            
+            KnownErrorFileChecker checker = new KnownErrorFileChecker();
+            MainFrame.recentHistory.remove(recentFile);
+            checker.updateRecentHistoryFile(MainFrame.recentHistory);
+            return false;
+        }else{
 
         logTable = new LogTable();
         String name = file.getName();
@@ -714,24 +598,32 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
         //sets name of tab
         newPanel.setName(name);
-
-        //adds panel to tab
-        logFileTabbedPane.add(newPanel);
-
-        //adds table to scroll pane
-        JScrollPane scrollPane = new JScrollPane(logTable);
-        scrollPane.setSize(newPanel.getWidth(), newPanel.getHeight());
-
+        
         //populates table
         newPanel.updateTable();
         addLogTable(logTable);
 
+        //adds panel to tab
+        logFileTabbedPane.add(newPanel);
+        initTabComponent(logFileTabbedPane.getTabCount()-1);
+
+        
+        //adds table to scroll pane
+        JScrollPane scrollPane = new JScrollPane(logTable);
+        scrollPane.setSize(newPanel.getWidth(), newPanel.getHeight());
+            
+        logFileTabbedPane.setSelectedIndex(logFileTabbedPane.getTabCount()-1);
+          
         //adds a box layout
         newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.LINE_AXIS));
         searchBox.setText("");
-
         //adds scrollable table to panel
         newPanel.add(scrollPane);
+        
+        totalEntriesLabel.setVisible(false);
+        specificEntryLabel.setVisible(false);
+        return true;
+        }
     }
 
     private void retrieveKnownErrors() {
@@ -765,18 +657,152 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         logTables.add(logTable);
     }
 
-    private void removeLogTable(int position) {
-        logTables.remove(position);
+    public void removeLogTable(int position) {
+                logTables.remove(position);
 
     }
+    
+     private void initTabComponent(int i) {
+        logFileTabbedPane.setTabComponentAt(i, new CloseTabButton(logFileTabbedPane, this));
+    } 
 
     public String getFilePath() {
         return filePath;
     }
+    
+    private void clearTables(){
+        
+        //clear tables
+                keTable.clearKnownErrorTable();
+                ukeTable.clearUnknownErrorTable();
+                logTable.clearLogTable();
+    }
 
-    private LogTable logTable;
-    private KnownErrorTable keTable;
-    private UnknownErrorTable ukeTable;
+    public void copy(){
+        EditMenuOptions.copyToClipboard(logTable, keTable, ukeTable);
+    }
+    
+    public void paste(){
+        EditMenuOptions.paste( searchBox);  
+    }
+    
+    public boolean isItemSelected(){
+        
+        return EditMenuOptions.isItemSelected(logTable, keTable, ukeTable);
+    }
+    
+    private void errorTabChangeListener(){
+        ChangeListener changeListener = new ChangeListener() {
+            
+           
+            
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                deselectErrorTableRows();
+              }   
+        };
+        
+        jTabbedPane3.addChangeListener(changeListener);
+    }
+    
+    private void logTabChangeListener(){
+          ChangeListener changeListener = new ChangeListener() {
+            
+           
+            
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+                int index = sourceTabbedPane.getSelectedIndex();
+
+                if(logFileTabbedPane.getTabCount()!=0){
+                //clear tables
+                clearTables();
+
+                //update tables
+                logTable = logTables.get(index);
+                logs = logTable.getOpenedLog();
+                logTable.populateLogsTable(logs, keTable);
+                } else{
+                                    clearTables();
+                }
+                //clear search field
+                searchBox.setText("");                
+              }   
+        };
+
+        logFileTabbedPane.addChangeListener(changeListener);
+    }
+    
+    private void initialiseWidgets(){
+        
+         //Initialise error tables
+        ukeTable = new UnknownErrorTable(searchBox);
+        keTable = new KnownErrorTable(ukeTable, searchBox, knownErrors);
+
+        //stops the labels that show the amount of entries found from being shown
+        totalEntriesLabel.setVisible(false);
+        specificEntryLabel.setVisible(false);
+
+        JScrollPane ukeScrollPane = new JScrollPane(ukeTable);
+        JScrollPane keScrollPane = new JScrollPane(keTable);
+
+        //IMPORTANT adds a swinglayout 
+        //tables will not show otherwise and button will not show underneath
+        SpringLayout ktlayout = new SpringLayout();
+
+        knownTab.setLayout(ktlayout);
+        knownTab.add(keScrollPane);
+
+        ktlayout.putConstraint(SpringLayout.WEST, keScrollPane, 0, SpringLayout.WEST, knownTab);
+        ktlayout.putConstraint(SpringLayout.NORTH, ukeScrollPane, 0, SpringLayout.NORTH, knownTab);
+        ktlayout.putConstraint(SpringLayout.EAST, knownTab, 0, SpringLayout.EAST, keScrollPane);
+        ktlayout.putConstraint(SpringLayout.SOUTH, knownTab, 0, SpringLayout.SOUTH, keScrollPane);
+
+        //IMPORTANT adds a swinglayout 
+        //tables will not show otherwise and button will not show underneath
+        SpringLayout uktlayout = new SpringLayout();
+
+        unknownTab.setLayout(uktlayout);
+        unknownTab.add(jButton1);
+        unknownTab.add(ukeScrollPane);
+
+        uktlayout.putConstraint(SpringLayout.WEST, ukeScrollPane, 0, SpringLayout.WEST, unknownTab);
+        uktlayout.putConstraint(SpringLayout.NORTH, ukeScrollPane, 0, SpringLayout.NORTH, unknownTab);
+        uktlayout.putConstraint(SpringLayout.WEST, jButton1, 0, SpringLayout.WEST, unknownTab);
+        uktlayout.putConstraint(SpringLayout.NORTH, jButton1, 5, SpringLayout.SOUTH, ukeScrollPane);
+        uktlayout.putConstraint(SpringLayout.EAST, unknownTab, 0, SpringLayout.EAST, ukeScrollPane);
+        uktlayout.putConstraint(SpringLayout.SOUTH, unknownTab, 0, SpringLayout.SOUTH, jButton1);
+
+        knownTab.add(keScrollPane);
+
+        unknownTab.add(ukeScrollPane);
+
+        
+    }
+    public static void deselectErrorTableRows(){
+        
+       ukeTable.clearSelection();
+       keTable.clearSelection();
+    }
+    
+    
+    public void selectAll(){
+        
+        EditMenuOptions.selectAll(logTable, keTable, ukeTable);
+    }
+    
+    
+    public void search(){
+        
+        EditMenuOptions.search(searchBox);
+    }
+    private static LogTable logTable;
+    private static KnownErrorTable keTable;
+    private static UnknownErrorTable ukeTable;
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JButton jButton1;
@@ -786,7 +812,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JPanel knownTab;
     private javax.swing.JTabbedPane logFileTabbedPane;
-    private javax.swing.JTextField searchBox;
+    private static javax.swing.JTextField searchBox;
     private javax.swing.JLabel specificEntryLabel;
     private javax.swing.JLabel totalEntriesLabel;
     private javax.swing.JPanel unknownTab;

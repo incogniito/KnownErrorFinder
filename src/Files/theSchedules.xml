@@ -1,4 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Schedules xmlns="http://schedules">
-
+    <schedules>
+        <id>0</id>
+        <name>test</name>
+        <scheduleTime>11:34:57</scheduleTime>
+        <scheduleDays>
+            <scheduleDay>Monday</scheduleDay>
+            <scheduleDay>Tuesday</scheduleDay>
+            <scheduleDay>Wednesday</scheduleDay>
+            <scheduleDay>Thursday</scheduleDay>
+            <scheduleDay>Friday</scheduleDay>
+        </scheduleDays>
+        <folderPaths>
+            <folderPath>/Users/oluwakemiborisade/Library</folderPath>
+        </folderPaths>
+    </schedules>
+    <schedules>
+        <id>1</id>
+        <name>Myschedule</name>
+        <scheduleTime>07:44:36</scheduleTime>
+        <scheduleDays>
+            <scheduleDay>Monday</scheduleDay>
+            <scheduleDay>Tuesday</scheduleDay>
+            <scheduleDay>Wednesday</scheduleDay>
+            <scheduleDay>Thursday</scheduleDay>
+            <scheduleDay>Friday</scheduleDay>
+            <scheduleDay>Saturday</scheduleDay>
+            <scheduleDay>Sunday</scheduleDay>
+        </scheduleDays>
+        <folderPaths>
+            <folderPath>/Users/oluwakemiborisade/Public</folderPath>
+        </folderPaths>
+    </schedules>
 </Schedules>

@@ -99,4 +99,27 @@ public class KnownErrorFileChecker {
         }
         return null;
     }
+    
+    public boolean checkIfScheduleFileExists() {
+        File f = new File(System.getProperty("user.dir") + "/src/Files/theSchedules.xml");
+        if (f.exists() && !f.isDirectory()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //creates an xml file in the Files package
+    public void createNewScheduleFile() {
+        List<String> lines = Arrays.asList("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+
+        Path file = Paths.get(System.getProperty("user.dir") + "/src/Files/theSchedules.xml");
+        try {
+            Files.write(file, lines, Charset.forName("UTF-8"));
+        } catch (IOException ex) {
+            Logger.getLogger(KnownErrorFileChecker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
 }

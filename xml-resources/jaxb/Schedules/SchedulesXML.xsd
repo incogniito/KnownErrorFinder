@@ -12,6 +12,7 @@ and open the template in the editor.
     
     <xsd:complexType name="Schedule"> 
         <xsd:sequence>
+            <xsd:element name = "id" type = "xsd:int"/>
             <xsd:element name = "name" type = "xsd:string"/> 
             <xsd:element name = "scheduleTime" type = "xsd:time"/>
             <xsd:element name = "scheduleDays" type = "tns:scheduledDays"/>

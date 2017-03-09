@@ -13,14 +13,14 @@ import javax.swing.JFrame;
  *
  * @author oluwakemiborisade
  */
-public class EditUnknownError extends javax.swing.JFrame {
+public class AddToKnownError extends javax.swing.JFrame {
 
     /**
-     * Creates new form EditUnknownError
+     * Creates new form AddToKnownError
      */
     public boolean saved = false;
     private Date date = null;
-    public EditUnknownError() {
+    public AddToKnownError() {
         initComponents();
         
                  setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -29,7 +29,7 @@ public class EditUnknownError extends javax.swing.JFrame {
          
          
     }
-    public void closeFrame(){
+    private void closeFrame(){
         super.dispose();
     }
     
@@ -41,7 +41,7 @@ public class EditUnknownError extends javax.swing.JFrame {
         int month = cal.get(Calendar.MONTH);
         int year= cal.get(Calendar.YEAR);  
         
-        dateLabel.setText("Date:  "+day+"/"+month+"/"+year);
+        dateLabel.setText("Date:  "+day+"/"+month+1+"/"+year);
         
         return cal.getTime();
      }
@@ -171,20 +171,21 @@ public class EditUnknownError extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EditUnknownError.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddToKnownError.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EditUnknownError.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddToKnownError.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EditUnknownError.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddToKnownError.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EditUnknownError.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddToKnownError.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new EditUnknownError().setVisible(true);
+                new AddToKnownError().setVisible(true);
                 
             }
         });

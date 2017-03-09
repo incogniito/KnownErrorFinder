@@ -9,7 +9,6 @@ import javax.swing.JCheckBox;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author oluwakemiborisade
@@ -22,9 +21,11 @@ public class DaySelector extends javax.swing.JFrame {
     public DaySelector() {
         initComponents();
     }
-    public void closeFrame(){
+
+    public void closeFrame() {
         super.dispose();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -127,7 +128,7 @@ public class DaySelector extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-       closeFrame();
+        closeFrame();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
@@ -138,51 +139,48 @@ public class DaySelector extends javax.swing.JFrame {
         // TODO add your handling code here:
         String text = "";
         List<String> checkBoxs = new ArrayList<>();
-        if(jCheckBox1.isSelected()){
-            text =  jCheckBox1.getText() + '\n';
+        if (jCheckBox1.isSelected()) {
+            text = jCheckBox1.getText() + '\n';
             checkBoxs.add(text);
             //
         }
-        if(jCheckBox2.isSelected()){
-            text =  jCheckBox2.getText() + '\n';
+        if (jCheckBox2.isSelected()) {
+            text = jCheckBox2.getText() + '\n';
             checkBoxs.add(text);
         }
-        if(jCheckBox3.isSelected()){
+        if (jCheckBox3.isSelected()) {
             text = jCheckBox3.getText() + '\n';
             checkBoxs.add(text);
         }
-          
-        if(jCheckBox4.isSelected()){
+
+        if (jCheckBox4.isSelected()) {
             text = jCheckBox4.getText() + '\n';
             checkBoxs.add(text);
         }
-          
-        if(jCheckBox5.isSelected()){
+
+        if (jCheckBox5.isSelected()) {
             text = jCheckBox5.getText() + '\n';
             checkBoxs.add(text);
         }
-          
-        if(jCheckBox6.isSelected()){
+
+        if (jCheckBox6.isSelected()) {
             text = jCheckBox6.getText() + '\n';
             checkBoxs.add(text);
         }
-         if(jCheckBox7.isSelected()){
+        if (jCheckBox7.isSelected()) {
             text = jCheckBox7.getText() + '\n';
             checkBoxs.add(text);
         }
-            
-            Scheduler textBox = new Scheduler();
-            textBox.setDays(checkBoxs);
-            textBox.setVisible(true);
-            
-            
-        
+
+        Scheduler.setDays(checkBoxs);
+
+        closeFrame();
+
     }//GEN-LAST:event_chooseButtonActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

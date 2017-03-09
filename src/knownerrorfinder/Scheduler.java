@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 import javax.swing.table.DefaultTableModel;
+import schedules.Schedule;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -34,13 +35,35 @@ public class Scheduler extends javax.swing.JFrame {
     /**
      * Creates new form Scheduler
      */
-    DefaultTableModel dtm;
-    DefaultTableModel tableMod;
+   private DefaultTableModel dtm;
+    private static DefaultTableModel tableMod;
+    
+    private int scheduleId = -1;
     public Scheduler() {
         initComponents();
         
     }
-
+    public Scheduler(int id, String name, Date scheduleTime, List <String> scheduleDay, List<String> folderPaths){
+        initComponents();
+        tableMod = (DefaultTableModel) daysTable.getModel();
+        dtm = (DefaultTableModel) pathTable.getModel();
+        nameField.setText(name);
+        
+        scheduleId = id;
+       jSpinner1.setValue(scheduleTime);
+         
+        for (String day : scheduleDay){
+            
+            tableMod.addRow(new Object[]{day});
+        }
+        for (String path : folderPaths){
+            
+            dtm.addRow(new Object[]{path});
+        }
+    
+        
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -277,22 +300,32 @@ public class Scheduler extends javax.swing.JFrame {
       else{
          for(int i = 0; i < row; i++ ){
              String folders =  pathTable.getValueAt(i,0).toString();
-             
-             folderPaths.add(folders);
+                   folderPaths.add(folders);
+                        
+          }
+         for(int i = 0; i < row1; i++){
              String day = daysTable.getValueAt(i,0).toString();
              scheduleDay.add(day);
-               
-          }
+         }
+         
+         if(scheduleId == -1){
+             
+         
          AccessDataFromXML saveSchedule = new AccessDataFromXML();
          saveSchedule.newSchedule(name, scheduleTime, scheduleDay, folderPaths);
          JOptionPane.showMessageDialog(null, "Schedule Saved");
          closeFrame();
          
-      }
+      }else{
+            AccessDataFromXML saveSchedule = new AccessDataFromXML();
+            saveSchedule.updateSchedules(scheduleId, name, scheduleTime, scheduleDay, folderPaths);
+            JOptionPane.showMessageDialog(null, "Schedule Saved");
+            closeFrame(); 
+         }
   
      
    
-      
+      }
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
@@ -376,26 +409,23 @@ public class Scheduler extends javax.swing.JFrame {
     }//GEN-LAST:event_removeButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        // TODO add your handling code here:
+        closeFrame();
     }//GEN-LAST:event_cancelButtonActionPerformed
-    public void setDays(List<String> days){
+    public static void setDays(List<String> days){
         
         
       tableMod = (DefaultTableModel) daysTable.getModel();
+            tableMod.setRowCount(0);
 
         for (String day : days){
             
             tableMod.addRow(new Object[]{day});
         }
-        
-        
-         
-         
-         
-        //display.setText(days);
+    
         
        
     }
+  
     /**
      * @param args the command line arguments
      */
@@ -435,7 +465,7 @@ public class Scheduler extends javax.swing.JFrame {
     private javax.swing.JButton addButton;
     private javax.swing.JButton cancelButton;
     private javax.swing.JComboBox<String> dayChooser;
-    private javax.swing.JTable daysTable;
+    private static javax.swing.JTable daysTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

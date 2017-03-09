@@ -80,7 +80,7 @@ public class PopUpMenu {
                 int selectedColumn = unknownErrorTable.getSelectedColumn();
                 String exception = unknownErrorTable.getValueAt(selectedRow, selectedColumn).toString();
 
-                EditUnknownError addKnownError = new EditUnknownError();
+                AddToKnownError addKnownError = new AddToKnownError();
                 addKnownError.setName(exception);
                 addKnownError.setVisible(true);
                 
