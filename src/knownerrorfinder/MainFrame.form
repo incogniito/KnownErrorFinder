@@ -125,6 +125,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Update Schedule"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateScheduleItemActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -139,11 +142,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Open Reports"/>
               </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="OpenRecentReportItem">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Open Most Recent Report"/>
-              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="openReportsItemActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="manageReportsItem">
               <Properties>

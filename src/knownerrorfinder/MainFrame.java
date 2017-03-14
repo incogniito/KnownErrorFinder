@@ -11,11 +11,14 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.JMenuItem;
 import knownerrorfinder.Panels.CloseFeatureTabButton;
 
 import knownerrorfinder.Panels.KnownErrorFinder1;
+import schedules.Schedule;
 //import knownerrorfinder.Panels
 
 /**
@@ -30,7 +33,10 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {
         initComponents();
         
+        setTitle("Error Finder");
+        
         checks = new KnownErrorFileChecker();
+        executor = Executors.newCachedThreadPool();
         filler1.setEnabled(false);
         filler2.setEnabled(false);
         filler3.setEnabled(false);
@@ -38,11 +44,13 @@ public class MainFrame extends javax.swing.JFrame {
         editOptionMenuSetup();
         fileCheck();
         addRecentHistoryItems();
+        startScheduleThreads(true);
     }
-
+    private static ExecutorService  executor;
     private KnownErrorFinder1 finder;
     public static List<String> recentHistory;
     private  KnownErrorFileChecker checks;
+    private static ExecuteSchedule runSchedule;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -78,7 +86,6 @@ public class MainFrame extends javax.swing.JFrame {
         filler3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         openReportsItem = new javax.swing.JMenuItem();
-        OpenRecentReportItem = new javax.swing.JMenuItem();
         manageReportsItem = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         exportReportItem = new javax.swing.JMenuItem();
@@ -189,6 +196,11 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu3.add(newScheduleItem);
 
         updateScheduleItem.setText("Update Schedule");
+        updateScheduleItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateScheduleItemActionPerformed(evt);
+            }
+        });
         jMenu3.add(updateScheduleItem);
 
         jMenuBar1.add(jMenu3);
@@ -197,10 +209,12 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu4.setText("Reports");
 
         openReportsItem.setText("Open Reports");
+        openReportsItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openReportsItemActionPerformed(evt);
+            }
+        });
         jMenu4.add(openReportsItem);
-
-        OpenRecentReportItem.setText("Open Most Recent Report");
-        jMenu4.add(OpenRecentReportItem);
 
         manageReportsItem.setText("Manage Reports");
         jMenu4.add(manageReportsItem);
@@ -239,7 +253,9 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_openFileItemActionPerformed
 
     private void newScheduleItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newScheduleItemActionPerformed
-        // TODO add your handling code here:
+        Scheduler newSchedule = new Scheduler();
+        newSchedule.setDefaultCloseOperation(Scheduler.DISPOSE_ON_CLOSE);
+        newSchedule.setVisible(true);
     }//GEN-LAST:event_newScheduleItemActionPerformed
 
     private void importKnownErrorsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importKnownErrorsItemActionPerformed
@@ -293,6 +309,20 @@ editOptionMenuSetup();
         finder.iterateUp();
     }//GEN-LAST:event_findPreviousMenuItemActionPerformed
 
+    private void updateScheduleItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateScheduleItemActionPerformed
+      ViewAllSchedules allSchedules = new ViewAllSchedules();
+      allSchedules.setDefaultCloseOperation(Scheduler.DISPOSE_ON_CLOSE);
+      allSchedules.setVisible(true);
+     
+    }//GEN-LAST:event_updateScheduleItemActionPerformed
+
+    private void openReportsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openReportsItemActionPerformed
+        // TODO add your handling code here:
+        ReportMenuOptions.openReports(this, finder, featuresTabbedPane);
+                    initTabComponent(featuresTabbedPane.getTabCount() - 1);
+
+    }//GEN-LAST:event_openReportsItemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -331,7 +361,7 @@ editOptionMenuSetup();
     //opens file
     private void openFile() {
 
-        if (featuresTabbedPane.getTabCount() == 0) {
+        if (featuresTabbedPane.indexOfTab("Finder") == -1) {
             finder = new KnownErrorFinder1();
             String filePath = finder.getFilePath();
 
@@ -371,6 +401,13 @@ editOptionMenuSetup();
 
         }
 
+        if (checks.checkIfScheduleFileExists()) {
+        } else {
+            //if the file doesnt exist then one is created
+            checks.createNewScheduleFile();
+
+        }
+        
         recentHistory = checks.readRecentHistoryFile();
 
     }
@@ -385,7 +422,7 @@ editOptionMenuSetup();
                     @Override
                     public void actionPerformed(ActionEvent e) {
 
-                        if (featuresTabbedPane.getTabCount() == 0) {
+                        if (featuresTabbedPane.indexOfTab("Finder") == -1) {
                             finder = new KnownErrorFinder1(fileName);
                             featuresTabbedPane.add("Finder", finder.getContentPane());
                             editOptionMenuSetup();
@@ -491,10 +528,25 @@ editOptionMenuSetup();
             searchMenuItem.setForeground(Color.LIGHT_GRAY);
         }
     }
+    
+    public static void startScheduleThreads(boolean fromMainFrame){
+    
+        AccessDataFromXML accessXML = new AccessDataFromXML();
+        List<Schedule> schedules = accessXML.retrieveSchedules();
+       if (fromMainFrame == false){ 
+           
+           executor.shutdownNow();
+           executor = Executors.newCachedThreadPool();
+       }
+       for (Schedule schedule : schedules){
+           runSchedule = new ExecuteSchedule(schedule);
+           executor.submit(runSchedule);
+
+       }     
+}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem OpenRecentReportItem;
     private javax.swing.JMenuItem copyMenuItem;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exportKnownErrorsItem;

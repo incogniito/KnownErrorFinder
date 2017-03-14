@@ -1,2 +1,2 @@
-/Users/samsonaiyegbusi/Downloads/oracle wl log
-/Users/samsonaiyegbusi/Downloads/application.txt
+/Users/samsonaiyegbusi/Downloads/logs/oracle wl log
+/Users/samsonaiyegbusi/Downloads/logs/glassfish server log

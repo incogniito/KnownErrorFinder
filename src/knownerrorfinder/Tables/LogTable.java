@@ -47,7 +47,7 @@ public class LogTable extends JTable {
 
         int counter = 0;
         this.logs = logs;
-        
+        model.setRowCount(0);
  
         //looks for each log in the list of logs
         for (String log : logs) {
@@ -61,6 +61,8 @@ public class LogTable extends JTable {
             //populates known and unknown errors table with every line
             keTable.populateErrorsTable(log);
         }
+        
+        int rowCount = this.getRowCount();
         //assigns model to table
         setModel(model);
         //popup menus

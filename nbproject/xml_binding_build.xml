@@ -25,5 +25,19 @@
         <copy todir="${build.generated.sources.dir}/jaxb">
             <fileset dir="build/generated/jaxbCache/KnownErrorBinding"/>
         </copy>
+        <mkdir dir="build/generated/jaxbCache/Schedules"/>
+        <xjc destdir="build/generated/jaxbCache/Schedules" catalog="catalog.xml">
+            <classpath>
+                <pathelement location="${src.dir}"/>
+                <pathelement path="${jaxbwiz.xjcrun.classpath}"/>
+            </classpath>
+            <arg value="-xmlschema"/>
+            <schema file="xml-resources/jaxb/Schedules/SchedulesXML.xsd"/>
+            <depends file="xml-resources/jaxb/Schedules/SchedulesXML.xsd"/>
+            <produces dir="build/generated/jaxbCache/Schedules"/>
+        </xjc>
+        <copy todir="${build.generated.sources.dir}/jaxb">
+            <fileset dir="build/generated/jaxbCache/Schedules"/>
+        </copy>
     </target>
 </project>

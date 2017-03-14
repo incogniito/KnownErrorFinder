@@ -28,7 +28,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import knownerrorfinder.AccessDataFromXML;
 import knownerrorfinder.EditMenuOptions;
-import knownerrorfinder.EditUnknownError;
+import knownerrorfinder.AddToKnownError;
 import knownerrorfinder.KnownErrorFileChecker;
 import knownerrorfinder.MainFrame;
 import knownerrorfinder.Tables.KnownErrorTable;
@@ -63,8 +63,8 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         
         //add logTable to panel        
         //adds listener to search box
+        
         searchBoxListener();
-
     }
 
     public KnownErrorFinder1(String filename) {
@@ -86,6 +86,32 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         //adds listener to search box
         searchBoxListener();
         
+
+    }
+    
+    public KnownErrorFinder1(List<String> filenames) {
+
+        initComponents();
+
+        //obtains known errors from xml
+        retrieveKnownErrors();
+        
+        
+        initialiseWidgets();
+
+        for (String filename : filenames){
+            //Opens dialog to find an log file when application is opened
+        openFile(filename);
+
+        }
+        
+        logTabChangeListener();
+        errorTabChangeListener();
+        
+        //adds listener to search box
+        searchBoxListener();
+               // jTabbedPane3.removeTabAt(0);
+
 
     }
 
@@ -252,7 +278,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         //opens new jframe enabling the ability to add the chosen unknown error to known errors
-        EditUnknownError addToUnknownFrame = new EditUnknownError();
+        AddToKnownError addToUnknownFrame = new AddToKnownError();
 
         //stores the index of the selected row
         int index = ukeTable.getSelectedRow();
@@ -575,7 +601,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             newPanel.add(scrollPane);
             
             totalEntriesLabel.setVisible(false);
-        specificEntryLabel.setVisible(false);
+            specificEntryLabel.setVisible(false);
         }
 
     }
