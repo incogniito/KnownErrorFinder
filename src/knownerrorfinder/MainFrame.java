@@ -44,7 +44,9 @@ public class MainFrame extends javax.swing.JFrame {
         editOptionMenuSetup();
         fileCheck();
         addRecentHistoryItems();
+                ExecuteSchedule.initialiseComponents(finder, featuresTabbedPane);
         startScheduleThreads(true);
+        
     }
     private static ExecutorService  executor;
     private KnownErrorFinder1 finder;
@@ -261,13 +263,13 @@ public class MainFrame extends javax.swing.JFrame {
     private void importKnownErrorsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importKnownErrorsItemActionPerformed
         // TODO add your handling code here:
 
-        ManageKnownErrors mke = new ManageKnownErrors(this);
+        FileMenuOptions mke = new FileMenuOptions(this);
         mke.openImportDialog();
     }//GEN-LAST:event_importKnownErrorsItemActionPerformed
 
     private void exportKnownErrorsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportKnownErrorsItemActionPerformed
         // TODO add your handling code here:
-        ManageKnownErrors mke = new ManageKnownErrors(this);
+        FileMenuOptions mke = new FileMenuOptions(this);
         mke.openExportDialog();
     }//GEN-LAST:event_exportKnownErrorsItemActionPerformed
 
@@ -531,8 +533,7 @@ editOptionMenuSetup();
     
     public static void startScheduleThreads(boolean fromMainFrame){
     
-        AccessDataFromXML accessXML = new AccessDataFromXML();
-        List<Schedule> schedules = accessXML.retrieveSchedules();
+        List<Schedule> schedules = AccessDataFromXML.retrieveSchedules();
        if (fromMainFrame == false){ 
            
            executor.shutdownNow();

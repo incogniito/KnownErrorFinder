@@ -33,7 +33,7 @@ import schedules.Schedules;
 public class AccessDataFromXML {
 
     //unmarshals data from xml file
-    public List<KnownError> retrieveKnownErrors() {
+    public static List<KnownError> retrieveKnownErrors() {
         AllKnownErrors knownErrorList = new AllKnownErrors();
         try {
             javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(knownErrorList.getClass().getPackage().getName());
@@ -57,7 +57,7 @@ public class AccessDataFromXML {
         
 
         List<KnownError> existingErrors = retrieveKnownErrors();
-        KnownError newKnownError = null;
+        KnownError newKnownError = new KnownError();
         if (existingErrors != null) {
             currentKnownErrors.addAll(existingErrors);
                 
@@ -113,7 +113,7 @@ public class AccessDataFromXML {
         }
     
    //unmarshals data from xml file
-    public List<Schedule> retrieveSchedules() {
+    public static List<Schedule> retrieveSchedules() {
         Schedules scheduleList = new Schedules();
         try {
             javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(scheduleList.getClass().getPackage().getName());

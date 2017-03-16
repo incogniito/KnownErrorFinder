@@ -35,9 +35,9 @@
     <schedules>
         <id>2</id>
         <name>tester</name>
-        <scheduleTime>08:48:30</scheduleTime>
+        <scheduleTime>14:23:20</scheduleTime>
         <scheduleDays>
-            <scheduleDay>Tuesday</scheduleDay>
+            <scheduleDay>Thursday</scheduleDay>
         </scheduleDays>
         <folderPaths>
             <folderPath>/Users/samsonaiyegbusi/Downloads/logs</folderPath>

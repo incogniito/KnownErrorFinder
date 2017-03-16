@@ -65,9 +65,7 @@ public class CustomMouseListener extends MouseAdapter{
         {
              if (table != null){
               findOccurences();
-            } else if (logsTable != null){
-                 KnownErrorFinder1.deselectErrorTableRows();
-            }
+            } 
         }    
     }
     
@@ -81,13 +79,7 @@ public class CustomMouseListener extends MouseAdapter{
                     {
                  menu.logTablePopupMenu(logsTable).show(e.getComponent(), e.getX(), e.getY());
                     }
-            } else {
-                int selectedRow = table.getSelectedRow();
-                    if (selectedRow != -1 ){
-
-                menu.unknownTablePopupMenu(table, searchField).show(e.getComponent(), e.getX(), e.getY());
-                    }
-            }
+            } 
         
         
         

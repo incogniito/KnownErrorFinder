@@ -18,7 +18,7 @@ public class AddToKnownError extends javax.swing.JFrame {
     /**
      * Creates new form AddToKnownError
      */
-    public boolean saved = false;
+    public static boolean saved = false;
     private Date date = null;
     public AddToKnownError() {
         initComponents();

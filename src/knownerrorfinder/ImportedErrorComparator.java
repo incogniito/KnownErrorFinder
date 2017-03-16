@@ -48,7 +48,7 @@ public class ImportedErrorComparator extends javax.swing.JFrame {
         }
     };
     
-    ManageKnownErrors manageErrors;
+    FileMenuOptions manageErrors;
     
     /** Creates new form ManageKnownError
     */

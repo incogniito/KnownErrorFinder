@@ -8,6 +8,8 @@ package knownerrorfinder.Panels;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -21,11 +23,15 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.RowFilter;
 import javax.swing.SpringLayout;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import knownerrorfinder.AccessDataFromXML;
 import knownerrorfinder.EditMenuOptions;
 import knownerrorfinder.AddToKnownError;
@@ -52,19 +58,24 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         //obtains known errors from xml
         retrieveKnownErrors(); 
         
+        
         initialiseWidgets();
+                logTabChangeListener();
+
          //Opens dialog to find an log file when application is opened
         openFile();
 
        
       
-        logTabChangeListener();
+         //logFileTabbedPane.setSelectedIndex(0);
+
         errorTabChangeListener();
         
         //add logTable to panel        
         //adds listener to search box
         
-        searchBoxListener();
+        searchBoxListener(false);
+        removeFocusFromErrorsPanel();
     }
 
     public KnownErrorFinder1(String filename) {
@@ -77,15 +88,19 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         
         initialiseWidgets();
 
+                logTabChangeListener();
+
+        
         //Opens dialog to find an log file when application is opened
         openFile(filename);
 
-        logTabChangeListener();
         errorTabChangeListener();
         
         //adds listener to search box
-        searchBoxListener();
+        searchBoxListener(false);
         
+                removeFocusFromErrorsPanel();
+
 
     }
     
@@ -99,23 +114,26 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         
         initialiseWidgets();
 
+        logTabChangeListener();
+
+        
         for (String filename : filenames){
             //Opens dialog to find an log file when application is opened
         openFile(filename);
 
         }
         
-        logTabChangeListener();
         errorTabChangeListener();
         
         //adds listener to search box
-        searchBoxListener();
+        searchBoxListener(true);
                // jTabbedPane3.removeTabAt(0);
 
+        removeFocusFromErrorsPanel();
 
     }
 
-    private List<String> logs;
+    private static List<String> logs;
     private int totalEntriesFound = -1;
     private int currentEntry = 0;
     private int row = 0;
@@ -126,8 +144,8 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     //used as a marker when the next and previous buttons have been pressed
     private static int buttonCounter = 0;
 
-    private AccessDataFromXML knownErrorsFile = new AccessDataFromXML();
-   private List<KnownError> knownErrors;
+    private static AccessDataFromXML knownErrorsFile = new AccessDataFromXML();
+   private static List<KnownError> knownErrors;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -298,30 +316,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         addToUnknownFrame.setVisible(true);
         
 
-        //Listens to when jframe closes
-        WindowAdapter adapter = new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                //checks if the save variable has been changed to true to identify if the unknown error has been saved
-                if (addToUnknownFrame.saved == true) {
-                    //clears the known and unknown error table so that it can be updated
-                    keTable.clearKnownErrorTable();
-                    ukeTable.clearUnknownErrorTable();
-//                    knownErrorHolder.clear();
-//                    unknownErrorHolder.clear();
-                    //show dialog informing users the unknown error has been saved
-                    JOptionPane.showMessageDialog(addToUnknownFrame, "The exception has been added to the list of Known Errors", "Exception Added", JOptionPane.OK_OPTION);
-                    //obtain errors to from xml file
-                    knownErrors = knownErrorsFile.retrieveKnownErrors();
-                    //populates log table
-                    logTable.populateLogsTable(logs, keTable);
-                }
-            }
-
-        };
-        //adds listener
-        addToUnknownFrame.addWindowListener(adapter);
-        addToUnknownFrame.addWindowFocusListener(adapter);
+        
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -396,7 +391,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     }
 //parses and obtains lines from file
 
-    private List<String> linesFromFile(File file) {
+    public static List<String> linesFromFile(File file) {
         String line;
         List<String> txtLogs = new ArrayList();
         try {
@@ -528,6 +523,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                 counter++;
             }
             if (query.equalsIgnoreCase("")) {
+                specificEntryLabel.setVisible(false);
                 totalEntriesLabel.setVisible(false);
                 totalEntriesFound = counter;
 
@@ -591,6 +587,8 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             newPanel.updateTable();
             addLogTable(logTable);
             logFileTabbedPane.setSelectedIndex(logFileTabbedPane.getTabCount()-1);
+                        jTabbedPane3.setSelectedIndex(1);
+
 
             //adds a box layout
             newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.LINE_AXIS));
@@ -645,6 +643,8 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         scrollPane.setSize(newPanel.getWidth(), newPanel.getHeight());
             
         logFileTabbedPane.setSelectedIndex(logFileTabbedPane.getTabCount()-1);
+                                jTabbedPane3.setSelectedIndex(1);
+
           
         //adds a box layout
         newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.LINE_AXIS));
@@ -663,7 +663,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     }
 
     //adds a listener to the search box
-    private void searchBoxListener() {
+    private void searchBoxListener(boolean isReport) {
         searchBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
@@ -679,11 +679,23 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             public void insertUpdate(DocumentEvent e) {
                 row = 0;
                 currentEntry = 0;
+                if (isReport == true){
+                    filterData(searchBox.getText());
+                }
                 countFoundEntries();
                 iterateDown();
             }
         });
     }
+    
+    private void filterData(String query){
+          
+         TableRowSorter<TableModel> tr=new TableRowSorter<>(logTable.getModel());
+         
+          logTable.setRowSorter(tr);
+         tr.setRowFilter(RowFilter.regexFilter("(?i)"+query));
+         
+     }
 
     private void addLogTable(LogTable logTable) {
         logTables.add(logTable);
@@ -746,7 +758,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             public void stateChanged(ChangeEvent changeEvent) {
                 JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
                 int index = sourceTabbedPane.getSelectedIndex();
-
+                
                 if(logFileTabbedPane.getTabCount()!=0){
                 //clear tables
                 clearTables();
@@ -759,7 +771,8 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                                     clearTables();
                 }
                 //clear search field
-                searchBox.setText("");                
+                searchBox.setText("");   
+                countFoundEntries();
               }   
         };
 
@@ -812,7 +825,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
         
     }
-    public static void deselectErrorTableRows(){
+    public  void deselectErrorTableRows(){
         
        ukeTable.clearSelection();
        keTable.clearSelection();
@@ -829,12 +842,72 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         
         EditMenuOptions.search(searchBox);
     }
-    private static LogTable logTable;
-    private static KnownErrorTable keTable;
-    private static UnknownErrorTable ukeTable;
+    private  LogTable logTable;
+    private  KnownErrorTable keTable;
+    public  UnknownErrorTable ukeTable;
+    
+    public static void addWindowListenerToAddKEFrame(AddToKnownError addToUnknownFrame){
+        //Listens to when jframe closes
+        WindowAdapter adapter = new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                //checks if the save variable has been changed to true to identify if the unknown error has been saved
+                if (addToUnknownFrame.saved == true) {
+                    //clears the known and unknown error table so that it can be updated
+                 //   keTable.clearKnownErrorTable();
+                 //   ukeTable.clearUnknownErrorTable();
+
+                    //show dialog informing users the unknown error has been saved
+                    JOptionPane.showMessageDialog(addToUnknownFrame, "The exception has been added to the list of Known Errors", "Exception Added", JOptionPane.OK_OPTION);
+                    //obtain errors to from xml file
+                    knownErrors = knownErrorsFile.retrieveKnownErrors();
+                    //populates log table
+                  //  logTable.rePopulateLogsTable(logs, keTable, knownErrors);
+                }
+            }
+
+        };
+        //adds listener
+        addToUnknownFrame.addWindowListener(adapter);
+        addToUnknownFrame.addWindowFocusListener(adapter);
+    }
     
     
     
+    private void removeFocusFromErrorsPanel(){
+        
+        MouseListener ml = new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+if (e.getClickCount() == 1){
+    deselectErrorTableRows();
+    
+}
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+
+
+    };
+                            logTable.addMouseListener(ml);
+
+                }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JButton jButton1;

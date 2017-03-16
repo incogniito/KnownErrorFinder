@@ -62,7 +62,34 @@ public class LogTable extends JTable {
             keTable.populateErrorsTable(log);
         }
         
-        int rowCount = this.getRowCount();
+        //assigns model to table
+        setModel(model);
+        //popup menus
+        PopUpMenu popup = new PopUpMenu();
+        //assigns popup menus to tables
+        CustomMouseListener popUpListener = new CustomMouseListener(popup, this);
+        addMouseListener(popUpListener);
+    }
+    
+    public void rePopulateLogsTable(List<String> logs, KnownErrorTable keTable, List<KnownError> knownErrors) {
+
+        int counter = 0;
+        this.logs = logs;
+        model.setRowCount(0);
+ 
+        //looks for each log in the list of logs
+        for (String log : logs) {
+            Object[] o = new Object[2];
+            counter++;
+
+            o[0] = counter;
+            o[1] = log;
+            //adds each line to table model
+            model.addRow(o);
+            //populates known and unknown errors table with every line
+            keTable.rePopulateErrorsTable(log, knownErrors);
+        }
+        
         //assigns model to table
         setModel(model);
         //popup menus
@@ -83,8 +110,9 @@ public class LogTable extends JTable {
      }
 
      public void setColumnSize(JTable table){
-                 TableColumn column = table.getColumnModel().getColumn(0);
-                 column.setPreferredWidth(15);
+                columnModel.getColumn(0).setPreferredWidth(15);
+                columnModel.getColumn(1).setPreferredWidth(200);
+
          
      }
     

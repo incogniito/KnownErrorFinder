@@ -46,7 +46,7 @@ int returnVal = fc.showOpenDialog(mf.getContentPane());
          kef = new KnownErrorFinder1(filePaths);
          String parentPath = folder.getParent();
          String date = parentPath.substring(parentPath.length()-10, parentPath.length());
-         featuresTabbedPane.add(date +"|"+folder.getName(), kef.getContentPane());
+         featuresTabbedPane.add(date +" | "+folder.getName(), kef.getContentPane());
     }
 
     }

@@ -41,7 +41,6 @@ public class ViewAllSchedules extends javax.swing.JFrame {
         populateTable();
     }
     DefaultTableModel scheduleModel;
-    AccessDataFromXML openFile = new AccessDataFromXML();
     List<Schedule> currentSchedules;
    
     /**
@@ -106,7 +105,7 @@ public class ViewAllSchedules extends javax.swing.JFrame {
       
         scheduleModel = (DefaultTableModel) displayTable.getModel();
              
-        currentSchedules = openFile.retrieveSchedules();
+        currentSchedules = AccessDataFromXML.retrieveSchedules();
           for (Schedule schedule : currentSchedules){
               
                

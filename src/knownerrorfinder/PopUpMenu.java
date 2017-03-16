@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import knownerrorfinder.Panels.KnownErrorFinder1;
 import org.example.knownerror.KnownError;
 /**
  *
@@ -63,36 +64,6 @@ public class PopUpMenu {
         logTablePopup.add(view);
 
         return logTablePopup;
-    }
-//pop up menu for only the unknown table
-    public JPopupMenu unknownTablePopupMenu(JTable unknownErrorTable, JTextField search) {
-
-        //Create Pop up Items
-        JPopupMenu unknownErrorTablePopup = new JPopupMenu();
-        JMenuItem addToKnownError = new JMenuItem("Add to Known Errors");
-
-        //When addToKnownError is clicked
-        addToKnownError.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                int selectedRow = unknownErrorTable.getSelectedRow();
-                int selectedColumn = unknownErrorTable.getSelectedColumn();
-                String exception = unknownErrorTable.getValueAt(selectedRow, selectedColumn).toString();
-
-                AddToKnownError addKnownError = new AddToKnownError();
-                addKnownError.setName(exception);
-                addKnownError.setVisible(true);
-                
-                
-
-            }
-
-        });
-
-        unknownErrorTablePopup.add(addToKnownError);
-
-        return unknownErrorTablePopup;
     }
 
 }
