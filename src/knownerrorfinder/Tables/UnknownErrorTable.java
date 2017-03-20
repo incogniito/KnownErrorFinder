@@ -81,6 +81,8 @@ public class UnknownErrorTable extends JTable {
         //uses regex to obtain words that have exception within its name
         Pattern p = Pattern.compile("[\\w]+Exception", Pattern.CASE_INSENSITIVE);
 
+
+        
         if (log.length() > 250) {
             log = log.substring(0, 250);
         }
@@ -112,6 +114,10 @@ public class UnknownErrorTable extends JTable {
          //empties table
         unknownModel.setRowCount(0);
         unknownErrorHolder.clear();
+        
+        
     }
+     
+     
     
 }

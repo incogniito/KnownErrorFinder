@@ -33,8 +33,7 @@ import schedules.Schedules;
 public class AccessDataFromXML {
 
     //unmarshals data from xml file
-    public List<KnownError> retrieveKnownErrors() {
-        
+    public static List<KnownError> retrieveKnownErrors() {
         AllKnownErrors knownErrorList = new AllKnownErrors();
         try {
             javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(knownErrorList.getClass().getPackage().getName());
@@ -58,7 +57,7 @@ public class AccessDataFromXML {
         
 
         List<KnownError> existingErrors = retrieveKnownErrors();
-        KnownError newKnownError = null;
+        KnownError newKnownError = new KnownError();
         if (existingErrors != null) {
             currentKnownErrors.addAll(existingErrors);
                 
@@ -114,8 +113,7 @@ public class AccessDataFromXML {
         }
     
    //unmarshals data from xml file
-    
-    public List<Schedule> retrieveSchedules() {
+    public static List<Schedule> retrieveSchedules() {
         Schedules scheduleList = new Schedules();
         try {
             javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(scheduleList.getClass().getPackage().getName());
@@ -164,7 +162,7 @@ public class AccessDataFromXML {
         //convert date to gregorian           
                     XMLGregorianCalendar xmlTimeSelected = null;
                     try {
-                        xmlTimeSelected = DatatypeFactory.newInstance().newXMLGregorianCalendarTime(timeSelected.get(Calendar.HOUR), timeSelected.get(Calendar.MINUTE), timeSelected.get(Calendar.SECOND), DatatypeConstants.FIELD_UNDEFINED);
+                        xmlTimeSelected = DatatypeFactory.newInstance().newXMLGregorianCalendarTime(timeSelected.get(Calendar.HOUR_OF_DAY), timeSelected.get(Calendar.MINUTE), timeSelected.get(Calendar.SECOND), DatatypeConstants.FIELD_UNDEFINED);
                     } catch (DatatypeConfigurationException ex) {
                         Logger.getLogger(AccessDataFromXML.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -185,7 +183,7 @@ public class AccessDataFromXML {
                     //convert selected time to xml gregorian time
                     XMLGregorianCalendar xmlTimeSelected = null;
                     try {
-                        xmlTimeSelected = DatatypeFactory.newInstance().newXMLGregorianCalendarTime(timeSelected.get(Calendar.HOUR), timeSelected.get(Calendar.MINUTE), timeSelected.get(Calendar.SECOND), DatatypeConstants.FIELD_UNDEFINED);
+                        xmlTimeSelected = DatatypeFactory.newInstance().newXMLGregorianCalendarTime(timeSelected.get(Calendar.HOUR_OF_DAY), timeSelected.get(Calendar.MINUTE), timeSelected.get(Calendar.SECOND), DatatypeConstants.FIELD_UNDEFINED);
                     } catch (DatatypeConfigurationException ex) {
                         Logger.getLogger(AccessDataFromXML.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -240,7 +238,7 @@ public class AccessDataFromXML {
                     
                     XMLGregorianCalendar xmlTimeSelected = null;
                     try {
-                        xmlTimeSelected = DatatypeFactory.newInstance().newXMLGregorianCalendarTime(timeSelected.get(Calendar.HOUR), timeSelected.get(Calendar.MINUTE), timeSelected.get(Calendar.SECOND), DatatypeConstants.FIELD_UNDEFINED);
+                        xmlTimeSelected = DatatypeFactory.newInstance().newXMLGregorianCalendarTime(timeSelected.get(Calendar.HOUR_OF_DAY), timeSelected.get(Calendar.MINUTE), timeSelected.get(Calendar.SECOND), DatatypeConstants.FIELD_UNDEFINED);
                     } catch (DatatypeConfigurationException ex) {
                         Logger.getLogger(AccessDataFromXML.class.getName()).log(Level.SEVERE, null, ex);
                     }

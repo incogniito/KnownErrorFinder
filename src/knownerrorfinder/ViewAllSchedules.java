@@ -22,11 +22,11 @@ public class ViewAllSchedules extends javax.swing.JFrame {
 
     public ViewAllSchedules() {
         initComponents();
+        setTitle("Choose a Schedule");
         existingSchedules();
         populateTable();
     }
     DefaultTableModel scheduleModel;
-    AccessDataFromXML openFile = new AccessDataFromXML();
     List<Schedule> currentSchedules;
    
     /**
@@ -91,7 +91,7 @@ public class ViewAllSchedules extends javax.swing.JFrame {
       
         scheduleModel = (DefaultTableModel) displayTable.getModel();
              
-        currentSchedules = openFile.retrieveSchedules();
+        currentSchedules = AccessDataFromXML.retrieveSchedules();
           for (Schedule schedule : currentSchedules){
               
                
@@ -123,6 +123,7 @@ public class ViewAllSchedules extends javax.swing.JFrame {
                     
                     Scheduler updateFrame = new Scheduler(schedule.getId(), scheduleName, scheduleTime, scheduleDay, folderPaths);
                     updateFrame.setDefaultCloseOperation(Scheduler.DISPOSE_ON_CLOSE);
+                    
                     updateFrame.setVisible(true);
                     
                     //close window after action has been completed 

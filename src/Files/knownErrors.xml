@@ -35,4 +35,20 @@
         <solution></solution>
         <dateAdded>2017-02-23</dateAdded>
     </Errors>
+    <Errors>
+        <name>BeanCreationException</name>
+        <solution></solution>
+        <dateAdded>2017-03-16</dateAdded>
+    </Errors>
+    <Errors>
+        <name>MethodInvocationException</name>
+        <solution></solution>
+        <dateAdded>2017-03-16</dateAdded>
+    </Errors>
+    <Errors>
+        <name>PropertyBatchUpdateException</name>
+        <solution></solution>
+        <dateAdded>2017-03-16</dateAdded>
+    </Errors>
+    
 </allKnownErrors>

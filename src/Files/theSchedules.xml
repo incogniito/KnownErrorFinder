@@ -2,7 +2,7 @@
 <Schedules xmlns="http://schedules">
     <schedules>
         <id>0</id>
-        <name>test</name>
+        <name>Test</name>
         <scheduleTime>11:34:57</scheduleTime>
         <scheduleDays>
             <scheduleDay>Monday</scheduleDay>
@@ -12,12 +12,12 @@
             <scheduleDay>Friday</scheduleDay>
         </scheduleDays>
         <folderPaths>
-            <folderPath>/Users/oluwakemiborisade/Library</folderPath>
+            <folderPath>/Users/samsonaiyegbusi/NetBeansProjects</folderPath>
         </folderPaths>
     </schedules>
     <schedules>
         <id>1</id>
-        <name>Myschedule</name>
+        <name>MySchedule</name>
         <scheduleTime>07:44:36</scheduleTime>
         <scheduleDays>
             <scheduleDay>Monday</scheduleDay>
@@ -29,7 +29,18 @@
             <scheduleDay>Sunday</scheduleDay>
         </scheduleDays>
         <folderPaths>
-            <folderPath>/Users/oluwakemiborisade/Public</folderPath>
+            <folderPath>/Users/samsonaiyegbusi/VirtualBox VMs</folderPath>
+        </folderPaths>
+    </schedules>
+    <schedules>
+        <id>2</id>
+        <name>tester</name>
+        <scheduleTime>14:23:20</scheduleTime>
+        <scheduleDays>
+            <scheduleDay>Thursday</scheduleDay>
+        </scheduleDays>
+        <folderPaths>
+            <folderPath>/Users/samsonaiyegbusi/Downloads/logs</folderPath>
         </folderPaths>
     </schedules>
 </Schedules>

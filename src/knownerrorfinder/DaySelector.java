@@ -140,35 +140,35 @@ public class DaySelector extends javax.swing.JFrame {
         String text = "";
         List<String> checkBoxs = new ArrayList<>();
         if (jCheckBox1.isSelected()) {
-            text = jCheckBox1.getText() + '\n';
+            text = jCheckBox1.getText();
             checkBoxs.add(text);
             //
         }
         if (jCheckBox2.isSelected()) {
-            text = jCheckBox2.getText() + '\n';
+            text = jCheckBox2.getText();
             checkBoxs.add(text);
         }
         if (jCheckBox3.isSelected()) {
-            text = jCheckBox3.getText() + '\n';
+            text = jCheckBox3.getText();
             checkBoxs.add(text);
         }
 
         if (jCheckBox4.isSelected()) {
-            text = jCheckBox4.getText() + '\n';
+            text = jCheckBox4.getText();
             checkBoxs.add(text);
         }
 
         if (jCheckBox5.isSelected()) {
-            text = jCheckBox5.getText() + '\n';
+            text = jCheckBox5.getText();
             checkBoxs.add(text);
         }
 
         if (jCheckBox6.isSelected()) {
-            text = jCheckBox6.getText() + '\n';
+            text = jCheckBox6.getText();
             checkBoxs.add(text);
         }
         if (jCheckBox7.isSelected()) {
-            text = jCheckBox7.getText() + '\n';
+            text = jCheckBox7.getText();
             checkBoxs.add(text);
         }
         //add selected checkboxes to main table

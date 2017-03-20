@@ -33,14 +33,14 @@ public class Scheduler extends javax.swing.JFrame {
     
     public Scheduler() {
         initComponents();
-        
+        setTitle("New Schedule");
     }
     
     //add schedule to xml document
     public Scheduler(int id, String name, Date scheduleTime, List <String> scheduleDay, List<String> folderPaths){
         
         initComponents();
-        
+        setTitle("Update Schedule");
         tableMod = (DefaultTableModel) daysTable.getModel();
         dtm = (DefaultTableModel) pathTable.getModel();
         
