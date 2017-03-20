@@ -1,24 +1,19 @@
 package knownerrorfinder;
 
-
-import knownerrorfinder.DaySelector;
 import java.awt.Color;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 import javax.swing.table.DefaultTableModel;
-import schedules.Schedule;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -31,37 +26,39 @@ import schedules.Schedule;
  * @author oluwakemiborisade
  */
 public class Scheduler extends javax.swing.JFrame {
-
-    /**
-     * Creates new form Scheduler
-     */
-   private DefaultTableModel dtm;
-    private static DefaultTableModel tableMod;
     
+    private DefaultTableModel dtm;
+    private static DefaultTableModel tableMod;
     private int scheduleId = -1;
+    
     public Scheduler() {
         initComponents();
         
     }
+    
+    //add schedule to xml document
     public Scheduler(int id, String name, Date scheduleTime, List <String> scheduleDay, List<String> folderPaths){
+        
         initComponents();
+        
         tableMod = (DefaultTableModel) daysTable.getModel();
         dtm = (DefaultTableModel) pathTable.getModel();
-        nameField.setText(name);
         
+        //set datas from application to xml elements 
+        nameField.setText(name);
         scheduleId = id;
-       jSpinner1.setValue(scheduleTime);
+        jSpinner1.setValue(scheduleTime);
          
+        //add days selected to the table row
         for (String day : scheduleDay){
             
             tableMod.addRow(new Object[]{day});
         }
+        //add selected folder paths to table row
         for (String path : folderPaths){
             
             dtm.addRow(new Object[]{path});
         }
-    
-        
         
     }
     /**
@@ -271,71 +268,87 @@ public class Scheduler extends javax.swing.JFrame {
     public void closeFrame(){
         super.dispose();
     }
+    
+    //save details entered as new schedule in xml file
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-      int row = pathTable.getRowCount();
-      int row1 = daysTable.getRowCount();
-      String name = nameField.getText();
-        DateFormat s = new SimpleDateFormat("ss:mm:ss");
-      Date scheduleTime = (Date) jSpinner1.getValue();
-      List <String> folderPaths = new ArrayList();
-      List <String> scheduleDay  = new ArrayList();  
-      
-      if ((nameField.getText().equals(""))||((row1 == 0))||(row == 0)) {
+        
+        
+        int row = pathTable.getRowCount();
+        int row1 = daysTable.getRowCount();
+        String name = nameField.getText();
+        
+       // DateFormat s = new SimpleDateFormat("ss:mm:ss");
+        Date scheduleTime = (Date) jSpinner1.getValue();
+        
+        List <String> folderPaths = new ArrayList();
+        List <String> scheduleDay  = new ArrayList();  
+        
+        //check missing fields and tables
+         if ((nameField.getText().equals(""))||((row1 == 0))||(row == 0)) {
             
-            JOptionPane.showMessageDialog(null, "Missing fields","Error",JOptionPane.ERROR_MESSAGE);
+             JOptionPane.showMessageDialog(null, "Missing fields","Error",JOptionPane.ERROR_MESSAGE);
+                
             if (nameField.getText().equals("")){  
+                  
                 jLabel5.setText("Enter schedule name");
                 jLabel5.setForeground(Color.red);
+                
             }
             
             if (row1 == 0){  
+                
                 jLabel6.setText("Select schedule day");
                 jLabel6.setForeground(Color.red);
             }
             if (row == 0){  
+                
                 jLabel7.setText("No path selected");
                 jLabel7.setForeground(Color.red);
             }
         } 
-      else{
-         for(int i = 0; i < row; i++ ){
-             String folders =  pathTable.getValueAt(i,0).toString();
-                   folderPaths.add(folders);
+         //if all fields have been filled out, add folders and days to list of String
+            else{
+                    for(int i = 0; i < row; i++ ){
+                    String folders =  pathTable.getValueAt(i,0).toString();
+                    folderPaths.add(folders);
                         
-          }
-         for(int i = 0; i < row1; i++){
-             String day = daysTable.getValueAt(i,0).toString();
-             scheduleDay.add(day);
-         }
-         
-         if(scheduleId == -1){
-             
-         
-         AccessDataFromXML saveSchedule = new AccessDataFromXML();
-         saveSchedule.newSchedule(name, scheduleTime, scheduleDay, folderPaths);
-         JOptionPane.showMessageDialog(null, "Schedule Saved");
-         closeFrame();
-         
-      }else{
-            AccessDataFromXML saveSchedule = new AccessDataFromXML();
-            saveSchedule.updateSchedules(scheduleId, name, scheduleTime, scheduleDay, folderPaths);
-            JOptionPane.showMessageDialog(null, "Schedule Saved");
-            closeFrame(); 
-         }
+                }
+                    for(int i = 0; i < row1; i++){
+                    String day = daysTable.getValueAt(i,0).toString();
+                    scheduleDay.add(day);
+                }
+         //save new schedule if id does not exist
+            if(scheduleId == -1){
+       
+                AccessDataFromXML saveSchedule = new AccessDataFromXML();
+                saveSchedule.newSchedule(name, scheduleTime, scheduleDay, folderPaths);
+                JOptionPane.showMessageDialog(null, "Schedule Saved");
+                closeFrame();
+            
+          //update existing schedule if id exists
+            }else{
+            
+                AccessDataFromXML saveSchedule = new AccessDataFromXML();
+                saveSchedule.updateSchedules(scheduleId, name, scheduleTime, scheduleDay, folderPaths);
+                JOptionPane.showMessageDialog(null, "Schedule Saved");
+                closeFrame(); 
+                }
   
      
    
-      }
+        }
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
         // TODO add your handling code here:
         
     }//GEN-LAST:event_nameFieldActionPerformed
-
+//select and display chosen days in daysTable
     private void dayChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dayChooserActionPerformed
+        
         tableMod = (DefaultTableModel) daysTable.getModel();
-     if(dayChooser.getSelectedItem().equals("Weekdays")){
+        
+        if(dayChooser.getSelectedItem().equals("Weekdays")){
          
             tableMod.setRowCount(0);
             tableMod.addRow(new Object[]{"Monday",});
@@ -343,13 +356,14 @@ public class Scheduler extends javax.swing.JFrame {
             tableMod.addRow(new Object[]{"Wednesday" });
             tableMod.addRow(new Object[]{"Thursday"});
             tableMod.addRow(new Object[]{"Friday"});
-       }
-     if(dayChooser.getSelectedItem().equals("Weekends")){
+        }
+        
+        if(dayChooser.getSelectedItem().equals("Weekends")){
          
             tableMod.setRowCount(0);
             tableMod.addRow(new Object[]{"Saturday"});
             tableMod.addRow(new Object[]{"Sunday"});
-      }
+        }
  
       if(dayChooser.getSelectedItem().equals("Everyday")){
           
@@ -362,68 +376,70 @@ public class Scheduler extends javax.swing.JFrame {
             tableMod.addRow(new Object[]{"Saturday"});
             tableMod.addRow(new Object[]{"Sunday"});
        }
+      
       if(dayChooser.getSelectedItem().equals("Select day(s)")){
-         DaySelector selectFrame = new DaySelector();
-         selectFrame.setDefaultCloseOperation(DaySelector.DISPOSE_ON_CLOSE);
-         selectFrame.setVisible(true);
+         
+            DaySelector selectFrame = new DaySelector();
+            selectFrame.setDefaultCloseOperation(DaySelector.DISPOSE_ON_CLOSE);
+            selectFrame.setVisible(true);
        
        }
+      
       if(dayChooser.getSelectedItem().equals("Choose")){
+          
           tableMod.setRowCount(0);
       }
             
     }//GEN-LAST:event_dayChooserActionPerformed
-
+//add a new folder path to the path table
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        try
-        {
-        JFileChooser j = new JFileChooser();
-        j.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int returnVal = j.showSaveDialog(this);
+       //add only file directories to the table and display message dialog
+        try{
+            JFileChooser j = new JFileChooser();
+            j.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            int returnVal = j.showSaveDialog(this);
         
-        if(returnVal == JFileChooser.APPROVE_OPTION) {  
+            if(returnVal == JFileChooser.APPROVE_OPTION) {  
             
-            File folder = j.getSelectedFile();
-            Vector v = new Vector();
-            String path;
-            dtm = (DefaultTableModel) pathTable.getModel();
-            path = folder.getPath();
-            v.add(path);
-            dtm.addRow(v);
-            JOptionPane.showMessageDialog(null, "Path Saved");
+                File folder = j.getSelectedFile();
+                Vector v = new Vector();
+                String path;
+                dtm = (DefaultTableModel) pathTable.getModel();
+                path = folder.getPath();
+                v.add(path);
+                dtm.addRow(v);
+                JOptionPane.showMessageDialog(null, "Path Saved");
             
-        }
-        }catch (Exception e) 
+            }
+           }catch (Exception e) 
                 {
-                JOptionPane.showMessageDialog(null, "Error saving path");
+                    JOptionPane.showMessageDialog(null, "Error saving path");
                 }
     }//GEN-LAST:event_addButtonActionPerformed
-
+//remove existing folder paths from the table
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
-         int val = JOptionPane.showConfirmDialog(null, "confirm Delete?", "Delete", JOptionPane.YES_OPTION);
+         
+        int val = JOptionPane.showConfirmDialog(null, "confirm Delete?", "Delete", JOptionPane.YES_OPTION);
         if ((pathTable.getSelectedRow() != -1) &&(val == 0)) {
             // remove selected row from the model
            dtm.removeRow(pathTable.getSelectedRow());
         }
         
     }//GEN-LAST:event_removeButtonActionPerformed
-
+//cancel the scheduling action
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         closeFrame();
     }//GEN-LAST:event_cancelButtonActionPerformed
+//Add the checked days to the days Table  
     public static void setDays(List<String> days){
         
+        tableMod = (DefaultTableModel) daysTable.getModel();
+        tableMod.setRowCount(0);
         
-      tableMod = (DefaultTableModel) daysTable.getModel();
-            tableMod.setRowCount(0);
-
         for (String day : days){
             
             tableMod.addRow(new Object[]{day});
-        }
-    
-        
-       
+        }   
     }
   
     /**

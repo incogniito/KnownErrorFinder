@@ -34,6 +34,7 @@ public class AccessDataFromXML {
 
     //unmarshals data from xml file
     public List<KnownError> retrieveKnownErrors() {
+        
         AllKnownErrors knownErrorList = new AllKnownErrors();
         try {
             javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(knownErrorList.getClass().getPackage().getName());
@@ -113,6 +114,7 @@ public class AccessDataFromXML {
         }
     
    //unmarshals data from xml file
+    
     public List<Schedule> retrieveSchedules() {
         Schedules scheduleList = new Schedules();
         try {
@@ -132,7 +134,7 @@ public class AccessDataFromXML {
     }
      
     
-    
+  //create new schedule to marshal into xml file   
   public void newSchedule(String name, Date scheduleTime, List <String> scheduleDay, List<String> folderPaths ) {
         Schedules schedulesObj = new Schedules();
         List<Schedule> currentSchedule = schedulesObj.getSchedules();
@@ -145,6 +147,7 @@ public class AccessDataFromXML {
         
         Schedule newSchedule = new Schedule();
         
+        //check if schedules exist and add element details to new schedule 
         if (existingSchedules != null) {
             
                     currentSchedule.addAll(existingSchedules);
@@ -156,8 +159,9 @@ public class AccessDataFromXML {
                     newSchedule.setFolderPaths(folderP);
                     newSchedule.setScheduleDays(daysChosen);
                     GregorianCalendar timeSelected = new GregorianCalendar();
-                    timeSelected.setTime(scheduleTime);                   
+                    timeSelected.setTime(scheduleTime);    
                     
+        //convert date to gregorian           
                     XMLGregorianCalendar xmlTimeSelected = null;
                     try {
                         xmlTimeSelected = DatatypeFactory.newInstance().newXMLGregorianCalendarTime(timeSelected.get(Calendar.HOUR), timeSelected.get(Calendar.MINUTE), timeSelected.get(Calendar.SECOND), DatatypeConstants.FIELD_UNDEFINED);
@@ -206,9 +210,7 @@ public class AccessDataFromXML {
             }
 
         }
-    
-  
-  
+        //update existing schedules 
     public void updateSchedules(int scheduleID, String name, Date scheduleTime, List <String> scheduleDay, List<String> folderPaths){
         
         Schedules schedulesObj = new Schedules();
@@ -226,7 +228,7 @@ public class AccessDataFromXML {
         currentFolderPaths.addAll(folderPaths);
         currentDays.addAll(scheduleDay);
         
-        
+        //check schedule ID before saving updated schedule
         for(Schedule schedules: currentSchedule){
             if (schedules.getId() == scheduleID){
                 
@@ -245,6 +247,7 @@ public class AccessDataFromXML {
                     currentSchedule.get(scheduleID).setScheduleTime(xmlTimeSelected);
             }
         }
+        //marshal data from app to xml file
          try {
                 OutputStream os = new FileOutputStream(System.getProperty("user.dir") + "/src/Files/theSchedules.xml");
                 javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(schedule.getClass().getPackage().getName());

@@ -21,7 +21,7 @@ public class DaySelector extends javax.swing.JFrame {
     public DaySelector() {
         initComponents();
     }
-
+    
     public void closeFrame() {
         super.dispose();
     }
@@ -136,7 +136,7 @@ public class DaySelector extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void chooseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseButtonActionPerformed
-        // TODO add your handling code here:
+        //check which textboxes have been checked 
         String text = "";
         List<String> checkBoxs = new ArrayList<>();
         if (jCheckBox1.isSelected()) {
@@ -171,7 +171,7 @@ public class DaySelector extends javax.swing.JFrame {
             text = jCheckBox7.getText() + '\n';
             checkBoxs.add(text);
         }
-
+        //add selected checkboxes to main table
         Scheduler.setDays(checkBoxs);
 
         closeFrame();
