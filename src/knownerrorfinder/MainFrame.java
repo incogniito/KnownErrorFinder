@@ -323,6 +323,10 @@ editOptionMenuSetup();
         ReportMenuOptions.openReports(this, finder, featuresTabbedPane);
                     initTabComponent(featuresTabbedPane.getTabCount() - 1);
 
+                    if (featuresTabbedPane.getTabCount() > 1){
+                        featuresTabbedPane.setSelectedIndex(featuresTabbedPane.getTabCount() - 1);
+                        
+                    }
     }//GEN-LAST:event_openReportsItemActionPerformed
 
     /**

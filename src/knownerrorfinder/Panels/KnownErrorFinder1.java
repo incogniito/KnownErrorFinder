@@ -5,9 +5,7 @@
  */
 package knownerrorfinder.Panels;
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
@@ -29,7 +27,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import knownerrorfinder.AccessDataFromXML;
@@ -60,7 +57,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
         
         
         initialiseWidgets();
-                logTabChangeListener();
+        logTabChangeListener();
 
          //Opens dialog to find an log file when application is opened
         openFile();
