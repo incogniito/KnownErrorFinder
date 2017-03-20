@@ -10,20 +10,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import knownerrorfinder.AccessDataFromXML;
-import knownerrorfinder.Scheduler;
 import schedules.Schedule;
-import schedules.Schedules;
 
 /**
  *
@@ -31,9 +20,6 @@ import schedules.Schedules;
  */
 public class ViewAllSchedules extends javax.swing.JFrame {
 
-    /**
-     * Creates new form AllSchedules
-     */
     public ViewAllSchedules() {
         initComponents();
         setTitle("Choose a Schedule");
@@ -99,8 +85,8 @@ public class ViewAllSchedules extends javax.swing.JFrame {
     }//GEN-LAST:event_displayTableMouseClicked
 
     
-    
-    
+   
+  //get names of existing schedules and add to the table rows .  
     public void  existingSchedules(){
       
         scheduleModel = (DefaultTableModel) displayTable.getModel();
@@ -117,9 +103,10 @@ public class ViewAllSchedules extends javax.swing.JFrame {
           
 
     }
+    //open up schedular frame when schedule name is double clicked.
     public void populateTable(){
          displayTable.addMouseListener(new MouseAdapter(){
-           
+        //listen for when a row is doubleclicked 
            @Override
            public void mouseClicked(MouseEvent e) {
            if (e.getClickCount() == 2) {  
@@ -127,6 +114,7 @@ public class ViewAllSchedules extends javax.swing.JFrame {
                String scheduleName = displayTable.getValueAt(rowIndex, 0).toString();
                for(Schedule schedule: currentSchedules){
                    
+             //gets the schedule name and gets schedule details      
                 if (schedule.getName().equalsIgnoreCase(scheduleName)){
                 
                     Date scheduleTime = schedule.getScheduleTime().toGregorianCalendar().getTime();
@@ -138,6 +126,7 @@ public class ViewAllSchedules extends javax.swing.JFrame {
                     
                     updateFrame.setVisible(true);
                     
+                    //close window after action has been completed 
                     WindowAdapter adapter = new WindowAdapter(){
                         @Override
                         public void windowClosed(WindowEvent e) {
