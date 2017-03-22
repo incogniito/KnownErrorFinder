@@ -77,6 +77,7 @@ public class UnknownErrorTable extends JTable {
     public void setModel(){
         this.setModel(unknownModel);
     }
+    
     public void populateUnknownErrorsTable(String log) {
         //uses regex to obtain words that have exception within its name
         Pattern p = Pattern.compile("[\\w]+Exception", Pattern.CASE_INSENSITIVE);
@@ -107,17 +108,12 @@ public class UnknownErrorTable extends JTable {
         }
         //sets unknown model to unknown table
         this.setModel(unknownModel);
-
     }
 
      public void clearUnknownErrorTable(){
          //empties table
         unknownModel.setRowCount(0);
         unknownErrorHolder.clear();
-        
-        
     }
-     
-     
-    
+ 
 }

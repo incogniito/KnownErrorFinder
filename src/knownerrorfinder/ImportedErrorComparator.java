@@ -252,6 +252,7 @@ public class ImportedErrorComparator extends javax.swing.JFrame {
          AccessDataFromXML accessXML = new AccessDataFromXML();
          accessXML.newErrors(importedErrors);
      }
+        
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable existingKnownErrorTable;
     private javax.swing.JTable imprtedKnownErrorTable;

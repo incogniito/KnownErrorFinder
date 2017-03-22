@@ -25,6 +25,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import knownerrorfinder.MainFrame;
 
 /**
  *
@@ -32,14 +33,13 @@ import javax.swing.JTabbedPane;
  */
 public class CloseFeatureTabButton extends JPanel {
   private final JTabbedPane pane;
-    public CloseFeatureTabButton(final JTabbedPane pane) {
+  public CloseFeatureTabButton(final JTabbedPane pane) {
         //unset default FlowLayout' gaps
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
         if (pane == null) {
             throw new NullPointerException("TabbedPane is null");
         }
         this.pane = pane;
-        
         setOpaque(false);
         
         //make JLabel read titles from JTabbedPane
@@ -88,6 +88,7 @@ public class CloseFeatureTabButton extends JPanel {
         public void actionPerformed(ActionEvent e) {
             int i = pane.indexOfTabComponent(CloseFeatureTabButton.this);
             if (i != -1) {
+                MainFrame.removeFinder(i);
                 pane.remove(i);
             }
         }
