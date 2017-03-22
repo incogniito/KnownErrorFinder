@@ -12,10 +12,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
@@ -350,8 +353,12 @@ public class MainFrame extends javax.swing.JFrame {
         ReportMenuOptions.export(this);
     }//GEN-LAST:event_exportReportItemActionPerformed
     private void deleteReportsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteReportsItemActionPerformed
-        //ReportMenuOptions del = new ReportMenuOptions();
-        ReportMenuOptions.deleteReports(this);
+        try {
+            //ReportMenuOptions del = new ReportMenuOptions();
+            ReportMenuOptions.deleteReports(this);
+        } catch (IOException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
                   
     }//GEN-LAST:event_deleteReportsItemActionPerformed
 
