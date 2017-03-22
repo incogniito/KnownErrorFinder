@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileView;
@@ -132,7 +133,8 @@ public class ReportMenuOptions {
                 List<String> fileContent = fileContents.get(index);
                 writeFiles(tempFileName, fileContent);
             }
-            
+                         JOptionPane.showMessageDialog(null, "Unknown Error Logs Exported","",JOptionPane.INFORMATION_MESSAGE);
+
         }
     }
     
@@ -168,9 +170,9 @@ public class ReportMenuOptions {
                     }
                 }
             }
-            
+            if(!unknownErrorLogs.isEmpty()){
             unknownErrorFiles.add(unknownErrorLogs);
-            
+            }
         }
         
         return unknownErrorFiles;
