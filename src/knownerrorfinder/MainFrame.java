@@ -88,7 +88,7 @@ public class MainFrame extends javax.swing.JFrame {
         filler3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         openReportsItem = new javax.swing.JMenuItem();
-        manageReportsItem = new javax.swing.JMenuItem();
+        deleteReportsItem = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         exportReportItem = new javax.swing.JMenuItem();
 
@@ -218,8 +218,13 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jMenu4.add(openReportsItem);
 
-        manageReportsItem.setText("Manage Reports");
-        jMenu4.add(manageReportsItem);
+        deleteReportsItem.setText("Delete Reports");
+        deleteReportsItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteReportsItemActionPerformed(evt);
+            }
+        });
+        jMenu4.add(deleteReportsItem);
         jMenu4.add(jSeparator2);
 
         exportReportItem.setText("Export");
@@ -328,6 +333,14 @@ editOptionMenuSetup();
                         
                     }
     }//GEN-LAST:event_openReportsItemActionPerformed
+
+    private void deleteReportsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteReportsItemActionPerformed
+        //ReportMenuOptions del = new ReportMenuOptions();
+        ReportMenuOptions.deleteReports(this);
+        
+        
+                    
+    }//GEN-LAST:event_deleteReportsItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -553,6 +566,7 @@ editOptionMenuSetup();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem copyMenuItem;
+    private javax.swing.JMenuItem deleteReportsItem;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exportKnownErrorsItem;
     private javax.swing.JMenuItem exportReportItem;
@@ -571,7 +585,6 @@ editOptionMenuSetup();
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
-    private javax.swing.JMenuItem manageReportsItem;
     private javax.swing.JMenuItem newScheduleItem;
     private javax.swing.JMenuItem openFileItem;
     private javax.swing.JMenu openRecentMenu;
