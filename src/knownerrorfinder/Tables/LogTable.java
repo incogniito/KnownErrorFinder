@@ -115,5 +115,7 @@ public class LogTable extends JTable {
 
          
      }
+     
+    
     
 }

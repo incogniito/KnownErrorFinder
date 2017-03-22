@@ -10,14 +10,25 @@ import java.awt.Container;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JTabbedPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileView;
 import knownerrorfinder.Panels.KnownErrorFinder1;
+import knownerrorfinder.Tables.LogTable;
+import knownerrorfinder.Tables.UnknownErrorTable;
 
 /**
  *
@@ -38,6 +49,7 @@ public class ReportMenuOptions {
             public void propertyChange(PropertyChangeEvent evt) {
                 if (JFileChooser.SELECTED_FILE_CHANGED_PROPERTY.equals(evt.getPropertyName())) {
                     String chosenFileName = evt.getNewValue().toString();
+                    
                     File file = new File(chosenFileName) ;
                     List<File> files = Arrays.asList( dirToLock.listFiles());
                     if (files.contains(file.getParentFile())) {
@@ -53,7 +65,7 @@ public class ReportMenuOptions {
             }
         });
 
-        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         int returnVal = fc.showOpenDialog(mf.getContentPane());
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File folder = fc.getSelectedFile();
@@ -66,6 +78,7 @@ public class ReportMenuOptions {
             }
 
             kef = new KnownErrorFinder1(filePaths);
+            mf.addFinderInstances(kef);
             String parentPath = folder.getParent();
             String date = parentPath.substring(parentPath.length() - 10, parentPath.length());
             featuresTabbedPane.add(date + " | " + folder.getName(), kef.getContentPane());
@@ -90,4 +103,88 @@ public class ReportMenuOptions {
             }
         }
     }
+    
+    public static void export(MainFrame mf){
+        
+        List<List<String>> fileContents = extractUnknownErrorLogs(mf.getSelectedFinder());
+        List<String> fileNames = new ArrayList();
+        
+        
+       JTabbedPane logFileTabPane =  mf.getSelectedFinder().getLogTabbedPane();
+        
+        for (int i = 0; i < logFileTabPane.getTabCount(); i++){
+            
+            String fileName = logFileTabPane.getTitleAt(i);
+            fileNames.add(fileName);
+        }
+        
+        
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setName("Export Report");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int returnVal = fileChooser.showDialog(mf.getContentPane(), "Export");
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+                     String filePath = fileChooser.getSelectedFile().getPath();
+
+            for (String fileName : fileNames){
+                String tempFileName = filePath+"/"+fileName;
+                int index = fileNames.indexOf(fileName);
+                List<String> fileContent = fileContents.get(index);
+                writeFiles(tempFileName, fileContent);
+            }
+            
+        }
+    }
+    
+    private static List<List<String>> extractUnknownErrorLogs( KnownErrorFinder1 finder){
+        
+                    List<List<String>> unknownErrorFiles = new ArrayList();
+
+                    int tabCount = finder.getLogTabbedPane().getTabCount();
+                    
+        for (int i = 0; i < tabCount; i++){
+                                List<String> unknownErrorLogs = new ArrayList();
+
+            finder.getLogTabbedPane().setSelectedIndex(i);
+            
+            UnknownErrorTable ukeTable = finder.getUkeTable();
+            LogTable logTable  = finder.getLogTable();
+            List<String> logs = logTable.getOpenedLog();
+            
+            for (int j = 0; j < ukeTable.getRowCount(); j++){
+                String unknownError = ukeTable.getValueAt(j, 0).toString();
+                for(String log : logs){
+                    
+                    String shortenedLog;
+                     if (log.length() > 250) {
+                shortenedLog = log.substring(0, 250);
+            } else{
+                        shortenedLog = log;
+                     }
+                    
+                    
+                    if(shortenedLog.contains(unknownError)){
+            unknownErrorLogs.add(log);
+                    }
+                }
+            }
+            
+            unknownErrorFiles.add(unknownErrorLogs);
+            
+        }
+        
+        return unknownErrorFiles;
+    }
+    
+    
+    private static void writeFiles(String fileName, List<String> fileContent){
+        
+                Path file = Paths.get(fileName);
+
+       try {
+            Files.write(file, fileContent, Charset.forName("UTF-8"));
+        } catch (IOException ex) {
+            Logger.getLogger(KnownErrorFileChecker.class.getName()).log(Level.SEVERE, null, ex);
+        }    }
+    
 }

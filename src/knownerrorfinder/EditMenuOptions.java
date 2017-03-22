@@ -75,7 +75,7 @@ int logTableIndex = logTable.getSelectedRow();
     }
     
    private static void copy(String text){
-        StringSelection stringSelection = new StringSelection(text);
+        StringSelection stringSelection = new StringSelection(text.trim());
 Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
 clpbrd.setContents(stringSelection, null);
     }
