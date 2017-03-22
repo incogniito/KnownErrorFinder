@@ -146,10 +146,13 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="openReportsItemActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="manageReportsItem">
+            <MenuItem class="javax.swing.JMenuItem" name="deleteReportsItem">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Manage Reports"/>
+                <Property name="text" type="java.lang.String" value="Delete Reports"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteReportsItemActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator2">
             </MenuItem>

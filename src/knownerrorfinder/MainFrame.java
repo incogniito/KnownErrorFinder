@@ -12,10 +12,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
@@ -97,7 +100,7 @@ public class MainFrame extends javax.swing.JFrame {
         filler3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         openReportsItem = new javax.swing.JMenuItem();
-        manageReportsItem = new javax.swing.JMenuItem();
+        deleteReportsItem = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         exportReportItem = new javax.swing.JMenuItem();
 
@@ -227,8 +230,13 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jMenu4.add(openReportsItem);
 
-        manageReportsItem.setText("Manage Reports");
-        jMenu4.add(manageReportsItem);
+        deleteReportsItem.setText("Delete Reports");
+        deleteReportsItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteReportsItemActionPerformed(evt);
+            }
+        });
+        jMenu4.add(deleteReportsItem);
         jMenu4.add(jSeparator2);
 
         exportReportItem.setText("Export");
@@ -320,6 +328,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void findPreviousMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findPreviousMenuItemActionPerformed
         // TODO add your handling code here:
         finder.iterateUp();
+        
     }//GEN-LAST:event_findPreviousMenuItemActionPerformed
 
     private void updateScheduleItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateScheduleItemActionPerformed
@@ -343,6 +352,15 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         ReportMenuOptions.export(this);
     }//GEN-LAST:event_exportReportItemActionPerformed
+    private void deleteReportsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteReportsItemActionPerformed
+        try {
+            //ReportMenuOptions del = new ReportMenuOptions();
+            ReportMenuOptions.deleteReports(this);
+        } catch (IOException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                  
+    }//GEN-LAST:event_deleteReportsItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -629,6 +647,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem copyMenuItem;
+    private javax.swing.JMenuItem deleteReportsItem;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exportKnownErrorsItem;
     private javax.swing.JMenuItem exportReportItem;
@@ -647,7 +666,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
-    private javax.swing.JMenuItem manageReportsItem;
     private javax.swing.JMenuItem newScheduleItem;
     private javax.swing.JMenuItem openFileItem;
     private javax.swing.JMenu openRecentMenu;
