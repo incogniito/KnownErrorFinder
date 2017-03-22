@@ -314,6 +314,7 @@ editOptionMenuSetup();
     private void findPreviousMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findPreviousMenuItemActionPerformed
         // TODO add your handling code here:
         finder.iterateUp();
+        
     }//GEN-LAST:event_findPreviousMenuItemActionPerformed
 
     private void updateScheduleItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateScheduleItemActionPerformed
@@ -337,9 +338,7 @@ editOptionMenuSetup();
     private void deleteReportsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteReportsItemActionPerformed
         //ReportMenuOptions del = new ReportMenuOptions();
         ReportMenuOptions.deleteReports(this);
-        
-        
-                    
+                  
     }//GEN-LAST:event_deleteReportsItemActionPerformed
 
     /**
