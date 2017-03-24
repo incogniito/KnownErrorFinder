@@ -32,6 +32,8 @@ public class Scheduler extends javax.swing.JFrame {
     private DefaultTableModel dtm;
     private static DefaultTableModel tableMod;
     private int scheduleId = -1;
+    //informs viewSchedule window listener if the frame was closed by being saved or by cancel
+    public boolean isSaved = false;
     
     public Scheduler() {
         initComponents();
@@ -333,7 +335,7 @@ public class Scheduler extends javax.swing.JFrame {
                 AccessDataFromXML saveSchedule = new AccessDataFromXML();
                 saveSchedule.updateSchedules(scheduleId, name, scheduleTime, scheduleDay, folderPaths);
                 JOptionPane.showMessageDialog(null, "Schedule Saved");
-                MainFrame.startScheduleThreads(false);
+                isSaved = true;
                 closeFrame(); 
                 }
   

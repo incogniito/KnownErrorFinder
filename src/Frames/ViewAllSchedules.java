@@ -21,11 +21,14 @@ import schedules.Schedule;
  */
 public class ViewAllSchedules extends javax.swing.JFrame {
 
-    public ViewAllSchedules() {
+    private MainFrame mf;
+    
+    public ViewAllSchedules(MainFrame mf) {
         initComponents();
         setTitle("Choose a Schedule");
         existingSchedules();
         populateTable();
+        this.mf = mf;
     }
     DefaultTableModel scheduleModel;
     List<Schedule> currentSchedules;
@@ -130,7 +133,7 @@ public class ViewAllSchedules extends javax.swing.JFrame {
                     //close window after action has been completed 
                     WindowAdapter adapter = new WindowAdapter(){
                         @Override
-                        public void windowClosed(WindowEvent e) {
+                        public void windowClosed(WindowEvent e) {                           
                             dispose();
                         }
                         
@@ -179,7 +182,7 @@ public class ViewAllSchedules extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ViewAllSchedules().setVisible(true);
+                //new ViewAllSchedules().setVisible(true);
             }
         });
     }

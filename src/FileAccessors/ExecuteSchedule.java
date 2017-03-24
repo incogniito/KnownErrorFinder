@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 import javax.swing.JTabbedPane;
 import Panels.CloseFeatureTabButton;
 import Frames.KnownErrorFinder1;
+import Frames.MainFrame;
 import org.example.knownerror.KnownError;
 import schedules.Schedule;
 
@@ -31,23 +32,21 @@ import schedules.Schedule;
  */
 public class ExecuteSchedule implements Runnable {
 
-    private final Schedule schedule;
+    private Schedule schedule;
     private List<String> mostRecentScheduledFilePaths;
-    private static KnownErrorFinder1 sKef;
-    private static JTabbedPane sFeaturesTabbedPane;
+    private KnownErrorFinder1 sKef;
+    private JTabbedPane sFeaturesTabbedPane;
 
     private Path scheduleParentPath;
 
-    public ExecuteSchedule(Schedule schedule) {
+    public ExecuteSchedule(Schedule schedule, KnownErrorFinder1 kef, JTabbedPane featuresTabbedPane) {
         this.schedule = schedule;
         mostRecentScheduledFilePaths = new ArrayList();
-
-    }
-
-    public static void initialiseComponents(KnownErrorFinder1 kef, JTabbedPane featuresTabbedPane) {
         sKef = kef;
         sFeaturesTabbedPane = featuresTabbedPane;
+
     }
+    private int counter = 0;
 
     @Override
     public void run() {
@@ -56,12 +55,28 @@ public class ExecuteSchedule implements Runnable {
 
             //obtains days and time from schedule and the current date
             List<String> days = schedule.getScheduleDays().getScheduleDay();
-            LocalTime time = schedule.getScheduleTime().toGregorianCalendar().toZonedDateTime().toLocalTime();
             String today = LocalDate.now().getDayOfWeek().toString();
             //checks if the days and timematch and clears the most Recent Scheduled FilePath list so that it can be reused for the
             //updated version of the filePaths if there is any
             for (String day : days) {
                 while (day.equalsIgnoreCase(today)) {
+                    //ensures any sudden changes to the time will be updated on all instances of the application    
+                    for (Schedule _schedule : AccessDataFromXML.retrieveSchedules()) {
+
+                        if (_schedule.getName().equalsIgnoreCase(schedule.getName())) {
+                            schedule = _schedule;
+                            if (!schedule.getScheduleDays().getScheduleDay().containsAll(days))
+                            {
+                                //obtains days from schedule and the current date in events of sudden updates to schedules
+                                days = schedule.getScheduleDays().getScheduleDay();
+                            }
+                        }
+                    }
+                   
+                    //obtains time from schedule and the current date in events of sudden updates to schedules
+                    LocalTime time = schedule.getScheduleTime().toGregorianCalendar().toZonedDateTime().toLocalTime();
+                    
+
                     LocalTime currentTime = LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute(), LocalTime.now().getSecond());
 
                     if (time.equals(currentTime)) {
@@ -75,7 +90,11 @@ public class ExecuteSchedule implements Runnable {
                         String parentPath = scheduleParentPath.getParent().toString();
                         String date = parentPath.substring(parentPath.length() - 10, parentPath.length());
                         try {
+
+                            MainFrame.addFinderInstances(sKef);
                             sFeaturesTabbedPane.add(date + " | " + scheduleParentPath.getFileName().toString(), sKef.getContentPane());
+                            counter++;
+                            System.out.println(counter);
                         } catch (Exception e) {
                             System.out.print(e);
                         }
@@ -104,7 +123,6 @@ public class ExecuteSchedule implements Runnable {
     }
 
     //creates report
-
     private void createFolder(Boolean identifier) {
 
         //checks if a folder with the name of the current date is created, if not then it creates a one and if so

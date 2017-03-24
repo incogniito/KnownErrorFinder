@@ -43,11 +43,11 @@ import schedules.Schedule;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    private static ExecutorService executor;
+    private  ExecutorService executor;
     private KnownErrorFinder1 finder;
     public static List<String> recentHistory;
     private KnownErrorFileChecker checks;
-    private static ExecuteSchedule runSchedule;
+    private  ExecuteSchedule runSchedule;
     //contains a list of finders so that it is easy to access the currently selected finder tabs with regards to 
     //deleting a finder and accessing components within specific ones. 
     private static List<KnownErrorFinder1> finders;
@@ -76,10 +76,8 @@ public class MainFrame extends javax.swing.JFrame {
         fileCheck();
         //updates the recent history list to be shown inside the 'open recent' menu item
         addRecentHistoryItems();
-        //initialises components within thread
-        ExecuteSchedule.initialiseComponents(finder, featuresTabbedPane);
         //starts thread
-        startScheduleThreads(true);
+        startScheduleThreads();
         //adds a change listner that removes focus from other tab components when a new tab is selected. 
         //otherwise when the copy function is used it will copy selected components in another tab even tho a new one has been selected.
         removeFocusFromPanelComponents();
@@ -354,7 +352,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_findPreviousMenuItemActionPerformed
 
     private void updateScheduleItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateScheduleItemActionPerformed
-        ViewAllSchedules allSchedules = new ViewAllSchedules();
+        ViewAllSchedules allSchedules = new ViewAllSchedules(this);
         allSchedules.setDefaultCloseOperation(Scheduler.DISPOSE_ON_CLOSE);
         allSchedules.setVisible(true);
     }//GEN-LAST:event_updateScheduleItemActionPerformed
@@ -616,26 +614,20 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }
     //starts the thread
-    public static void startScheduleThreads(boolean fromMainFrame) {
+    private  void startScheduleThreads() {
 
         List<Schedule> schedules = AccessDataFromXML.retrieveSchedules();
         //identifies whether the method was called from the MainFrame or another
         //if it was from another class then the current pool is shutdown and then a new one is started
-    
-        if (fromMainFrame == false) {
-
-            executor.shutdownNow();
-            executor = Executors.newCachedThreadPool();
-        }
         for (Schedule schedule : schedules) {
-            runSchedule = new ExecuteSchedule(schedule);
-            executor.submit(runSchedule);
-            
 
+            runSchedule = new ExecuteSchedule(schedule,finder, featuresTabbedPane);
+            executor.submit(runSchedule);
         }
     }
+    
     //removes focus on components from the previous tab when another tab is selected
-    public void removeFocusFromPanelComponents() {
+    private void removeFocusFromPanelComponents() {
 
         ChangeListener changeListener = new ChangeListener() {
 
@@ -663,7 +655,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     }
 
-    public void addFinderInstances(KnownErrorFinder1 kef) {
+    public static void addFinderInstances(KnownErrorFinder1 kef) {
         finders.add(kef);
     }
 
@@ -691,6 +683,7 @@ public class MainFrame extends javax.swing.JFrame {
                     exportKnownErrorsItem.setForeground(Color.BLACK);
                 }
     }
+   
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -699,7 +692,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exportKnownErrorsItem;
     private javax.swing.JMenuItem exportReportItem;
-    private javax.swing.JTabbedPane featuresTabbedPane;
+    private static javax.swing.JTabbedPane featuresTabbedPane;
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu filler1;

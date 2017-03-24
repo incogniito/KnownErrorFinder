@@ -221,14 +221,14 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
         jTabbedPane3.addTab("Unknown", unknownTab);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/knownerrorfinder/icon-arrow-down-b-128.png"))); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Files/icon-arrow-down-b-128.png"))); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/knownerrorfinder/icon-arrow-up-b-128.png"))); // NOI18N
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Files/icon-arrow-up-b-128.png"))); // NOI18N
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
