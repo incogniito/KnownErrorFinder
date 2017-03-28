@@ -35,7 +35,7 @@
     <schedules>
         <id>2</id>
         <name>tester</name>
-        <scheduleTime>15:30:10</scheduleTime>
+        <scheduleTime>08:40:30</scheduleTime>
         <scheduleDays>
             <scheduleDay>Monday</scheduleDay>
             <scheduleDay>Tuesday</scheduleDay>
