@@ -43,7 +43,7 @@ import schedules.Schedule;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    private  ExecutorService executor;
+    private static  ExecutorService executor;
     private KnownErrorFinder1 finder;
     public static List<String> recentHistory;
     private KnownErrorFileChecker checks;
@@ -296,7 +296,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_openFileItemActionPerformed
 
     private void newScheduleItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newScheduleItemActionPerformed
-        Scheduler newSchedule = new Scheduler();
+        Scheduler newSchedule = new Scheduler(this );
         newSchedule.setDefaultCloseOperation(Scheduler.DISPOSE_ON_CLOSE);
         newSchedule.setVisible(true);
     }//GEN-LAST:event_newScheduleItemActionPerformed
@@ -613,7 +613,7 @@ public class MainFrame extends javax.swing.JFrame {
             searchMenuItem.setForeground(Color.LIGHT_GRAY);
         }
     }
-    //starts the thread
+    //starts the threadS
     private  void startScheduleThreads() {
 
         List<Schedule> schedules = AccessDataFromXML.retrieveSchedules();
@@ -625,6 +625,17 @@ public class MainFrame extends javax.swing.JFrame {
             executor.submit(runSchedule);
         }
     }
+
+    //starts the thread
+    public void startScheduleThread(Schedule schedule) {
+
+        //identifies whether the method was called from the MainFrame or another
+        //if it was from another class then the current pool is shutdown and then a new one is started
+            runSchedule = new ExecuteSchedule(schedule,finder, featuresTabbedPane);
+            executor.submit(runSchedule);
+        
+    }
+
     
     //removes focus on components from the previous tab when another tab is selected
     private void removeFocusFromPanelComponents() {

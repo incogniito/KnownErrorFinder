@@ -565,6 +565,9 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             //sets name of tab
             newPanel.setName(name);
 
+            addLogTable(logTable);
+
+            
             //adds panel to tab
             logFileTabbedPane.add(newPanel);
             initTabComponent(logFileTabbedPane.getTabCount() - 1);
@@ -575,7 +578,6 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
             //populates table on first occassion
             newPanel.updateTable();
-            addLogTable(logTable);
             logFileTabbedPane.setSelectedIndex(logFileTabbedPane.getTabCount() - 1);
             jTabbedPane3.setSelectedIndex(1);
 

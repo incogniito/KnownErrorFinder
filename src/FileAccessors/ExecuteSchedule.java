@@ -95,6 +95,9 @@ public class ExecuteSchedule implements Runnable {
                             sFeaturesTabbedPane.add(date + " | " + scheduleParentPath.getFileName().toString(), sKef.getContentPane());
                             counter++;
                             System.out.println(counter);
+                            //ensures only one is made per second 
+                            Thread.sleep(1000);
+
                         } catch (Exception e) {
                             System.out.print(e);
                         }

@@ -137,7 +137,7 @@ public class AccessDataFromXML {
      
     
   //create new schedule to marshal into the schedule xml file   
-  public void newSchedule(String name, Date scheduleTime, List <String> scheduleDay, List<String> folderPaths ) {
+  public Schedule newSchedule(String name, Date scheduleTime, List <String> scheduleDay, List<String> folderPaths ) {
         Schedules schedulesObj = new Schedules();
         List<Schedule> currentSchedule = schedulesObj.getSchedules();
         Folders folderP = new Folders();
@@ -203,14 +203,14 @@ public class AccessDataFromXML {
                 marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8"); //NOI18N
                 marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
                 marshaller.marshal(schedulesObj, os);
-                                   
+                    return newSchedule;               
             } catch (javax.xml.bind.JAXBException ex) {
                 // XXXTODO Handle exception
                 System.out.print(ex); //NOI18N
             } catch (FileNotFoundException e) {
                 java.util.logging.Logger.getLogger("global").log(java.util.logging.Level.SEVERE, null, e); //NOI18N
             }
-
+return null;
         }
         //update existing schedules 
     public void updateSchedules(int scheduleID, String name, Date scheduleTime, List <String> scheduleDay, List<String> folderPaths){
