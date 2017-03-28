@@ -22,6 +22,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import FileAccessors.AccessDataFromXML;
+import javax.swing.JOptionPane;
 import org.example.knownerror.KnownError;
 
 /**
@@ -102,6 +103,7 @@ public class FileMenuOptions {
 
                 exportKnownErrorsToXML(file);
             }
+                    JOptionPane.showMessageDialog(mf, "The Known Errors have been exported successfully", "Export", JOptionPane.INFORMATION_MESSAGE);
 
         }
 

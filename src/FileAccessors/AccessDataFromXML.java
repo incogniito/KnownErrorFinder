@@ -265,6 +265,7 @@ return null;
                 java.util.logging.Logger.getLogger("global").log(java.util.logging.Level.SEVERE, null, e); //NOI18N
             }
     }
+   
     
     //Imports a list of errors from an existing file and marshalls them to the existing xml document
     public void newErrors(List<String> errors){

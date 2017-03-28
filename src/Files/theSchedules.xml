@@ -203,4 +203,21 @@
             <folderPath>/Users/oluwakemiborisade/Logs</folderPath>
         </folderPaths>
     </schedules>
+    <schedules>
+        <id>13</id>
+        <name>tested</name>
+        <scheduleTime>13:14:00</scheduleTime>
+        <scheduleDays>
+            <scheduleDay>Monday</scheduleDay>
+            <scheduleDay>Tuesday</scheduleDay>
+            <scheduleDay>Wednesday</scheduleDay>
+            <scheduleDay>Thursday</scheduleDay>
+            <scheduleDay>Friday</scheduleDay>
+            <scheduleDay>Saturday</scheduleDay>
+            <scheduleDay>Sunday</scheduleDay>
+        </scheduleDays>
+        <folderPaths>
+            <folderPath>/Users/oluwakemiborisade/Logs</folderPath>
+        </folderPaths>
+    </schedules>
 </Schedules>

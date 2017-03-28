@@ -50,5 +50,34 @@
         <solution></solution>
         <dateAdded>2017-03-16</dateAdded>
     </Errors>
-    
+    <Errors>
+        <name>ConstraintViolationException</name>
+        <solution>Work through the file.</solution>
+        <dateAdded>2017-03-28</dateAdded>
+    </Errors>
+    <Errors>
+        <name>BeanValidationException</name>
+        <solution>The file has been fixed</solution>
+        <dateAdded>2017-03-28</dateAdded>
+    </Errors>
+    <Errors>
+        <name>SSLKeyException</name>
+        <solution></solution>
+        <dateAdded>2017-03-28</dateAdded>
+    </Errors>
+    <Errors>
+        <name>ServiceUnavailableException</name>
+        <solution></solution>
+        <dateAdded>2017-03-28</dateAdded>
+    </Errors>
+    <Errors>
+        <name>IOException</name>
+        <solution></solution>
+        <dateAdded>2017-03-28</dateAdded>
+    </Errors>
+    <Errors>
+        <name>EJBException</name>
+        <solution>the error is fixed</solution>
+        <dateAdded>2017-03-28</dateAdded>
+    </Errors>
 </allKnownErrors>

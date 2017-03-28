@@ -116,6 +116,7 @@ public class ExecuteSchedule implements Runnable {
 
             }
             try {
+                //waits 12 hrs before continuing so it leads ono the next day
                 Thread.sleep(43200000);
             } catch (InterruptedException ex) {
                 // Logger.getLogger(ExecuteSchedule.class.getName()).log(Level.SEVERE, null, ex);
@@ -180,7 +181,7 @@ public class ExecuteSchedule implements Runnable {
         if (sources.length != 0) {
             for (File source : sources) {
                 try {
-                    String destFileNamePath = dest.toString() + "/" + source.getName();
+                    String destFileNamePath = dest.toString() + "/" + source.getName()+".txt";
                     Path schedulePath = Paths.get(destFileNamePath);
 
                     //checks if unknown errors exist so it can be added to directory, otherwise they will be omitted
