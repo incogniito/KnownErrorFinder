@@ -308,6 +308,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             //makes the jframe visible
             addToUnknownFrame.setVisible(true);
 
+            addWindowListenerToAddKEFrame(addToUnknownFrame);
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -565,6 +566,9 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
             //sets name of tab
             newPanel.setName(name);
 
+            addLogTable(logTable);
+
+            
             //adds panel to tab
             logFileTabbedPane.add(newPanel);
             initTabComponent(logFileTabbedPane.getTabCount() - 1);
@@ -575,7 +579,6 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
 
             //populates table on first occassion
             newPanel.updateTable();
-            addLogTable(logTable);
             logFileTabbedPane.setSelectedIndex(logFileTabbedPane.getTabCount() - 1);
             jTabbedPane3.setSelectedIndex(1);
 
@@ -857,7 +860,7 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
     private KnownErrorTable keTable;
     private UnknownErrorTable ukeTable;
 
-    public static void addWindowListenerToAddKEFrame(AddToKnownError addToUnknownFrame) {
+    public  void addWindowListenerToAddKEFrame(AddToKnownError addToUnknownFrame) {
         //Listens to when jframe closes
         WindowAdapter adapter = new WindowAdapter() {
             @Override
@@ -865,11 +868,14 @@ public class KnownErrorFinder1 extends javax.swing.JFrame {
                 //checks if the save variable has been changed to true to identify if the unknown error has been saved
                 if (addToUnknownFrame.saved == true) {
                     //clears the known and unknown error table so that it can be updated
-
+                    clearTables();
                     //show dialog informing users the unknown error has been saved
-                    JOptionPane.showMessageDialog(addToUnknownFrame, "The exception has been added to the list of Known Errors", "Exception Added", JOptionPane.OK_OPTION);
+                    JOptionPane.showMessageDialog(addToUnknownFrame, "The exception has been added to the list of Known Errors", "Exception Added", JOptionPane.INFORMATION_MESSAGE);
                     //obtain errors to from xml file
                     knownErrors = knownErrorsFile.retrieveKnownErrors();
+
+                    //populates log table
+                    logTable.rePopulateLogsTable(logs, keTable,knownErrors);
 
                 }
             }

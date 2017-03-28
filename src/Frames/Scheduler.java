@@ -16,6 +16,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 import javax.swing.table.DefaultTableModel;
 import FileAccessors.AccessDataFromXML;
+import schedules.Schedule;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -34,13 +35,15 @@ public class Scheduler extends javax.swing.JFrame {
     private int scheduleId = -1;
     //informs viewSchedule window listener if the frame was closed by being saved or by cancel
     public boolean isSaved = false;
+    private MainFrame mf;
     
-    public Scheduler() {
+    public Scheduler(MainFrame mf) {
         initComponents();
         setTitle("New Schedule");
+        this.mf = mf;
     }
     
-    //add schedule to xml document
+    //called from view all schedule with the purpose of only updating the xml document
     public Scheduler(int id, String name, Date scheduleTime, List <String> scheduleDay, List<String> folderPaths){
         
         initComponents();
@@ -325,8 +328,9 @@ public class Scheduler extends javax.swing.JFrame {
             if(scheduleId == -1){
        
                 AccessDataFromXML saveSchedule = new AccessDataFromXML();
-                saveSchedule.newSchedule(name, scheduleTime, scheduleDay, folderPaths);
-                JOptionPane.showMessageDialog(null, "Schedule Saved");
+                Schedule schedule = saveSchedule.newSchedule(name, scheduleTime, scheduleDay, folderPaths);
+                mf.startScheduleThread(schedule);
+                JOptionPane.showMessageDialog(null, "Schedule Saved");               
                 closeFrame();
             
           //update existing schedule if id exists
@@ -477,7 +481,7 @@ public class Scheduler extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Scheduler().setVisible(true);
+                //new Scheduler().setVisible(true);
             }
         });
     }

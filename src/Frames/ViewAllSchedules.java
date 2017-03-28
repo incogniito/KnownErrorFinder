@@ -44,6 +44,7 @@ public class ViewAllSchedules extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         displayTable = new javax.swing.JTable();
+        viewButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,6 +64,13 @@ public class ViewAllSchedules extends javax.swing.JFrame {
     });
     jScrollPane1.setViewportView(displayTable);
 
+    viewButton.setText("View");
+    viewButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            viewButtonActionPerformed(evt);
+        }
+    });
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
@@ -71,13 +79,17 @@ public class ViewAllSchedules extends javax.swing.JFrame {
             .addContainerGap()
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap(19, Short.MAX_VALUE))
+        .addGroup(layout.createSequentialGroup()
+            .addComponent(viewButton)
+            .addGap(0, 0, Short.MAX_VALUE))
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
             .addContainerGap()
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap(19, Short.MAX_VALUE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(viewButton))
     );
 
     pack();
@@ -88,33 +100,18 @@ public class ViewAllSchedules extends javax.swing.JFrame {
         
     }//GEN-LAST:event_displayTableMouseClicked
 
-    
-   
-  //get names of existing schedules and add to the table rows .  
-    public void  existingSchedules(){
-      
-        scheduleModel = (DefaultTableModel) displayTable.getModel();
-             
-        currentSchedules = AccessDataFromXML.retrieveSchedules();
-          for (Schedule schedule : currentSchedules){
-              
-               
-              Object[] o = new Object[1];
-              o[0] = schedule.getName();
-            scheduleModel.addRow(o);
-          }
-          
-          
+    private void viewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewButtonActionPerformed
+            
+        openScheduleTable();
+       
 
-    }
-    //open up schedular frame when schedule name is double clicked.
-    public void populateTable(){
-         displayTable.addMouseListener(new MouseAdapter(){
-        //listen for when a row is doubleclicked 
-           @Override
-           public void mouseClicked(MouseEvent e) {
-           if (e.getClickCount() == 2) {  
-               int rowIndex = displayTable.getSelectedRow();
+    }//GEN-LAST:event_viewButtonActionPerformed
+
+    
+    //open schedular table to update schedules
+   
+  public void openScheduleTable(){
+       int rowIndex = displayTable.getSelectedRow();
                String scheduleName = displayTable.getValueAt(rowIndex, 0).toString();
                for(Schedule schedule: currentSchedules){
                    
@@ -144,6 +141,34 @@ public class ViewAllSchedules extends javax.swing.JFrame {
                    updateFrame.addWindowFocusListener(adapter);
                  }  
                }     
+
+      
+  }
+  //get names of existing schedules and add to the table rows .  
+    public void  existingSchedules(){
+      
+        scheduleModel = (DefaultTableModel) displayTable.getModel();
+             
+        currentSchedules = AccessDataFromXML.retrieveSchedules();
+          for (Schedule schedule : currentSchedules){
+              
+               
+              Object[] o = new Object[1];
+              o[0] = schedule.getName();
+            scheduleModel.addRow(o);
+          }
+          
+          
+
+    }
+    //open up schedular frame when schedule name is double clicked.
+    public void populateTable(){
+         displayTable.addMouseListener(new MouseAdapter(){
+        //listen for when a row is doubleclicked 
+           @Override
+           public void mouseClicked(MouseEvent e) {
+           if (e.getClickCount() == 2) {  
+               openScheduleTable();    
     }
   }
        });
@@ -190,5 +215,6 @@ public class ViewAllSchedules extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable displayTable;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton viewButton;
     // End of variables declaration//GEN-END:variables
 }

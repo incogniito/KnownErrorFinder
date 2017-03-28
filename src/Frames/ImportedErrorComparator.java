@@ -11,6 +11,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import FileAccessors.AccessDataFromXML;
 import Menus.FileMenuOptions;
+import javax.swing.JOptionPane;
 
 
 
@@ -174,6 +175,8 @@ public class ImportedErrorComparator extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         addToKnownErrors(importedErrors);
+                            JOptionPane.showMessageDialog(this, "The exceptions has been added to the list of Known Errors", "Exceptions Added", JOptionPane.INFORMATION_MESSAGE);
+
         closeFrame();
     }//GEN-LAST:event_jButton1ActionPerformed
 
