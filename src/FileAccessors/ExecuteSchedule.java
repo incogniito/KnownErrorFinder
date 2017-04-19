@@ -44,6 +44,7 @@ public class ExecuteSchedule implements Runnable {
         mostRecentScheduledFilePaths = new ArrayList();
         sKef = kef;
         sFeaturesTabbedPane = featuresTabbedPane;
+        
 
     }
     private int counter = 0;
@@ -132,7 +133,7 @@ public class ExecuteSchedule implements Runnable {
         //checks if a folder with the name of the current date is created, if not then it creates a one and if so
         //it then executed the method again this time creating a directory for the schedule
         if (identifier == false) {
-            Path path = Paths.get(System.getProperty("user.dir") + "/Reports/" + LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth()));
+            Path path = Paths.get(System.getProperty("user.home") + "/KnownErrorFinderFiles/Reports/" + LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth()));
 
             //if directory exists?
             if (!Files.exists(path)) {
@@ -147,7 +148,7 @@ public class ExecuteSchedule implements Runnable {
                 createFolder(true);
             }
         } else {
-            scheduleParentPath = Paths.get(System.getProperty("user.dir") + "/Reports/" + LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth()) + "/" + schedule.getName() + "/");
+            scheduleParentPath = Paths.get(System.getProperty("user.home") + "/KnownErrorFinderFiles/Reports/" + LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth()) + "/" + schedule.getName() + "/");
 //if directory does not exist then create a new one, if so then copy the contents of the folder paths noted in the schedule into the reports folder
             if (!Files.exists(scheduleParentPath)) {
                 try {

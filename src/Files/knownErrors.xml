@@ -2,66 +2,11 @@
 <allKnownErrors xmlns="http://exceptions">
     <Errors>
         <name>SQLException</name>
-        <solution>,n,mn,mn</solution>
-        <dateAdded>2017-02-06</dateAdded>
-    </Errors>
-    <Errors>
-        <name>ResourceException</name>
-        <solution>huihuhiu</solution>
-        <dateAdded>2017-02-06</dateAdded>
-    </Errors>
-    <Errors>
-        <name>PropertyAccessException</name>
-        <solution>gzhdfgfxh</solution>
-        <dateAdded>2017-02-06</dateAdded>
-    </Errors>
-    <Errors>
-        <name>ResourceDeadException</name>
-        <solution>bjhbb</solution>
-        <dateAdded>2017-02-06</dateAdded>
-    </Errors>
-    <Errors>
-        <name>ParseException</name>
         <solution></solution>
-        <dateAdded>2017-02-23</dateAdded>
+        <dateAdded>2017-02-06</dateAdded>
     </Errors>
     <Errors>
         <name>ServletException</name>
-        <solution></solution>
-        <dateAdded>2017-02-23</dateAdded>
-    </Errors>
-    <Errors>
-        <name>IllegalArgumentException</name>
-        <solution></solution>
-        <dateAdded>2017-02-23</dateAdded>
-    </Errors>
-    <Errors>
-        <name>BeanCreationException</name>
-        <solution></solution>
-        <dateAdded>2017-03-16</dateAdded>
-    </Errors>
-    <Errors>
-        <name>MethodInvocationException</name>
-        <solution></solution>
-        <dateAdded>2017-03-16</dateAdded>
-    </Errors>
-    <Errors>
-        <name>PropertyBatchUpdateException</name>
-        <solution></solution>
-        <dateAdded>2017-03-16</dateAdded>
-    </Errors>
-    <Errors>
-        <name>ConstraintViolationException</name>
-        <solution>Work through the file.</solution>
-        <dateAdded>2017-03-28</dateAdded>
-    </Errors>
-    <Errors>
-        <name>BeanValidationException</name>
-        <solution>The file has been fixed</solution>
-        <dateAdded>2017-03-28</dateAdded>
-    </Errors>
-    <Errors>
-        <name>SSLKeyException</name>
         <solution></solution>
         <dateAdded>2017-03-28</dateAdded>
     </Errors>
@@ -71,13 +16,33 @@
         <dateAdded>2017-03-28</dateAdded>
     </Errors>
     <Errors>
+        <name>ParseException</name>
+        <solution></solution>
+        <dateAdded>2017-03-28</dateAdded>
+    </Errors>
+    <Errors>
         <name>IOException</name>
         <solution></solution>
         <dateAdded>2017-03-28</dateAdded>
     </Errors>
     <Errors>
-        <name>EJBException</name>
-        <solution>the error is fixed</solution>
+        <name>IllegalArgumentException</name>
+        <solution></solution>
+        <dateAdded>2017-03-28</dateAdded>
+    </Errors>
+    <Errors>
+        <name>PropertyAccessException</name>
+        <solution>hjkhkjhk</solution>
+        <dateAdded>2017-03-28</dateAdded>
+    </Errors>
+    <Errors>
+        <name>FileNotFoundException</name>
+        <solution></solution>
+        <dateAdded>2017-03-28</dateAdded>
+    </Errors>
+    <Errors>
+        <name>FileNotFoundException</name>
+        <solution>nknkn</solution>
         <dateAdded>2017-03-28</dateAdded>
     </Errors>
 </allKnownErrors>

@@ -36,6 +36,8 @@ import Frames.KnownErrorFinder1;
 import FileAccessors.KnownErrorFileChecker;
 import Tables.LogTable;
 import Tables.UnknownErrorTable;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 
 /**
  *
@@ -46,23 +48,31 @@ public class ReportMenuOptions {
     public ReportMenuOptions() {
 
     }
-    public static void openReports(MainFrame mf, KnownErrorFinder1 kef, JTabbedPane featuresTabbedPane) {
-        final File dirToLock = new File(System.getProperty("user.dir") + "/Reports/");
-        JFileChooser fc = new JFileChooser(dirToLock);
-                        setOpenButtonState(fc, false);
 
+    public static void openReports(MainFrame mf, KnownErrorFinder1 kef, JTabbedPane featuresTabbedPane) {
+        final File dirToLock = new File(System.getProperty("user.home") + "/KnownErrorFinderFiles/Reports/");
+        JFileChooser fc = new JFileChooser(dirToLock);
+        setOpenButtonState(fc, false);
+List<String> str = new ArrayList();
+        
+       ActionMap am = fc.getActionMap();  
+       for (Object ob : am.allKeys()){
+           str.add(ob.toString());
+       }
+        
+        
         fc.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (JFileChooser.SELECTED_FILE_CHANGED_PROPERTY.equals(evt.getPropertyName())) {
                     String chosenFileName = evt.getNewValue().toString();
-                    
-                    File file = new File(chosenFileName) ;
-                    List<File> files = Arrays.asList( dirToLock.listFiles());
+
+                    File file = new File(chosenFileName);
+                    List<File> files = Arrays.asList(dirToLock.listFiles());
                     if (files.contains(file.getParentFile())) {
                         setOpenButtonState(fc, true);
 
-                    } else  {
+                    } else {
                         setOpenButtonState(fc, false);
                         System.out.println(file.getName());
                     }
@@ -72,7 +82,9 @@ public class ReportMenuOptions {
             }
         });
 
-        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        
+        
         int returnVal = fc.showOpenDialog(mf.getContentPane());
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File folder = fc.getSelectedFile();
@@ -92,12 +104,12 @@ public class ReportMenuOptions {
         }
 
     }
-    
- public static void deleteReports(MainFrame mf) throws IOException {
-            
-        final File dirToLock = new File(System.getProperty("user.dir") + "/Reports/");
+
+    public static void deleteReports(MainFrame mf) throws IOException {
+
+        final File dirToLock = new File(System.getProperty("user.home") + "/KnownErrorFinderFiles/Reports/");
         JFileChooser fc = new JFileChooser(dirToLock);
-          
+
         //fc.setMultiSelectionEnabled(true);
         //check for when a file in selected 
         fc.addPropertyChangeListener(new PropertyChangeListener() {
@@ -105,14 +117,14 @@ public class ReportMenuOptions {
             public void propertyChange(PropertyChangeEvent evt) {
                 if (JFileChooser.SELECTED_FILE_CHANGED_PROPERTY.equals(evt.getPropertyName())) {
                     String chosenFileName = evt.getNewValue().toString();
-                    File filee = new File(chosenFileName) ;
-                   
+                    File filee = new File(chosenFileName);
+
                     String getP = filee.getParent();
                     //check the right directory has been selected 
                     if (getP.contains((dirToLock.toString()))) {
-                      setDeleteButtonState(fc, true);
-                      
-                    } else  {
+                        setDeleteButtonState(fc, true);
+
+                    } else {
                         setDeleteButtonState(fc, false);
                         System.out.println(filee.getName());
                     }
@@ -120,24 +132,22 @@ public class ReportMenuOptions {
                 fc.repaint();
             }
         });
-        
+
         //allow files and directory to be added 
         fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         int returnVal = fc.showDialog(mf, "Delete");
-        
+
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            
+
             File file = fc.getSelectedFile();
             //ask user for confirmation
             int o = JOptionPane.showConfirmDialog(mf, "Are you sure you want to delete this ?", "Confirm", JOptionPane.YES_NO_OPTION);
-            if(o == JOptionPane.YES_OPTION){
+            if (o == JOptionPane.YES_OPTION) {
                 delete(file);
             }
         }
- }
+    }
 
-          
-      
     public static void setOpenButtonState(Container c, boolean flag) {
         int len = c.getComponentCount();
         for (int i = 0; i < len; i++) {
@@ -155,103 +165,103 @@ public class ReportMenuOptions {
             }
         }
     }
-    
-    public static void export(MainFrame mf){
-        
+
+    public static void export(MainFrame mf) {
+
         List<List<String>> fileContents = extractUnknownErrorLogs(mf.getSelectedFinder());
         //list of file names to associate with its corresponding filecontents
         List<String> fileNames = new ArrayList();
-        
-        
-       JTabbedPane logFileTabPane =  mf.getSelectedFinder().getLogTabbedPane();
-        
-        for (int i = 0; i < logFileTabPane.getTabCount(); i++){
-            
+
+        JTabbedPane logFileTabPane = mf.getSelectedFinder().getLogTabbedPane();
+
+        for (int i = 0; i < logFileTabPane.getTabCount(); i++) {
+
             String fileName = logFileTabPane.getTitleAt(i);
             fileNames.add(fileName);
         }
-        
+
         //opens export dialog
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setName("Export Report");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int returnVal = fileChooser.showDialog(mf.getContentPane(), "Export");
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-                     String filePath = fileChooser.getSelectedFile().getPath();
+            String filePath = fileChooser.getSelectedFile().getPath();
 
-            for (String fileName : fileNames){
-                String tempFileName = filePath+"/"+fileName;
+            for (String fileName : fileNames) {
+                String tempFileName = filePath + "/" + fileName;
                 int index = fileNames.indexOf(fileName);
                 List<String> fileContent = fileContents.get(index);
                 writeFiles(tempFileName, fileContent);
             }
-                         JOptionPane.showMessageDialog(null, "Unknown Error Logs Exported","",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Unknown Error Logs Exported", "", JOptionPane.INFORMATION_MESSAGE);
 
-        } 
+        }
     }
-    
-    //extracts unknown error lines from logs
-    private static List<List<String>> extractUnknownErrorLogs( KnownErrorFinder1 finder){
-        //a List containing another list of strings which represent the contents that will be written to each file 
-                    List<List<String>> unknownErrorFiles = new ArrayList();
 
-                    int tabCount = finder.getLogTabbedPane().getTabCount();
-                    
-        for (int i = 0; i < tabCount; i++){
+    //extracts unknown error lines from logs
+    private static List<List<String>> extractUnknownErrorLogs(KnownErrorFinder1 finder) {
+        //a List containing another list of strings which represent the contents that will be written to each file 
+        List<List<String>> unknownErrorFiles = new ArrayList();
+
+        int tabCount = finder.getLogTabbedPane().getTabCount();
+
+        for (int i = 0; i < tabCount; i++) {
             List<String> unknownErrorLogs = new ArrayList();
 
             //each iterated tab count will ensure that setSelectedIndex is called which will therefore execute the change listener in the 
             //knownErrorFinder1 class file for the log table panel and therefore as each tab is changing the unknown error tables will have different contents
             //which will be used to obtain the necessary log lines from the corresponding log table
             finder.getLogTabbedPane().setSelectedIndex(i);
-            
+
             //obtains the unknown error table
             UnknownErrorTable ukeTable = finder.getUkeTable();
             //obtains the log table
-            LogTable logTable  = finder.getLogTable();
+            LogTable logTable = finder.getLogTable();
             //gets the logs used for the table
             List<String> logs = logTable.getOpenedLog();
-            
-            for (int j = 0; j < ukeTable.getRowCount(); j++){
+
+            for (int j = 0; j < ukeTable.getRowCount(); j++) {
                 //iterates through the rows in the unknown error table and obtaining the unknown error
                 String unknownError = ukeTable.getValueAt(j, 0).toString();
-                for(String log : logs){
-                    
+                for (String log : logs) {
+
                     String shortenedLog;
                     //looks for a shortend version of each line to improve the accuracy of the search
-                     if (log.length() > 250) {
-                shortenedLog = log.substring(0, 250);
-            } else{
+                    if (log.length() > 250) {
+                        shortenedLog = log.substring(0, 250);
+                    } else {
                         shortenedLog = log;
-                     }
-                    
+                    }
+
                     //adds log if it contains the unknown error
-                    if(shortenedLog.contains(unknownError)){
-            unknownErrorLogs.add(log);
+                    if (shortenedLog.contains(unknownError)) {
+                        unknownErrorLogs.add(log);
                     }
                 }
             }
             //incase old reports are opened and all the unknown errors have been added to known errors
             //they will not be exported to files. 
-            if(!unknownErrorLogs.isEmpty()){
-            unknownErrorFiles.add(unknownErrorLogs);
+            if (!unknownErrorLogs.isEmpty()) {
+                unknownErrorFiles.add(unknownErrorLogs);
             }
         }
-        
+
         return unknownErrorFiles;
     }
-    
-    //writes log contents to file and exports it to the chosen file location
-    private static void writeFiles(String fileName, List<String> fileContent){
-        
-                Path file = Paths.get(fileName);
 
-       try {
+    //writes log contents to file and exports it to the chosen file location
+    private static void writeFiles(String fileName, List<String> fileContent) {
+
+        Path file = Paths.get(fileName);
+
+        try {
             Files.write(file, fileContent, Charset.forName("UTF-8"));
         } catch (IOException ex) {
             Logger.getLogger(KnownErrorFileChecker.class.getName()).log(Level.SEVERE, null, ex);
-        }    }
-    
+        }
+    }
+
     //disable and enable the delete button
     public static void setDeleteButtonState(Container cont, boolean flag) {
         int len = cont.getComponentCount();
@@ -269,48 +279,37 @@ public class ReportMenuOptions {
             }
         }
     }
-    
+
     //delete the directory or file
     public static void delete(File file)
-          throws IOException{
+            throws IOException {
         //check the file is there, and its a directory
-           if(file.exists()){
-               if(file.isDirectory()){
-                        //delete directory if it is empty 
-                    if(file.list().length == 0){
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                //delete directory if it is empty 
+                if (file.list().length == 0) {
+                    file.delete();
+                    System.out.println("Directory is deleted : " + file.getAbsolutePath());
+                } //list contents of directory if its not empty then delete
+                else {
+                    String files[] = file.list();
+                    for (String temp : files) {
+                        //construct file structure 
+                        File fileDelete = new File(file.getPath(), temp);
+                        //recursively delete
+                        delete(fileDelete);
+                    }
+                    //check again if the directory is empty the delete
+                    if (file.list().length == 0) {
                         file.delete();
-                            System.out.println("Directory is deleted : " + file.getAbsolutePath());
+                        System.out.println("Directory deleted : " + file.getAbsolutePath());
                     }
-                        //list contents of directory if its not empty then delete
-                    else{
-                        String files[] = file.list();
-                        for (String temp : files){
-                            //construct file structure 
-                            File fileDelete = new File(file.getPath(), temp);
-                            //recursively delete
-                            delete(fileDelete);
-                            }
-                        //check again if the directory is empty the delete
-                        if(file.list().length == 0){
-                            file.delete();
-                            System.out.println("Directory deleted : " + file.getAbsolutePath());
-                        }
-                    }
-               }else{
-                   //if its a file, then delete it
-                   file.delete();
-                   System.out.println("File deleted : " + file.getAbsolutePath());
-               }
-           }
+                }
+            } else {
+                //if its a file, then delete it
+                file.delete();
+                System.out.println("File deleted : " + file.getAbsolutePath());
+            }
+        }
     }
 }
-  
-    
-             
-        
-          
-      
-      
-
-    
-

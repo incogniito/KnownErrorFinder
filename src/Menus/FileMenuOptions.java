@@ -163,7 +163,7 @@ public class FileMenuOptions {
 
     //export Known errors to XML file
     private void exportKnownErrorsToXML(File file){
-                File source = new File(System.getProperty("user.dir") + "/src/Files/knownErrors.xml");
+                File source = new File(System.getProperty("user.home") + "/KnownErrorFinderFiles/knownErrors.xml");
 
         try {
             Files.copy(source.toPath(), file.toPath());

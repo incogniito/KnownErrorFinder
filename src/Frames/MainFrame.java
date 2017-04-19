@@ -61,6 +61,8 @@ public class MainFrame extends javax.swing.JFrame {
         setTitle("Error Finder");
 
         checks = new KnownErrorFileChecker();
+        //checks the known error, schedule and recent history file exists when the program is run, and if not it will create one
+        fileCheck();
         executor = Executors.newCachedThreadPool();
         //filler jmenus to create space between the actual menus
         filler1.setEnabled(false);
@@ -72,8 +74,7 @@ public class MainFrame extends javax.swing.JFrame {
         editOptionMenuSetup();
         reportOptionMenuSetup();
         fileOptionMenuSetup();
-        //checks the known error, schedule and recent history file exists when the program is run, and if not it will create one
-        fileCheck();
+        
         //updates the recent history list to be shown inside the 'open recent' menu item
         addRecentHistoryItems();
         //starts thread
@@ -360,10 +361,11 @@ public class MainFrame extends javax.swing.JFrame {
     private void openReportsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openReportsItemActionPerformed
         // TODO add your handling code here:
         ReportMenuOptions.openReports(this, finder, featuresTabbedPane);
-        //adds close button to tabs
-        initTabComponent(featuresTabbedPane.getTabCount() - 1);
+        
         //selectes the new tab once it has been added
         if (featuresTabbedPane.getTabCount() > 1) {
+            //adds close button to tab
+        initTabComponent(featuresTabbedPane.getTabCount() - 1);
             featuresTabbedPane.setSelectedIndex(featuresTabbedPane.getTabCount() - 1);
 
         }
@@ -449,6 +451,8 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     private void fileCheck() {
+        //checks if directories that contain the files exist
+        checks.createSrc$FileFolder();
         //checks if file exists
         if (checks.checkIfRecentHistoryExists()) {
         } else {
@@ -476,7 +480,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     }
     //updates the open recent list
-    private void addRecentHistoryItems() {
+    private void addRecentHistoryItems( ) {
         openRecentMenu.removeAll();
         if (recentHistory != null) {
             for (String fileName : recentHistory) {
@@ -670,7 +674,7 @@ public class MainFrame extends javax.swing.JFrame {
         finders.add(kef);
     }
 
-    public KnownErrorFinder1 getSelectedFinder() {
+    public  KnownErrorFinder1 getSelectedFinder() {
 
         int index = featuresTabbedPane.getSelectedIndex();
         return finders.get(index);
@@ -681,7 +685,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     }
     
-    
+   
     private void fileOptionMenuSetup(){
                 List<KnownError> knownError = AccessDataFromXML.retrieveKnownErrors();
                 

@@ -5,6 +5,8 @@
  */
 package MouseListeners;
 
+import FileAccessors.AccessDataFromXML;
+import Frames.AddToKnownError;
 import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,31 +17,36 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import Frames.KnownErrorFinder1;
+import Frames.MainFrame;
 import Menus.PopUpMenu;
 import Frames.ShowFullDetails;
+import javax.xml.datatype.XMLGregorianCalendar;
+import org.example.knownerror.KnownError;
 
 /**
  *
  * @author samsonaiyegbusi
  */
-public class CustomMouseListener extends MouseAdapter{
+public class TablesMouseListener extends MouseAdapter{
     
     private PopUpMenu menu;
     private JTable table;
     private JTable logsTable;
     private JTextField searchField;
+    private KnownErrorFinder1 finder;
     
     //constructor for Log table
-    public CustomMouseListener(PopUpMenu menu, JTable logTable){
+    public TablesMouseListener(PopUpMenu menu, JTable logTable){
         this.menu = menu;
         this.logsTable = logTable;
     }
     
     //constructor for error tables
-    public CustomMouseListener(PopUpMenu menu, JTable exceptionsTable, JTextField searchField ){
+    public TablesMouseListener(PopUpMenu menu, JTable exceptionsTable, JTextField searchField, KnownErrorFinder1 finder ){
         this.menu = menu;
         this.table = exceptionsTable;
         this.searchField = searchField;
+        this.finder = finder;
     }
     
     
@@ -79,11 +86,23 @@ public class CustomMouseListener extends MouseAdapter{
                     {
                  menu.logTablePopupMenu(logsTable).show(e.getComponent(), e.getX(), e.getY());
                     }
-            } 
+            }else if(table != null){
+                
+                int selectedRow = table.getSelectedRow();
+                    if (selectedRow != -1 )
+                    {
+                                         menu.keTablePopupMenu(table, finder).show(e.getComponent(), e.getX(), e.getY());
+
+                        
+                            }
+                        }
+                        
+                    }
+            
         
         
         
-    }
+    
     //opens another jframe to give a larger view of the selected field(s)
     private void showDetails(){
         

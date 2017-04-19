@@ -5,6 +5,8 @@
  */
 package Tables;
 
+import Frames.KnownErrorFinder1;
+import Frames.MainFrame;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -12,7 +14,7 @@ import java.util.regex.Pattern;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import MouseListeners.CustomMouseListener;
+import MouseListeners.TablesMouseListener;
 import Menus.PopUpMenu;
 
 /**
@@ -23,6 +25,7 @@ public class UnknownErrorTable extends JTable {
     
    private JTextField searchBox;
    private List<String> unknownErrorHolder;
+    private KnownErrorFinder1 kef;
    
        //column names for log table
    private Object[] unknownErrorColumnNames = {"Exception"};
@@ -33,6 +36,7 @@ public class UnknownErrorTable extends JTable {
     public UnknownErrorTable(JTextField searchBox) {
         
         this.searchBox = searchBox;
+        this.kef = kef;
         
         unknownErrorHolder = new ArrayList();
         
@@ -45,15 +49,17 @@ public class UnknownErrorTable extends JTable {
         }
     };
         
-        setUp();
+       // setUp();
     }
     
     private void setUp()
     {
          //popup menus
         PopUpMenu popup = new PopUpMenu();
+        
+        
         //assigns popup menus to tables
-        CustomMouseListener unknownPopUpListener = new CustomMouseListener(popup, this, searchBox);
+        TablesMouseListener unknownPopUpListener = new TablesMouseListener(popup, this, searchBox, kef);
         this.addMouseListener(unknownPopUpListener);
         
     }

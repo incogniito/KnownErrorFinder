@@ -9,6 +9,11 @@ import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JFrame;
 import FileAccessors.AccessDataFromXML;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+import javax.swing.text.DateFormatter;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  *
@@ -21,15 +26,42 @@ public class AddToKnownError extends javax.swing.JFrame {
      */
     public static boolean saved = false;
     private Date date = null;
+    private boolean update = false; 
     public AddToKnownError() {
         initComponents();
-        
+                       saved = false;
+
                  setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+                 setTitle("Add to Known Errors");
         date = dateEdited();
          
+    }
+    
+     public AddToKnownError(String exceptionName, XMLGregorianCalendar cal, String Solution) {
+        initComponents();
+        
+        update = true;
+                               saved = false;
+
+        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        //date = dateEdited();
+        
+                 setName(exceptionName);
+                 
+ int day = cal.getDay();
+        int month = cal.getMonth();
+        int year= cal.getYear();
+        
+        dateLabel.setText("Date:  "+day+"/"+month+"/"+year);
+        
+        jTextArea1.append(Solution);
+         date = cal.toGregorianCalendar().getTime();
          
     }
+    
     private void closeFrame(){
         super.dispose();
     }
@@ -42,7 +74,7 @@ public class AddToKnownError extends javax.swing.JFrame {
         int month = cal.get(Calendar.MONTH);
         int year= cal.get(Calendar.YEAR);  
         
-        dateLabel.setText("Date:  "+day+"/"+month+1+"/"+year);
+        dateLabel.setText("Date:  "+day+"/"+month+"/"+year);
         
         return cal.getTime();
      }
@@ -144,7 +176,11 @@ public class AddToKnownError extends javax.swing.JFrame {
          AccessDataFromXML data = new AccessDataFromXML();
                String name = nameLabel.getText();
                String solution = jTextArea1.getText();
+               if (update == false){
                data.newError(name, date, solution);
+               } else {
+                          data.updateError(name, date, solution);  
+               }
                saved = true;
                closeFrame();
                

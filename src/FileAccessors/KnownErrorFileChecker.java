@@ -14,6 +14,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,7 +32,7 @@ public class KnownErrorFileChecker {
 //checks if file exists
 
     public boolean checkIfFileExists() {
-        File f = new File(System.getProperty("user.dir") + "/src/Files/knownErrors.xml");
+        File f = new File(System.getProperty("user.home") + "/KnownErrorFinderFiles/knownErrors.xml");
         if (f.exists() && !f.isDirectory()) {
             return true;
         } else {
@@ -41,9 +42,10 @@ public class KnownErrorFileChecker {
 
     //creates an xml file in the Files package
     public void createNewKnownErrorFile() {
-        List<String> lines = Arrays.asList("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+        List<String> lines = Arrays.asList("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "<allKnownErrors xmlns=\'http://exceptions'>", "</allKnownErrors>");
+       
 
-        Path file = Paths.get(System.getProperty("user.dir") + "/src/Files/knownErrors.xml");
+        Path file = Paths.get(System.getProperty("user.home") + "/KnownErrorFinderFiles/knownErrors.xml");
         try {
             Files.write(file, lines, Charset.forName("UTF-8"));
         } catch (IOException ex) {
@@ -54,7 +56,7 @@ public class KnownErrorFileChecker {
 
     //checks if file exists
     public boolean checkIfRecentHistoryExists() {
-        File f = new File(System.getProperty("user.dir") + "/src/Files/recentHistory.txt");
+        File f = new File(System.getProperty("user.home") + "/KnownErrorFinderFiles/recentHistory.txt");
         if (f.exists() && !f.isDirectory()) {
             return true;
         } else {
@@ -66,7 +68,7 @@ public class KnownErrorFileChecker {
     public void createNewRecentHistoryFile() {
         List<String> lines = Arrays.asList("");
 
-        Path file = Paths.get(System.getProperty("user.dir") + "/src/Files/recentHistory.txt");
+        Path file = Paths.get(System.getProperty("user.home") + "/KnownErrorFinderFiles/recentHistory.txt");
         try {
             Files.write(file, lines, Charset.forName("UTF-8"));
         } catch (IOException ex) {
@@ -78,7 +80,7 @@ public class KnownErrorFileChecker {
     //updates recent history file
     public void updateRecentHistoryFile(List<String> lines) {
 
-        Path file = Paths.get(System.getProperty("user.dir") + "/src/Files/recentHistory.txt");
+        Path file = Paths.get(System.getProperty("user.home") + "/KnownErrorFinderFiles/recentHistory.txt");
         try {
             Files.write(file, lines, Charset.forName("UTF-8"));
         } catch (IOException ex) {
@@ -90,19 +92,20 @@ public class KnownErrorFileChecker {
     //reads the lines of the recentHistory file and returns as a list
     public List<String> readRecentHistoryFile() {
         List<String> history = new ArrayList();
-        Path file = Paths.get(System.getProperty("user.dir") + "/src/Files/recentHistory.txt");
+        Path file = Paths.get(System.getProperty("user.home") + "/KnownErrorFinderFiles/recentHistory.txt");
 
         try (Stream<String> stream = Files.lines(file)) {
             history = stream.collect(Collectors.toList());
             return history;
         } catch (IOException ex) {
-           System.out.println(ex);
+            System.out.println(ex);
         }
         return null;
     }
+
     //checks if a schedule file exists
     public boolean checkIfScheduleFileExists() {
-        File f = new File(System.getProperty("user.dir") + "/src/Files/theSchedules.xml");
+        File f = new File(System.getProperty("user.home") + "/KnownErrorFinderFiles/theSchedules.xml");
         if (f.exists() && !f.isDirectory()) {
             return true;
         } else {
@@ -112,9 +115,9 @@ public class KnownErrorFileChecker {
 
     //creates an xml file in the Files package
     public void createNewScheduleFile() {
-        List<String> lines = Arrays.asList("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
-
-        Path file = Paths.get(System.getProperty("user.dir") + "/src/Files/theSchedules.xml");
+        List<String> lines = Arrays.asList("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "<Schedules xmlns=\'http://schedules'>", "</Schedules>");
+      
+        Path file = Paths.get(System.getProperty("user.home") + "/KnownErrorFinderFiles/theSchedules.xml");
         try {
             Files.write(file, lines, Charset.forName("UTF-8"));
         } catch (IOException ex) {
@@ -123,4 +126,19 @@ public class KnownErrorFileChecker {
 
     }
 
+    public void createSrc$FileFolder() {
+
+        //checks if the src & files folder exist & if not then create them
+        Path srcpath = Paths.get(System.getProperty("user.home") + "/KnownErrorFinderFiles");
+
+        //if directory exists?
+        if (!Files.exists(srcpath)) {
+            try {
+                Files.createDirectories(srcpath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } 
+
+    }
 }

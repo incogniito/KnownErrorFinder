@@ -5,8 +5,11 @@
  */
 package FileAccessors;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,6 +17,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
@@ -39,7 +46,7 @@ public class AccessDataFromXML {
         try {
             javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(knownErrorList.getClass().getPackage().getName());
             javax.xml.bind.Unmarshaller unmarshaller = jaxbCtx.createUnmarshaller();
-            knownErrorList = (AllKnownErrors) unmarshaller.unmarshal(new java.io.File(System.getProperty("user.dir") + "/src/Files/knownErrors.xml")); //NOI18N
+            knownErrorList = (AllKnownErrors) unmarshaller.unmarshal(new java.io.File(System.getProperty("user.home") + "/KnownErrorFinderFiles/knownErrors.xml")); //NOI18N
             List<KnownError> allErrors = knownErrorList.getErrors();
             return allErrors;
 
@@ -100,7 +107,7 @@ public class AccessDataFromXML {
         
         //Marshaller
             try {
-                OutputStream os = new FileOutputStream(System.getProperty("user.dir") + "/src/Files/knownErrors.xml");
+                OutputStream os = new FileOutputStream(System.getProperty("user.home") + "/KnownErrorFinderFiles/knownErrors.xml");
                 javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(newKnownError.getClass().getPackage().getName());
                 javax.xml.bind.Marshaller marshaller = jaxbCtx.createMarshaller();           //^^^^^^^^^^
                 marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8"); //NOI18N
@@ -111,10 +118,53 @@ public class AccessDataFromXML {
                 // XXXTODO Handle exception
                 System.out.print(ex); //NOI18N
             } catch (FileNotFoundException e) {
-                java.util.logging.Logger.getLogger("global").log(java.util.logging.Level.SEVERE, null, e); //NOI18N
+System.out.print(e);            
             }
 
         }
+    
+    public void updateError(String name, Date date, String solution) {
+        
+        File file = new File(System.getProperty("user.home") + "/KnownErrorFinderFiles/knownErrors.xml");
+        
+    
+        
+        try {
+            JAXBContext jc = JAXBContext.newInstance(AllKnownErrors.class);
+           InputStream inputStream = new FileInputStream(file);
+           AllKnownErrors existingErrors = (AllKnownErrors) jc.createUnmarshaller().unmarshal(inputStream);
+           
+            List<KnownError> list = existingErrors.getErrors();
+            
+            for(KnownError error : list)
+            {
+                if(error.getName().equalsIgnoreCase(name)){
+                    int index = list.indexOf(error);
+                    
+                    GregorianCalendar dateAdded = new GregorianCalendar();
+            dateAdded.setTime(date);
+            XMLGregorianCalendar xmlDateAdded = null;
+            try {
+                xmlDateAdded = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(dateAdded.get(Calendar.YEAR), dateAdded.get(Calendar.MONTH) + 1, dateAdded.get(Calendar.DAY_OF_MONTH), DatatypeConstants.FIELD_UNDEFINED);
+            } catch (DatatypeConfigurationException ex) {
+                Logger.getLogger(AccessDataFromXML.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                    
+                    list.get(index).setDateAdded(xmlDateAdded);
+                    list.get(index).setSolution(solution);
+                    
+                    Marshaller m = jc.createMarshaller();
+                    m.marshal(existingErrors,  file);
+                    break;
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(AccessDataFromXML.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JAXBException ex) {
+            Logger.getLogger(AccessDataFromXML.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
     
    //unmarshals data from xml file
     public static List<Schedule> retrieveSchedules() {
@@ -122,7 +172,7 @@ public class AccessDataFromXML {
         try {
             javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(scheduleList.getClass().getPackage().getName());
             javax.xml.bind.Unmarshaller unmarshaller = jaxbCtx.createUnmarshaller();
-            scheduleList = (Schedules) unmarshaller.unmarshal(new java.io.File(System.getProperty("user.dir") + "/src/Files/theSchedules.xml")); //NOI18N
+            scheduleList = (Schedules) unmarshaller.unmarshal(new java.io.File(System.getProperty("user.home") + "/KnownErrorFinderFiles/theSchedules.xml")); //NOI18N
             //flights = (FlightLists) unmarshaller.unmarshal(new java.io.File("/Volumes/WININSTALL/Service Centric and cloud computing/Travel_agencyWS/src/java/com/cw/travelagencyWS/Flights.xml")); //NOI18N
             List<Schedule> allSchedules = scheduleList.getSchedules();
                    
@@ -197,7 +247,7 @@ public class AccessDataFromXML {
         }
             //marshalling data from app to xml document
             try {
-                OutputStream os = new FileOutputStream(System.getProperty("user.dir") + "/src/Files/theSchedules.xml");
+                OutputStream os = new FileOutputStream(System.getProperty("user.home") + "/KnownErrorFinderFiles/theSchedules.xml");
                 javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(newSchedule.getClass().getPackage().getName());
                 javax.xml.bind.Marshaller marshaller = jaxbCtx.createMarshaller();           
                 marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8"); //NOI18N
@@ -208,8 +258,8 @@ public class AccessDataFromXML {
                 // XXXTODO Handle exception
                 System.out.print(ex); //NOI18N
             } catch (FileNotFoundException e) {
-                java.util.logging.Logger.getLogger("global").log(java.util.logging.Level.SEVERE, null, e); //NOI18N
-            }
+System.out.print(e);            }
+            
 return null;
         }
         //update existing schedules 
@@ -251,7 +301,7 @@ return null;
         }
         //marshal data from app to xml file
          try {
-                OutputStream os = new FileOutputStream(System.getProperty("user.dir") + "/src/Files/theSchedules.xml");
+                OutputStream os = new FileOutputStream(System.getProperty("user.home") + "/KnownErrorFinderFiles/theSchedules.xml");
                 javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(schedule.getClass().getPackage().getName());
                 javax.xml.bind.Marshaller marshaller = jaxbCtx.createMarshaller();           
                 marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8"); //NOI18N
@@ -262,8 +312,7 @@ return null;
                 // XXXTODO Handle exception
                 System.out.print(ex); //NOI18N
             } catch (FileNotFoundException e) {
-                java.util.logging.Logger.getLogger("global").log(java.util.logging.Level.SEVERE, null, e); //NOI18N
-            }
+System.out.print(e);            }
     }
    
     
@@ -335,7 +384,7 @@ return null;
         }
         //marshaller
         try {
-                OutputStream os = new FileOutputStream(System.getProperty("user.dir") + "/src/Files/knownErrors.xml");
+                OutputStream os = new FileOutputStream(System.getProperty("user.home") + "/KnownErrorFinderFiles/knownErrors.xml");
                 javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(newKnownError.getClass().getPackage().getName());
                 javax.xml.bind.Marshaller marshaller = jaxbCtx.createMarshaller();
                 marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8"); //NOI18N
@@ -345,7 +394,7 @@ return null;
                 // XXXTODO Handle exception
                 System.out.print(ex); //NOI18N
             } catch (FileNotFoundException e) {
-                java.util.logging.Logger.getLogger("global").log(java.util.logging.Level.SEVERE, null, e); //NOI18N
+System.out.print(e);            }
             }  
-    }
+    
 }

@@ -5,6 +5,8 @@
  */
 package Menus;
 
+import FileAccessors.AccessDataFromXML;
+import Frames.AddToKnownError;
 import Frames.ShowFullDetails;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +19,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import Frames.KnownErrorFinder1;
+import javax.xml.datatype.XMLGregorianCalendar;
 import org.example.knownerror.KnownError;
 /**
  *
@@ -60,6 +63,39 @@ public class PopUpMenu {
                 details.setVisible(true);
             }
 
+        });
+
+        logTablePopup.add(view);
+
+        return logTablePopup;
+    }
+    
+  //pop up menu for only the logs table
+    public JPopupMenu keTablePopupMenu(JTable table, KnownErrorFinder1 finder) {
+
+        //Create Pop up Items
+        JPopupMenu logTablePopup = new JPopupMenu();
+        JMenuItem view = new JMenuItem("View Details");
+
+        //When View is clicked
+        view.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                                int selectedRow = table.getSelectedRow();
+
+                String exceptionName = table.getValueAt(selectedRow, 0).toString();
+                        for(KnownError error : AccessDataFromXML.retrieveKnownErrors()){
+                            
+                            if (error.getName().equalsIgnoreCase(exceptionName)){
+                                
+                                XMLGregorianCalendar dateAdded = error.getDateAdded();
+                                String solution = error.getSolution();
+                                AddToKnownError ake = new AddToKnownError(exceptionName, dateAdded, solution);
+                                finder.addWindowListenerToAddKEFrame(ake);
+                                ake.setVisible(true);
+            }
+}
+            }
         });
 
         logTablePopup.add(view);

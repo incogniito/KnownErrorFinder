@@ -1,2 +1,5 @@
-/Users/oluwakemiborisade/Logs/glassfish server log
-/Users/oluwakemiborisade/Logs/oracle wl log
+/Users/samsonaiyegbusi/Documents/Ayo/10MB.txt
+/Users/samsonaiyegbusi/Documents/Ayo/100MB.txt
+/Users/samsonaiyegbusi/Downloads/logs/application.txt
+/Users/samsonaiyegbusi/weka.log
+/Users/samsonaiyegbusi/Downloads/logs/glassfish server log

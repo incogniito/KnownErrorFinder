@@ -14,7 +14,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import FileAccessors.AccessDataFromXML;
-import MouseListeners.CustomMouseListener;
+import MouseListeners.TablesMouseListener;
 import Menus.PopUpMenu;
 import org.example.knownerror.KnownError;
 
@@ -67,7 +67,7 @@ public class LogTable extends JTable {
         //popup menus
         PopUpMenu popup = new PopUpMenu();
         //assigns popup menus to tables
-        CustomMouseListener popUpListener = new CustomMouseListener(popup, this);
+        TablesMouseListener popUpListener = new TablesMouseListener(popup, this);
         addMouseListener(popUpListener);
     }
     
@@ -95,7 +95,7 @@ public class LogTable extends JTable {
         //popup menus
         PopUpMenu popup = new PopUpMenu();
         //assigns popup menus to tables
-        CustomMouseListener popUpListener = new CustomMouseListener(popup, this);
+        TablesMouseListener popUpListener = new TablesMouseListener(popup, this);
         addMouseListener(popUpListener);
     }
     

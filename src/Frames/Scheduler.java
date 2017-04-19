@@ -428,7 +428,7 @@ public class Scheduler extends javax.swing.JFrame {
 //remove existing folder paths from the table
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
          
-        int val = JOptionPane.showConfirmDialog(null, "confirm Delete?", "Delete", JOptionPane.YES_OPTION);
+        int val = JOptionPane.showConfirmDialog(null, "Confirm Delete?", "Delete", JOptionPane.YES_OPTION);
         if ((pathTable.getSelectedRow() != -1) &&(val == 0)) {
             // remove selected row from the model
            dtm.removeRow(pathTable.getSelectedRow());

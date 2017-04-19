@@ -5,6 +5,8 @@
  */
 package Tables;
 
+import Frames.KnownErrorFinder1;
+import Frames.MainFrame;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -12,7 +14,7 @@ import java.util.regex.Pattern;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import MouseListeners.CustomMouseListener;
+import MouseListeners.TablesMouseListener;
 import Menus.PopUpMenu;
 import org.example.knownerror.KnownError;
 
@@ -26,6 +28,7 @@ public class KnownErrorTable extends JTable {
     private List<KnownError> knownErrors;
     private List<String> knownErrorHolder;
     private UnknownErrorTable ukeTable;
+    private KnownErrorFinder1 kef;
 
     //column names for log table
    private Object[] knownErrorColumnNames = {"Exception"};
@@ -34,11 +37,12 @@ public class KnownErrorTable extends JTable {
 
     
     
-    public KnownErrorTable(UnknownErrorTable ukeTable, JTextField searchBox, List<KnownError> knownErrors) {
+    public KnownErrorTable(UnknownErrorTable ukeTable, JTextField searchBox, List<KnownError> knownErrors, KnownErrorFinder1 kef) {
         
         this.ukeTable = ukeTable;
         this.searchBox = searchBox;
         this.knownErrors = knownErrors;
+        this.kef = kef;
         
         knownModel = new DefaultTableModel(new Object[0][0], knownErrorColumnNames) {
 
@@ -61,7 +65,7 @@ public class KnownErrorTable extends JTable {
          //popup menus
         PopUpMenu popup = new PopUpMenu();
         //assigns popup menus to tables
-        CustomMouseListener knownPopUpListener = new CustomMouseListener(popup, this, searchBox);
+        TablesMouseListener knownPopUpListener = new TablesMouseListener(popup, this, searchBox, kef);
         this.addMouseListener(knownPopUpListener);
         
     }
